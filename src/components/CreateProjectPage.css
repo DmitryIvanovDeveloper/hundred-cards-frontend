@@ -1,0 +1,170 @@
+
+.project-layout {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: transparent;  
+}
+
+/* ---------------- COMMON BLOCK CONTAINER ---------------- */
+.block-container {
+  background-color: #fff;  
+  border: 1px solid #EFF6F8;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.category-top-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+#category-toolbar {
+  border: none;
+  background-color: transparent;
+}
+
+.category-title-label {
+  margin-left: 20px;
+  background-color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.category-editor .ql-container {
+  border: none;
+  border-radius: 8px;
+  min-height: 40px;  
+  background-color: #fff;
+  padding: 8px;
+}
+
+.category-editor .ql-toolbar {
+  display: none;
+}
+
+/* ---------------- QUESTION SECTION STYLES ---------------- */
+.question-label {
+  display: inline-block;  
+  float: right;          
+  margin-bottom: 8px;
+  background-color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.question-textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  padding: 10px;
+  border: 1px solid #EFF6F8;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* ---------------- ANSWERS SECTION STYLES ---------------- */
+.answers-header {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.answers-label {
+  background-color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.add-answer-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.answers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.answer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.answer-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #EFF6F8;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.delete-answer-btn {
+  background-color: #ff5f5f;
+  border: none;
+  color: #fff;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-answer-btn:hover {
+  background-color: #ff2f2f;
+}
+
+/* ---------------- BUTTONS ROW ---------------- */
+.buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.buttons-row button {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #4CAF50;
+}
+
+.buttons-row button:hover {
+  background-color: #45a049;
+}
+
+input:focus,
+textarea:focus,
+.ql-container:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ---------------- ADD ANSWER BUTTON ---------------- */
+.add-answer-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.add-answer-icon {
+  width: 80px; 
+  height: 30px; 
+  cursor: pointer;
+}
+
+/* ---------------- INPUT CONTAINER ---------------- */
+.input-container {
+  border-top: 1px solid #EFF6F8; 
+  padding-top: 10px;              
+  margin-top: 10px;              
+}

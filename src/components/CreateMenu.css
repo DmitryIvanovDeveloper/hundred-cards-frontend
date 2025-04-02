@@ -1,0 +1,131 @@
+.create-menu {
+  width: 250px;
+  background-color: #bfd2da;
+  color: #000;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 60px;
+}
+
+.menu-title {
+  margin: 0 0 55px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.menu-section {
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.header-plus {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.menu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-section ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.menu-section ul li.selected {
+ background: linear-gradient(to right, #ffffff 0%, #F7F7F700 100%);
+}
+
+.menu-section ul li span {
+  flex: 1;
+}
+
+/* For the Questions block */
+.drag-handle {
+  width: 16px;
+  height: 16px;
+  cursor: grab;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.white-square {
+  width: 16px;
+  height: 16px;
+}
+
+.check-icon {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+.questions-block ul {
+  margin: 0;
+  padding: 0;
+}
+
+.questions-block ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.questions-block ul li.selected {
+ background: linear-gradient(to right, #ffffff 0%, #F7F7F700 100%);
+}
+.question-label {
+  flex: 1;
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: #000;
+}
+
+.drag-handle {
+  width: 16px;
+  height: 16px;
+  cursor: grab;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.white-square {
+  width: 16px;
+  height: 16px;
+}
+
+.check-icon {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
