@@ -3,12 +3,13 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import './Sidebar.css'
 import logo from '../assets/Logo (2).svg'
-import folder2 from '../assets/folder 2.svg'
-import analytics from '../assets/analytics 1.svg'
-import settings from '../assets/settings.svg'
-import human from '../assets/human.svg'
-import voprosik from '../assets/voprosik.svg'
-import logout from '../assets/logout 1.svg'
+import { ReactComponent as FolderIcon }  from '../assets/folder 2.svg'
+import { ReactComponent as AnalyticsIcon } from '../assets/analytics 1.svg'
+import { ReactComponent as SettingsIcon } from '../assets/settings.svg'
+import { ReactComponent as HumanIcon } from '../assets/human.svg'
+import { ReactComponent as HelpIcon } from '../assets/voprosik.svg'
+import { ReactComponent as LogoutIcon } from '../assets/logout 1.svg'
+import { ReactComponent as ArrowLeftIcon } from '../assets/arrLeft.svg'
 
 export default function Sidebar() {
   const { t } = useTranslation()
@@ -33,40 +34,41 @@ export default function Sidebar() {
         <ul className="nav-links">
           <li>
             <NavLink to="/my-account" className="nav-link">
-              <img src={human} alt={t('sidebar.myAccount')} />
+              <HumanIcon className="nav-icon" />
               <span>{t('sidebar.myAccount')}</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/" className="nav-link">
-              <img src={folder2} alt={t('sidebar.projects')} />
+              <FolderIcon className="nav-icon" />
               <span>{t('sidebar.projects')}</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/analytics" className="nav-link">
-              <img src={analytics} alt={t('sidebar.analytics')} />
+              <AnalyticsIcon className="nav-icon" />
               <span>{t('sidebar.analytics')}</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/settings" className="nav-link">
-              <img src={settings} alt={t('sidebar.settings')} />
+              <SettingsIcon className="nav-icon" />
               <span>{t('sidebar.settings')}</span>
             </NavLink>
           </li>
         </ul>
         <div className="sidebar-bottom">
           <NavLink to="/help" className="nav-link">
-            <img src={voprosik} alt={t('sidebar.help')} />
+            <HelpIcon className="nav-icon" />
             <span>{t('sidebar.help')}</span>
           </NavLink>
           <NavLink to="/logout" className="nav-link">
-            <img src={logout} alt={t('sidebar.logOut')} />
+            <LogoutIcon className="nav-icon" />
             <span>{t('sidebar.logOut')}</span>
           </NavLink>
           {!isCreatePage && (
             <button className="hide-btn" onClick={() => setIsOpen(!isOpen)}>
+              <ArrowLeftIcon className="nav-icon" />
               <span>
                 {isOpen ? t('sidebar.hideButton') || 'Hide' : t('sidebar.showButton') || 'Show'}
               </span>

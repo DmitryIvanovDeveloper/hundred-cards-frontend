@@ -8,7 +8,7 @@
 }
 
 .sidebar.open {
-  width: 192px; 
+  width: 184px; 
 }
 
 .sidebar.closed {
@@ -20,15 +20,19 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  border-right: 2px solid #A5BBC5;
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 20px;
+  gap: 15px;
+  padding: 25px 22px 52px;
 }
-
+.sidebar-logo img {
+  width: 34px;
+  height: 34px;
+}
 .sidebar.closed .sidebar-logo {
   padding: 10px 15px;
   justify-content: center;
@@ -36,11 +40,11 @@
 
 .company-name {
   font-family: "Jersey 20", sans-serif;
-  font-weight: 700;
-  font-size: 24.48px;
+  font-weight: 400;
+  font-size: 19.5px;
   line-height: 100%;
-  letter-spacing: 0;
   color: #9747FF;
+  text-transform: uppercase;
 }
 
 .nav-links {
@@ -59,15 +63,28 @@
   gap: 10px;
   color: #fff;
   text-decoration: none;
-  padding: 10px 15px;
-  transition: background-color 0.2s ease;
+  padding: 14px 22px 14px 22px;
+  transition: 0.2s ease;
   justify-content: flex-start;
+  font-size: 13px;
+  line-height: 140%;
+}
+.nav-link .nav-icon {
+  width: 17px;
+  height: 17px;
+}
+.nav-link .nav-icon path {
+  fill: #FFF;
+  transition: 0.2s ease;
 }
 
 .nav-link:hover,
 .nav-link.active {
-  background-color: orange;
-  color: #fff;
+  color: #9747FF;
+}
+.nav-link:hover .nav-icon path,
+.nav-link.active .nav-icon path {
+  fill: #9747FF;
 }
 
 .nav-link img {
@@ -88,8 +105,12 @@
 .sidebar.closed .nav-link span,
 .sidebar.closed .company-name {
   display: none;
+  scale: 0;
 }
-
+.sidebar .nav-link span {
+  scale: 1;
+  transition: 0.3s ease;
+}
 .sidebar.closed .nav-link,
 .sidebar.closed .hide-btn {
   justify-content: center;
@@ -98,18 +119,32 @@
 .hide-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   background: none;
   border: none;
   color: #fff !important;
   cursor: pointer;
-  padding: 10px 15px;
-  transition: none;
-  justify-content: flex-start;
+  padding: 10px 10px;
+  transition: 0.3s ease;
+  font-size: 10px;
+  line-height: 140%;
 }
-
+.hide-btn svg path {
+  fill: #FFF;
+  transition: 0.3s ease;
+}
+.hide-btn svg {
+  transition: 0.3s ease;
+}
+.sidebar.closed .hide-btn svg {
+  transform: scaleX(-1);
+}
 .hide-btn:hover {
-  background-color: transparent !important;
-  color: #fff !important;
-  outline: none;
+  color: #9747FF !important;
+}
+.hide-btn:hover svg {
+  transform: translateX(-2px);
+}
+.hide-btn:hover svg path {
+  fill: #9747FF;
 }
