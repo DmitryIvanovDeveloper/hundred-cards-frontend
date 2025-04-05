@@ -1,0 +1,56 @@
+{
+  "sidebar": {
+    "companyName": "LudumCore",
+    "myAccount": "Мой аккаунт",
+    "projects": "Проекты",
+    "analytics": "Аналитика",
+    "settings": "Настройки",
+    "help": "Помощь",
+    "logOut": "Выйти",
+    "hideButton": "Скрыть",
+    "showButton": "Показать"
+  },
+  "mainPage": {
+    "createNewProject": "Создать новый проект",
+    "myNewProject": "Мой новый проект_20...",
+    "mySecondProject": "Мой второй проект..."
+  },
+  "secondPage": {
+    "title": "Категория 1",
+    "question": "Вопрос",
+    "sampleText": "Один два три",
+    "answer1": "Один два три",
+    "answer2": "Один два три четыре пять"
+  },
+  "createMenu": {
+    "title": "Создание проекта",
+    "projects": "Проекты",
+    "project1": "Проект 1",
+    "project2": "Проект 2",
+    "categories": "Категории",
+    "category": "Категория",
+    "category1": "Категория 1",
+    "category2": "Категория 2",
+    "category3": "Категория 3",
+    "questions": "Вопросы",
+    "question": "Вопрос",
+    "question1": "Вопрос 1",
+    "question2": "Вопрос 2",
+    "question3": "Вопрос 3",
+    "question4": "Вопрос 4",
+    "question5": "Вопрос 5",
+    "achievement": "Достижения",
+    "starFeature": "Звёздная функция",
+    "idkFeature": "Не знаю",
+    "newCategory": "Категория",
+    "newQuestion": "Вопрос"
+  },
+  "createProjectLayout": {
+    "categoryTitleLabel": "Заголовок категории",
+    "questionLabel": "Вопрос",
+    "answersLabel": "Ответы",
+    "addAnswer": "Добавить +",
+    "saveButton": "Сохранить",
+    "deleteButton": "Удалить"
+  }
+}

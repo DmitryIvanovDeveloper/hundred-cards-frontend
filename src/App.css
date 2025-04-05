@@ -1,0 +1,23 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.App {
+  width: 100%;
+  min-height: 100vh;
+  background: url('./assets/Background (1).svg') no-repeat center center;
+  background-size: cover;
+  font-family: sans-serif;
+}
+.main-content {
+  margin-left: 200px;
+  padding: 20px;
+  min-height: 100vh;
+}
+@font-face {
+  font-family: "Jersey 20";
+  src: url("./assets/fonts/Jersey20-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}

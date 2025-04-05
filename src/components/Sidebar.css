@@ -1,0 +1,115 @@
+.sidebar {
+  background-color: #B6CAD1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: width 0.3s ease;
+  height: 100vh;
+}
+
+.sidebar.open {
+  width: 192px; 
+}
+
+.sidebar.closed {
+  width: 60px; 
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+}
+
+.sidebar.closed .sidebar-logo {
+  padding: 10px 15px;
+  justify-content: center;
+}
+
+.company-name {
+  font-family: "Jersey 20", sans-serif;
+  font-weight: 700;
+  font-size: 24.48px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: #9747FF;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.2s ease;
+  justify-content: flex-start;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: orange;
+  color: #fff;
+}
+
+.nav-link img {
+  width: 24px;
+  height: 24px;
+}
+
+
+.sidebar-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+
+.sidebar.closed .nav-link span,
+.sidebar.closed .company-name {
+  display: none;
+}
+
+.sidebar.closed .nav-link,
+.sidebar.closed .hide-btn {
+  justify-content: center;
+}
+
+.hide-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: #fff !important;
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: none;
+  justify-content: flex-start;
+}
+
+.hide-btn:hover {
+  background-color: transparent !important;
+  color: #fff !important;
+  outline: none;
+}
