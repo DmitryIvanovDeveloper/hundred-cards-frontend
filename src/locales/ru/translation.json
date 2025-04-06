@@ -52,5 +52,19 @@
     "addAnswer": "Добавить +",
     "saveButton": "Сохранить",
     "deleteButton": "Удалить"
+
+  },
+  "achievementsPage": {
+    "pageTitle": "Создать достижение",
+    "achievementTitle": "Название достижения",
+    "activateAchievement": "Активировать достижение",
+    "description": "Описание",
+    "achievementIcon": "Иконка достижения",
+    "selectAchievementCategory": "Выберите категорию достижения",
+    "numberOfCorrectAnswers": "Количество правильных ответов",
+    "selectQuestionsToAchieve": "Выберите вопросы для достижения",
+    "preview": "Предпросмотр",
+    "save": "Сохранить",
+    "newAchievement": "Новое достижение"
   }
 }

@@ -7,23 +7,16 @@ import addIcon from '../assets/add.svg'
 
 export default function CreateProjectLayout() {
   const { t } = useTranslation()
-
   const [answers, setAnswers] = useState([
     { id: 1, text: t('secondPage.answer1'), checked: true },
     { id: 2, text: t('secondPage.answer2'), checked: false }
   ])
-
-  const [categoryTitle, setCategoryTitle] = useState(
-    t('createProjectLayout.categoryTitleLabel')
-  )
-  const [questionText, setQuestionText] = useState(
-    t('createProjectLayout.questionLabel')
-  )
+  const [categoryTitle, setCategoryTitle] = useState(t('createProjectLayout.categoryTitleLabel'))
+  const [questionText, setQuestionText] = useState(t('createProjectLayout.questionLabel'))
 
   const handleAddAnswer = () => {
     const newId = answers.length + 1
-    const newAnswer = { id: newId, text: '', checked: false }
-    setAnswers([...answers, newAnswer])
+    setAnswers([...answers, { id: newId, text: '', checked: false }])
   }
 
   const handleToggleCheck = (id) => {
@@ -46,6 +39,7 @@ export default function CreateProjectLayout() {
     console.log('Saved:', { categoryTitle, questionText, answers })
     alert(t('createProjectLayout.saveButton') + ' (example)!')
   }
+
   const handleDelete = () => {
     console.log('Deleted (example)!')
     alert(t('createProjectLayout.deleteButton') + ' (example)!')
@@ -53,14 +47,8 @@ export default function CreateProjectLayout() {
 
   return (
     <div className="project-layout">
-      <CategorySection
-        title={categoryTitle}
-        onTitleChange={setCategoryTitle}
-      />
-      <QuestionSection
-        questionText={questionText}
-        onQuestionChange={setQuestionText}
-      />
+      <CategorySection title={categoryTitle} onTitleChange={setCategoryTitle} />
+      <QuestionSection questionText={questionText} onQuestionChange={setQuestionText} />
       <AnswersSection
         answers={answers}
         onAddAnswer={handleAddAnswer}
@@ -69,12 +57,8 @@ export default function CreateProjectLayout() {
         onDeleteAnswer={handleDeleteAnswer}
       />
       <div className="buttons-row">
-        <button onClick={handleSave}>
-          {t('createProjectLayout.saveButton')}
-        </button>
-        <button onClick={handleDelete}>
-          {t('createProjectLayout.deleteButton')}
-        </button>
+        <button onClick={handleSave}>{t('createProjectLayout.saveButton')}</button>
+        <button onClick={handleDelete}>{t('createProjectLayout.deleteButton')}</button>
       </div>
     </div>
   )
@@ -82,10 +66,7 @@ export default function CreateProjectLayout() {
 
 function CategorySection({ title, onTitleChange }) {
   const { t } = useTranslation()
-
-  const modules = {
-    toolbar: { container: '#category-toolbar' }
-  }
+  const modules = { toolbar: { container: '#category-toolbar' } }
   const formats = ['bold', 'italic', 'underline']
 
   return (
@@ -98,11 +79,8 @@ function CategorySection({ title, onTitleChange }) {
             <button className="ql-underline" />
           </span>
         </div>
-        <div className="category-title-label">
-          {t('createProjectLayout.categoryTitleLabel')}
-        </div>
+        <div className="category-title-label">{t('createProjectLayout.categoryTitleLabel')}</div>
       </div>
-
       <ReactQuill
         value={title}
         onChange={onTitleChange}
@@ -118,9 +96,7 @@ function QuestionSection({ questionText, onQuestionChange }) {
   const { t } = useTranslation()
   return (
     <div className="block-container question-section">
-      <label className="question-label">
-        {t('createProjectLayout.questionLabel')}
-      </label>
+      <label className="question-label">{t('createProjectLayout.questionLabel')}</label>
       <textarea
         className="question-textarea"
         value={questionText}
@@ -135,9 +111,7 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
   return (
     <div className="block-container answers-section">
       <div className="answers-header">
-        <label className="answers-label">
-          {t('createProjectLayout.answersLabel')}
-        </label>
+        <label className="answers-label">{t('createProjectLayout.answersLabel')}</label>
       </div>
       <div className="answers-list">
         {answers.map((ans) => (
@@ -151,11 +125,7 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
         ))}
       </div>
       <div className="add-answer-button" onClick={onAddAnswer}>
-        <img
-          src={addIcon}
-          alt="add"
-          className="add-answer-icon"
-        />
+        <img src={addIcon} alt="add" className="add-answer-icon" />
       </div>
     </div>
   )
@@ -175,10 +145,7 @@ function AnswerItem({ answer, onToggleCheck, onAnswerTextChange, onDeleteAnswer 
         value={answer.text}
         onChange={(e) => onAnswerTextChange(answer.id, e.target.value)}
       />
-      <button
-        className="delete-answer-btn"
-        onClick={() => onDeleteAnswer(answer.id)}
-      >
+      <button className="delete-answer-btn" onClick={() => onDeleteAnswer(answer.id)}>
         ✕
       </button>
     </div>

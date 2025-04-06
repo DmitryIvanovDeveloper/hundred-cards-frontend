@@ -52,5 +52,18 @@
     "addAnswer": "Add +",
     "saveButton": "Save",
     "deleteButton": "Delete"
+  },
+  "achievementsPage": {
+    "pageTitle": "Create Achievement",
+    "achievementTitle": "Achievement Title",
+    "activateAchievement": "Activate Achievement",
+    "description": "Description",
+    "achievementIcon": "Achievement Icon",
+    "selectAchievementCategory": "Select Achievement Category",
+    "numberOfCorrectAnswers": "Number of Correct Answers",
+    "selectQuestionsToAchieve": "Select Questions to Achieve",
+    "preview": "Preview",
+    "save": "Save",
+    "newAchievement": "New Achievement"
   }
 }

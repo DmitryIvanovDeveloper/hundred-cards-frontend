@@ -37,5 +37,30 @@ export const imageLinks = (
     <img src="assets/createproject/9.svg" alt="9" />
     <img src="assets/createproject/10.svg" alt="10" />
     <img src="assets/createproject/11.svg" alt="11" />
+
+    <img src="assets/achievements/apple.svg" alt="apple" />
+    <img src="assets/achievements/Arrow 3.svg" alt="arrow-3" />
+    <img src="assets/achievements/Cancel.svg" alt="cancell" />
+    <img src="assets/achievements/career 1.svg" alt="career-1" />
+    <img src="assets/achievements/chicken 1.svg" alt="chicken-1" />
+    <img src="assets/achievements/diamond.svg" alt="diamond" />
+    <img src="assets/achievements/crown.svg" alt="crown" />
+    <img src="assets/achievements/eye.svg" alt="eye" />
+    <img src="assets/achievements/Group 210.svg" alt="upload" />
+    <img src="assets/achievements/Group 125.svg" alt="zipper" />
+    <img src="assets/achievements/Group 216.svg" alt="sett" />
+    <img src="assets/achievements/Group 219.svg" alt="magnifier" />
+    <img src="assets/achievements/Group 221.svg" alt="human" />
+    <img src="assets/achievements/Group 222.svg" alt="message" />
+    <img src="assets/achievements/Group 223.svg" alt="community" />
+    <img src="assets/achievements/magic-ball 1.svg" alt="magic-ball-1" />
+    <img src="assets/achievements/megaphone 1.svg" alt="megaphone-1" />
+    <img src="assets/achievements/plane.svg" alt="plane" />
+    <img src="assets/achievements/rocket.svg" alt="rocket" />
+    <img src="assets/achievements/save.svg" alt="save" />
+    <img src="assets/achievements/startach.svg" alt="startach" />
+    <img src="assets/achievements/Rectangle.svg" alt="rec1" />
+    <img src="assets/achievements/Rectangle 37.svg" alt="rec2" />
+    <img src="assets/achievements/Polygon 6.svg" alt="arrowdown" />
   </>
 );
