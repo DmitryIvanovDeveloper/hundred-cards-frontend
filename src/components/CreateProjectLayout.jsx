@@ -125,7 +125,8 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
         ))}
       </div>
       <div className="add-answer-button" onClick={onAddAnswer}>
-        <img src={addIcon} alt="add" className="add-answer-icon" />
+        Add
+        {/* <img src={addIcon} alt="add" className="add-answer-icon" /> */}
       </div>
     </div>
   )
@@ -134,11 +135,14 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
 function AnswerItem({ answer, onToggleCheck, onAnswerTextChange, onDeleteAnswer }) {
   return (
     <div className="answer-item">
-      <input
-        type="checkbox"
-        checked={answer.checked}
-        onChange={() => onToggleCheck(answer.id)}
-      />
+      <label class="custom-checkbox">
+        <input
+          type="checkbox"
+          checked={answer.checked}
+          onChange={() => onToggleCheck(answer.id)}
+        />
+        <span class="checkmark"></span>
+      </label>
       <input
         className="answer-input"
         type="text"
