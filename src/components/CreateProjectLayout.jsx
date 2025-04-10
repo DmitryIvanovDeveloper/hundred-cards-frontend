@@ -1,3 +1,4 @@
+// src/components/CreateProjectLayout.jsx
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill'
@@ -20,19 +21,19 @@ export default function CreateProjectLayout() {
   }
 
   const handleToggleCheck = (id) => {
-    setAnswers((prev) =>
+    setAnswers(prev =>
       prev.map(ans => (ans.id === id ? { ...ans, checked: !ans.checked } : ans))
     )
   }
 
   const handleAnswerTextChange = (id, newText) => {
-    setAnswers((prev) =>
+    setAnswers(prev =>
       prev.map(ans => (ans.id === id ? { ...ans, text: newText } : ans))
     )
   }
 
   const handleDeleteAnswer = (id) => {
-    setAnswers((prev) => prev.filter(ans => ans.id !== id))
+    setAnswers(prev => prev.filter(ans => ans.id !== id))
   }
 
   const handleSave = () => {
@@ -68,7 +69,6 @@ function CategorySection({ title, onTitleChange }) {
   const { t } = useTranslation()
   const modules = { toolbar: { container: '#category-toolbar' } }
   const formats = ['bold', 'italic', 'underline']
-
   return (
     <div className="block-container category-section">
       <div className="category-top-block">
@@ -126,7 +126,6 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
       </div>
       <div className="add-answer-button" onClick={onAddAnswer}>
         Add
-        {/* <img src={addIcon} alt="add" className="add-answer-icon" /> */}
       </div>
     </div>
   )
@@ -135,13 +134,13 @@ function AnswersSection({ answers, onAddAnswer, onToggleCheck, onAnswerTextChang
 function AnswerItem({ answer, onToggleCheck, onAnswerTextChange, onDeleteAnswer }) {
   return (
     <div className="answer-item">
-      <label class="custom-checkbox">
+      <label className="custom-checkbox">
         <input
           type="checkbox"
           checked={answer.checked}
           onChange={() => onToggleCheck(answer.id)}
         />
-        <span class="checkmark"></span>
+        <span className="checkmark"></span>
       </label>
       <input
         className="answer-input"

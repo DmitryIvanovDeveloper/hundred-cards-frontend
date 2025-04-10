@@ -69,12 +69,6 @@
 
 /* ---------------- QUESTION SECTION STYLES ---------------- */
 .question-label {
-  /* display: inline-block;  
-  float: right;          
-  margin-bottom: 8px;
-  background-color: #fff;
-  padding: 4px 8px;
-  border-radius: 4px; */
   min-height: 26px;
   display: flex;
   justify-content: flex-end;

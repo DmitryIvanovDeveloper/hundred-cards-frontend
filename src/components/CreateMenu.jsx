@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 import './CreateMenu.css'
@@ -12,6 +12,32 @@ import Rectangle from '../assets/createproject/Rectangle.svg'
 import whitevoprosik from '../assets/createproject/whitevoprosik.svg'
 import idk from '../assets/createproject/idk.svg'
 import acceptMedium from '../assets/createproject/fluent-mdl2_accept-medium.svg'
+
+const useUrlUpdater = () => {
+  const navigate = useNavigate()
+  const { search } = useLocation()
+
+  return useCallback(
+    (params, options = { replace: true }) => {
+      const searchParams = new URLSearchParams(search)
+      Object.entries(params).forEach(([k, v]) => {
+        if (v === null || v === undefined) {
+          searchParams.delete(k)
+        } else {
+          searchParams.set(k, v)
+        }
+      })
+      navigate(
+        {
+          pathname: '/create',
+          search: searchParams.toString() ? `?${searchParams.toString()}` : ''
+        },
+        options
+      )
+    },
+    [navigate, search]
+  )
+}
 
 const AchievementItem = ({ achievement, isSelected, onSelect, onEdit, editing, finishEditing, onChangeLabel }) => (
   <li
@@ -31,19 +57,15 @@ const AchievementItem = ({ achievement, isSelected, onSelect, onEdit, editing, f
       </div>
     ) : (
       <div className="achievement-display">
-        {achievement.icon && (
-          <img src={achievement.icon} alt="achievement icon" className="achievement-icon" />
-        )}
+        {achievement.icon && <img src={achievement.icon} alt="" className="achievement-icon" />}
         <span>{achievement.label}</span>
-        {achievement.isSaved && (
-          <img src={acceptMedium} alt="saved" className="saved-icon" />
-        )}
+        {achievement.isSaved && <img src={acceptMedium} alt="" className="saved-icon" />}
       </div>
     )}
     {isSelected && editing.type !== 'achievement' && (
       <img
         src={pencil}
-        alt="Edit Achievement"
+        alt=""
         onClick={(e) => {
           e.stopPropagation()
           onEdit('achievement', achievement.id)
@@ -55,7 +77,7 @@ const AchievementItem = ({ achievement, isSelected, onSelect, onEdit, editing, f
 
 const QuestionItem = ({ question, isSelected, onSelect, onToggleCheck, onEdit, editing, finishEditing, onChangeLabel }) => (
   <li className={isSelected ? 'selected' : ''} onClick={() => onSelect(question.id, question.categoryId)}>
-    <img src={idk} alt="drag-handle" className="drag-handle" />
+    <img src={idk} alt="" className="drag-handle" />
     <div
       className="checkbox"
       onClick={(e) => {
@@ -63,10 +85,8 @@ const QuestionItem = ({ question, isSelected, onSelect, onToggleCheck, onEdit, e
         onToggleCheck(question.id)
       }}
     >
-      <img src={check} alt="check" className="white-square" />
-      {question.checked && (
-        <img src={acceptMedium} alt="accepted" className="check-icon" />
-      )}
+      <img src={check} alt="" className="white-square" />
+      {question.checked && <img src={acceptMedium} alt="" className="check-icon" />}
     </div>
     {editing.type === 'question' && editing.id === question.id ? (
       <input
@@ -83,7 +103,7 @@ const QuestionItem = ({ question, isSelected, onSelect, onToggleCheck, onEdit, e
     {isSelected && editing.type !== 'question' && (
       <img
         src={pencil}
-        alt="Edit Question"
+        alt=""
         onClick={(e) => {
           e.stopPropagation()
           onEdit('question', question.id)
@@ -101,10 +121,9 @@ const QuestionsBlock = ({
   editing,
   setEditing,
   toggleCheck,
-  setQuestions,
   finishEditing,
   onChangeLabel,
-  updateUrl,
+  updateUrl
 }) => {
   const handleEdit = (type, id) => setEditing({ type, id })
   const handleSelect = (id, categoryId) => {
@@ -127,46 +146,39 @@ const QuestionsBlock = ({
           onChangeLabel={onChangeLabel}
         />
       ))}
-      <img src={Rectangle} alt="Separator" />
+      <img src={Rectangle} alt="" />
     </ul>
   )
 }
 
 export default function CreateMenu({ onSelectionChange }) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const updateUrl = (params) => {
-    const searchParams = new URLSearchParams(location.search)
-    Object.keys(params).forEach((key) => {
-      if (params[key] === null || params[key] === undefined) {
-        searchParams.delete(key)
-      } else {
-        searchParams.set(key, params[key])
-      }
-    })
-    navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true })
-  }
+  const updateUrl = useUrlUpdater()
 
   const [selectedProject, setSelectedProject] = useState('project1')
   const [projectName, setProjectName] = useState(t('createMenu.project1'))
 
-  const initialCategories = [
-    { id: 'category1', label: t('createMenu.category1') },
-    { id: 'category2', label: t('createMenu.category2') },
-    { id: 'category3', label: t('createMenu.category3') },
-  ]
+  const initialCategories = useMemo(
+    () => [
+      { id: 'category1', label: t('createMenu.category1') },
+      { id: 'category2', label: t('createMenu.category2') },
+      { id: 'category3', label: t('createMenu.category3') }
+    ],
+    [t]
+  )
   const [categories, setCategories] = useState(initialCategories)
   const [selectedCategory, setSelectedCategory] = useState(initialCategories[0].id)
 
-  const initialQuestions = [
-    { id: 'question1', label: t('createMenu.question1'), checked: false, categoryId: selectedCategory },
-    { id: 'question2', label: t('createMenu.question2'), checked: false, categoryId: selectedCategory },
-    { id: 'question3', label: t('createMenu.question3'), checked: false, categoryId: selectedCategory },
-    { id: 'question4', label: t('createMenu.question4'), checked: false, categoryId: selectedCategory },
-    { id: 'question5', label: t('createMenu.question5'), checked: false, categoryId: selectedCategory },
-  ]
+  const initialQuestions = useMemo(
+    () => [
+      { id: 'question1', label: t('createMenu.question1'), checked: false, categoryId: selectedCategory },
+      { id: 'question2', label: t('createMenu.question2'), checked: false, categoryId: selectedCategory },
+      { id: 'question3', label: t('createMenu.question3'), checked: false, categoryId: selectedCategory },
+      { id: 'question4', label: t('createMenu.question4'), checked: false, categoryId: selectedCategory },
+      { id: 'question5', label: t('createMenu.question5'), checked: false, categoryId: selectedCategory }
+    ],
+    [t, selectedCategory]
+  )
   const [questions, setQuestions] = useState(initialQuestions)
   const [selectedQuestion, setSelectedQuestion] = useState(initialQuestions[0].id)
 
@@ -174,28 +186,25 @@ export default function CreateMenu({ onSelectionChange }) {
   const [selectedAchievement, setSelectedAchievement] = useState(null)
 
   const [editing, setEditing] = useState({ type: null, id: null })
+  const finishEditing = () => setEditing({ type: null, id: null })
 
   useEffect(() => {
     if (selectedAchievement) {
-      onSelectionChange && onSelectionChange({ type: 'achievement', id: selectedAchievement })
-    } else if (selectedProject && selectedCategory) {
-      onSelectionChange &&
-        onSelectionChange({
-          type: 'project',
-          project: selectedProject,
-          projectName,
-          category: selectedCategory,
-          question: selectedQuestion || null,
-        })
+      onSelectionChange?.({ type: 'achievement', id: selectedAchievement })
+    } else {
+      onSelectionChange?.({
+        type: 'project',
+        project: selectedProject,
+        projectName,
+        category: selectedCategory,
+        question: selectedQuestion || null
+      })
     }
   }, [selectedProject, selectedCategory, selectedQuestion, selectedAchievement, projectName, onSelectionChange])
 
-  const finishEditing = () => setEditing({ type: null, id: null })
-
   const addCategory = () => {
-    const newNum = categories.length + 1
-    const newId = `category${newNum}`
-    const newLabel = `${t('createMenu.category')} ${newNum}`
+    const newId = `category${categories.length + 1}`
+    const newLabel = `${t('createMenu.category')} ${categories.length + 1}`
     setCategories([...categories, { id: newId, label: newLabel }])
     setSelectedCategory(newId)
     setSelectedAchievement(null)
@@ -203,9 +212,8 @@ export default function CreateMenu({ onSelectionChange }) {
   }
 
   const addQuestion = () => {
-    const newNum = questions.length + 1
-    const newId = `question${newNum}`
-    const newLabel = `${t('createMenu.question')} ${newNum}`
+    const newId = `question${questions.length + 1}`
+    const newLabel = `${t('createMenu.question')} ${questions.length + 1}`
     const newQuestion = { id: newId, label: newLabel, checked: false, categoryId: selectedCategory }
     setQuestions([...questions, newQuestion])
     setSelectedQuestion(newId)
@@ -213,28 +221,17 @@ export default function CreateMenu({ onSelectionChange }) {
     updateUrl({ category: selectedCategory, question: newId, achievement: null })
   }
 
+  const toggleCheck = (id) => setQuestions((prev) => prev.map((q) => (q.id === id ? { ...q, checked: !q.checked } : q)))
+  const handleChangeQuestionLabel = (id, value) => setQuestions((prev) => prev.map((q) => (q.id === id ? { ...q, label: value } : q)))
+  const handleChangeAchievementLabel = (id, value) => setAchievements((prev) => prev.map((a) => (a.id === id ? { ...a, label: value } : a)))
+
   const addAchievement = () => {
-    const newNum = achievements.length + 1
-    const newId = `achievement${newNum}`
-    const newLabel = `${t('createMenu.achievement')} ${newNum}`
+    const newId = `achievement${achievements.length + 1}`
+    const newLabel = `${t('createMenu.achievement')} ${achievements.length + 1}`
     const newAchievement = { id: newId, label: newLabel, icon: '', isSaved: false, categoryId: selectedCategory }
     setAchievements([...achievements, newAchievement])
     setSelectedAchievement(newId)
     updateUrl({ achievement: newId })
-  }
-
-  const toggleCheck = (id) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, checked: !q.checked } : q))
-    )
-  }
-
-  const handleChangeQuestionLabel = (id, value) => {
-    setQuestions(questions.map((q) => (q.id === id ? { ...q, label: value } : q)))
-  }
-
-  const handleChangeAchievementLabel = (id, value) => {
-    setAchievements(achievements.map((ach) => (ach.id === id ? { ...ach, label: value } : ach)))
   }
 
   return (
@@ -242,7 +239,7 @@ export default function CreateMenu({ onSelectionChange }) {
       <h1 className="menu-title">{t('createMenu.title')}</h1>
       <div className="menu-section">
         <div className="section-header">
-          <img src={whitefolder} alt="Project" />
+          <img src={whitefolder} alt="" />
           <span>{t('createMenu.projects')}</span>
         </div>
         <ul>
@@ -269,7 +266,7 @@ export default function CreateMenu({ onSelectionChange }) {
             {selectedProject === 'project1' && editing.type !== 'project' && (
               <img
                 src={pencil}
-                alt="Edit Project"
+                alt=""
                 onClick={(e) => {
                   e.stopPropagation()
                   setEditing({ type: 'project', id: 'project1' })
@@ -281,9 +278,9 @@ export default function CreateMenu({ onSelectionChange }) {
       </div>
       <div className="menu-section">
         <div className="section-header">
-          <img src={optionsLines} alt="Categories" />
+          <img src={optionsLines} alt="" />
           <span>{t('createMenu.categories')}</span>
-          <img src={plus} alt="Add Category" className="header-plus" onClick={addCategory} />
+          <img src={plus} alt="" className="header-plus" onClick={addCategory} />
         </div>
         <ul>
           {categories.map((cat) => (
@@ -301,11 +298,7 @@ export default function CreateMenu({ onSelectionChange }) {
                   type="text"
                   value={cat.label}
                   onChange={(e) =>
-                    setCategories(
-                      categories.map((item) =>
-                        item.id === cat.id ? { ...item, label: e.target.value } : item
-                      )
-                    )
+                    setCategories((prev) => prev.map((item) => (item.id === cat.id ? { ...item, label: e.target.value } : item)))
                   }
                   onBlur={finishEditing}
                   onKeyPress={(e) => e.key === 'Enter' && finishEditing()}
@@ -317,7 +310,7 @@ export default function CreateMenu({ onSelectionChange }) {
               {selectedCategory === cat.id && editing.type !== 'category' && (
                 <img
                   src={pencil}
-                  alt="Edit Category"
+                  alt=""
                   onClick={(e) => {
                     e.stopPropagation()
                     setEditing({ type: 'category', id: cat.id })
@@ -326,14 +319,14 @@ export default function CreateMenu({ onSelectionChange }) {
               )}
             </li>
           ))}
-          <img src={Rectangle} alt="Separator" />
+          <img src={Rectangle} alt="" />
         </ul>
       </div>
       <div className="menu-section questions-block">
         <div className="section-header">
-          <img src={whitevoprosik} alt="Questions" />
+          <img src={whitevoprosik} alt="" />
           <span>{t('createMenu.questions')}</span>
-          <img src={plus} alt="Add Question" className="header-plus" onClick={addQuestion} />
+          <img src={plus} alt="" className="header-plus" onClick={addQuestion} />
         </div>
         <QuestionsBlock
           questions={questions}
@@ -343,7 +336,6 @@ export default function CreateMenu({ onSelectionChange }) {
           editing={editing}
           setEditing={setEditing}
           toggleCheck={toggleCheck}
-          setQuestions={setQuestions}
           finishEditing={finishEditing}
           onChangeLabel={handleChangeQuestionLabel}
           updateUrl={updateUrl}
@@ -352,7 +344,7 @@ export default function CreateMenu({ onSelectionChange }) {
       <div className="menu-section">
         <div className="section-header">
           <span>{t('createMenu.achievement')}</span>
-          <img src={plus} alt="Add Achievement" className="header-plus" onClick={addAchievement} />
+          <img src={plus} alt="" className="header-plus" onClick={addAchievement} />
         </div>
         <ul>
           {achievements.map((ach) => (
@@ -363,7 +355,7 @@ export default function CreateMenu({ onSelectionChange }) {
               onSelect={(id) => {
                 setSelectedAchievement(id)
                 updateUrl({ achievement: id })
-                onSelectionChange && onSelectionChange({ type: 'achievement', id })
+                onSelectionChange?.({ type: 'achievement', id })
               }}
               onEdit={(type, id) => setEditing({ type, id })}
               editing={editing}
