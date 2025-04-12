@@ -39,7 +39,7 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/" className="nav-link">
+            <NavLink to="/" className={`nav-link ${isCreatePage ? 'active' : ''}`}>
               <FolderIcon className="nav-icon" />
               <span>{t('sidebar.projects')}</span>
             </NavLink>

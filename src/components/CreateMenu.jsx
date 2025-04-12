@@ -8,7 +8,6 @@ import check from '../assets/createproject/check.svg'
 import pencil from '../assets/createproject/pencil.svg'
 import plus from '../assets/createproject/plus.svg'
 import whitefolder from '../assets/createproject/folder white.svg'
-import Rectangle from '../assets/createproject/Rectangle.svg'
 import whitevoprosik from '../assets/createproject/whitevoprosik.svg'
 import idk from '../assets/createproject/idk.svg'
 import acceptMedium from '../assets/createproject/fluent-mdl2_accept-medium.svg'
@@ -146,7 +145,6 @@ const QuestionsBlock = ({
           onChangeLabel={onChangeLabel}
         />
       ))}
-      <img src={Rectangle} alt="" />
     </ul>
   )
 }
@@ -319,7 +317,6 @@ export default function CreateMenu({ onSelectionChange }) {
               )}
             </li>
           ))}
-          <img src={Rectangle} alt="" />
         </ul>
       </div>
       <div className="menu-section questions-block">

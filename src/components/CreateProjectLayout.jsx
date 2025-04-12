@@ -5,8 +5,9 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import './CreateProjectPage.css'
 import addIcon from '../assets/add.svg'
+import projTitleIcon from '../assets/idea.png'
 
-export default function CreateProjectLayout() {
+export default function CreateProjectLayout({ projectId, userName }) {
   const { t } = useTranslation()
   const [answers, setAnswers] = useState([
     { id: 1, text: t('secondPage.answer1'), checked: true },
@@ -58,6 +59,10 @@ export default function CreateProjectLayout() {
         onDeleteAnswer={handleDeleteAnswer}
       />
       <div className="buttons-row">
+        <div className="user-name">
+          <img src={projTitleIcon} alt="icon" />
+          {userName}
+        </div>
         <button onClick={handleSave}>{t('createProjectLayout.saveButton')}</button>
         <button onClick={handleDelete}>{t('createProjectLayout.deleteButton')}</button>
       </div>

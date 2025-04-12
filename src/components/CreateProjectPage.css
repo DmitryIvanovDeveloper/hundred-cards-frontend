@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 /* ---------------- COMMON BLOCK CONTAINER ---------------- */
 .block-container {
@@ -240,6 +241,45 @@
 }
 
 /* ---------------- BUTTONS ROW ---------------- */
+.project-layout .buttons-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 14px;
+  margin: 0;
+  background-color: #EFF6F8;
+  box-shadow: 0px 2px 2px 0px #69758740;
+  display: flex;
+}
+.project-layout .buttons-row button {
+  font-weight: 800;
+  font-size: 11px;
+  line-height: 100%;
+  padding: 8px 25px;
+  background-color: #9747FF;
+  border: 1px solid #9747FF;
+  transition: 0.3s ease;
+}
+.project-layout .buttons-row .user-name {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-right: auto;
+  margin-left: 13%;
+  color: #92A0A6;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 100%;
+}
+.project-layout .buttons-row .user-name img {
+  width: 30px;
+  height: 30px;
+}
+.project-layout .buttons-row button:hover {
+  color: #9747FF;
+  background-color: #fff;
+}
 .buttons-row {
   display: flex;
   gap: 10px;

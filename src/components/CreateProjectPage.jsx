@@ -12,6 +12,7 @@ export default function CreateProjectPage() {
   const [token, setToken] = useState(null)
   const [loading, setLoading] = useState(true)
   const hasFetched = useRef(false)
+  const [userName, setUserName] = useState('')
 
   useEffect(() => {
     if (hasFetched.current) return
@@ -34,6 +35,7 @@ export default function CreateProjectPage() {
         // Attempt to sign up the user.
         const signUpResponse = await signUp(userData)
         newToken = signUpResponse.token
+        setUserName(`${userData.user.first_name} ${userData.user.last_name}`)
         console.log("Sign up successful. Token:", newToken)
       } catch (err) {
         // If sign-up fails due to a unique constraint error, fall back to sign in.
@@ -52,6 +54,7 @@ export default function CreateProjectPage() {
               }
             })
             newToken = signInResponse.token
+            setUserName(`${userData.user.first_name} ${userData.user.last_name}`)
             console.log("Sign in successful. Token:", newToken)
           } else {
             throw err
@@ -99,7 +102,7 @@ export default function CreateProjectPage() {
         ) : selection.type === 'achievement' ? (
           <CreateAchievementLayout achievementId={selection.id} />
         ) : selection.id ? (
-          <CreateProjectLayout projectId={selection.id} />
+          <CreateProjectLayout projectId={selection.id} userName={userName}/>
         ) : (
           <div className="loading">{t('noProjectFound', 'No Project Found')}</div>
         )}

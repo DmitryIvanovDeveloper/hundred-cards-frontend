@@ -1,23 +1,31 @@
 .create-menu {
-  width: 250px;
+  width: 236px;
   background-color: #bfd2da;
   color: #000;
   min-height: 100vh;
-  padding: 20px;
+  padding: 0 5px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 60px;
+  z-index: 5;
+  border-right: 2px solid #A5BBC5;
 }
 
 .menu-title {
-  margin: 0 0 55px;
+  margin: 0 0 77px;
+  padding: 35px 10px 0 50px;
   font-size: 24px;
   font-weight: bold;
+  font-weight: 900;
+  font-size: 21.2px;
+  line-height: 100%;
+  color: #FFF;
 }
 
 .menu-section {
-  margin-bottom: 20px;
+  padding: 20px 20px 25px;
+  border-bottom: 1px solid #92A0A6;
 }
 
 .section-header {
@@ -25,7 +33,10 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
-}
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 100%;
+  }
 
 .header-plus {
   margin-left: auto;
@@ -34,7 +45,7 @@
 
 .menu-section ul {
   list-style: none;
-  padding: 0;
+  padding: 0 0 0 24px;
   margin: 0;
 }
 
@@ -45,6 +56,11 @@
   margin: 5px 0;
   cursor: pointer;
   padding: 5px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
 .menu-section ul li.selected {
