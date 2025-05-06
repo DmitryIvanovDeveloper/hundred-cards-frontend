@@ -1,15 +1,15 @@
 import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugin";
 import AdminAuthenticatedEvent from "@/modules/shared/authentication/business/events/admin-authenticated.event";
+import { L } from "vitest/dist/chunks/reporters.d.CfRkRKN2";
 
-export default class AdminAuthenticatedEventCreateProfileHandler implements IAsyncEventHandler<AdminAuthenticatedEvent> {
-    canHandle(event: AdminAuthenticatedEvent): boolean {
-       return event instanceof AdminAuthenticatedEvent;
-    }
-   
-    handleAsync(event: AdminAuthenticatedEvent): Promise<void> {
+export default class AdminAuthenticatedEventCreateProfileHandler
+  implements IAsyncEventHandler<AdminAuthenticatedEvent>
+{
+  canHandle(event: AdminAuthenticatedEvent): boolean {
+    return event instanceof AdminAuthenticatedEvent;
+  }
 
-       console.log("AdminAuthenticatedEventHandler");
-       throw new Error("AdminAuthenticatedEventHandler");
-    }
-    
+  async handleAsync(event: AdminAuthenticatedEvent): Promise<void> {
+    await Promise.resolve();
+  }
 }

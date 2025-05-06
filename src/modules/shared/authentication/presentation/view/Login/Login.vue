@@ -1,41 +1,42 @@
 <script setup lang="ts">
 import { TYPES } from "../../../types";
 import { container } from "@/infrastructure/bootstrap/inversify.config";
-import { useRouter } from "vue-router";
 import CardContent from "@/ui/CardContent.vue";
 import ButtonsSwitcher from "@/ui/Buttons/ButtonsSwitcher.vue";
 import LoginPresenter from "../../presenter/login.presenter";
 import LoginController from "../../controller/login.controller";
-import { RouterPaths } from "@/app/router/router-paths";
 import Form from "./components/Form.vue";
+import { LoginType } from "../../../business/dtos/login.type";
 
 const presenter = container.get<LoginPresenter>(TYPES.LoginPresenter);
 const controller = container.get<LoginController>(TYPES.LoginController);
 
-const router = useRouter();
-
 </script>
 
 <template>
+  <div class="flex w-[400px]">
+
     <CardContent :title="'Авторизация'">
         <template #right>
-          <div class="flex w-[260px]">
+          <div class="flex w-[200px]">
             <ButtonsSwitcher
+              :value="controller.form.value.type"
               :options="[
                 {
-                  label: 'Phone',
-                  value: 'phone',
+                  label: presenter.labels.loginType.phone,
+                  value: LoginType.Phone
                 },
                 {
-                  label: 'Email',
-                  value: 'email',
+                  label: presenter.labels.loginType.email,
+                  value: LoginType.Email
                 },
               ]"
-              :handle-press="() => {}"
+              :handle-press="(type) => controller.updateType(type)"
             />
           </div>
         </template>
         <Form />
       </CardContent>
+    </div>
   
 </template>

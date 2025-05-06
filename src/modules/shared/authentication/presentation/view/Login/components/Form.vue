@@ -1,43 +1,64 @@
 <script setup lang="ts">
-import RegistrationPresenter from "../../../presenter/registration.presenter";
 import { TYPES } from "../../../../types";
 import { container } from "@/infrastructure/bootstrap/inversify.config";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
 import UniversalRoundedButton from "@/ui/Buttons/UniversalRoundedButton.vue";
 import UniversalInput from "@/ui/UniversalInput.vue";
 import LoginPresenter from "../../../presenter/login.presenter";
+import LoginController from "../../../controller/login.controller";
+import { LoginType } from "@/modules/shared/authentication/business/dtos/login.type";
 import { RouterPaths } from "@/app/router/router-paths";
 
-const presenter = container.get<LoginPresenter>(
-  TYPES.LoginPresenter
-);
+const presenter = container.get<LoginPresenter>(TYPES.LoginPresenter);
+
+const controller = container.get<LoginController>(TYPES.LoginController);
+
 const router = useRouter();
 
-const form = ref({
-  email: "",
-  phone: "",
-  password: "",
-  confirmPassword: "",
-  termsAccepted: false,
-});
+const signIn = async () => {
+    const result = await controller.tryLogin();
+    if (!result.isSuccess) {
+        return;
+    }
+    console.log(RouterPaths.admin)
+
+    router.push(RouterPaths.admin);
+}
 </script>
 
 <template>
-  <div class="flex h-full w-full flex flex-col gap-[20px]">
-    <UniversalInput label="Email (личный)" :onChange="() => {}" type="email" />
-
-    <UniversalInput label="Телефон" :onChange="() => {}" type="phone" />
-
-    <UniversalInput label="Пароль" :onChange="() => {}" type="password" />
-
-    <UniversalRoundedButton
-      :label="'Войти'"
-      :handle-press="() => router.push(RouterPaths.registration)"
+  <div class="flex w-full flex flex-col gap-[10px] pt-[20px]">
+    <UniversalInput
+      v-if="controller.form.value.type === LoginType.Email"
+      :label="presenter.labels.email.label"
+      :onChange="controller.updateEmail"
+      type="email"
     />
 
-    <p class="text-center text-sm text-gray-600">
-      Не зарегистрировваны? <a href="/registration" class="text-purple-500">Зарегистрироваться</a>
+    <UniversalInput
+      v-if="controller.form.value.type === LoginType.Phone"
+      :label="presenter.labels.phone.label"
+      :onChange="controller.updatePhone"
+      type="phone"
+    />
+
+    <UniversalInput
+      :label="presenter.labels.password.label"
+      :onChange="controller.updatePassword"
+      type="password"
+    />
+
+    <UniversalRoundedButton
+        :loading="controller.isLoading.value"
+        :label="presenter.labels.confirm"
+        :handle-press="signIn"
+    />
+
+    <p class="text-center text-sm text-gray-600 text-left">
+      {{ presenter.labels.notRegistered.title }}
+      <a href="/registration" class="text-purple-500">{{
+        presenter.labels.notRegistered.goto
+      }}</a>
     </p>
   </div>
 </template>

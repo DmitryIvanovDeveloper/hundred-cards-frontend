@@ -8,6 +8,8 @@ import LoginController from '../../presentation/controller/login.controller';
 import IAuthenticationRepository from '../../business/plugins/authentication.repository.interface';
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import RegistrationPresenter from '../../presentation/presenter/registration.presenter';
+import TrySignInUseCase from '../../business/usecases/try-sign-in.usecase';
+import TrySignUpUseCase from '../../business/usecases/try-sign-up.usecase';
 
 container
     .bind<IAuthenticationRepository>(TYPES.AuthenticationRepository)
@@ -39,3 +41,16 @@ container
     .to(LoginController)
     .inSingletonScope()
 ;
+
+container
+    .bind<TrySignInUseCase>(TYPES.TrySignInUseCase)
+    .to(TrySignInUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind<TrySignUpUseCase>(TYPES.TrySignUpUseCase)
+    .to(TrySignUpUseCase)
+    .inTransientScope()
+;
+

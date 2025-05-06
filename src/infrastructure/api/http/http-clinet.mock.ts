@@ -5,7 +5,7 @@ import Result from '@/infrastructure/helpers/result';
 import IErrorResponse from '../../dtos/errorResponse';
 import { IError } from '../../dtos/error-type';
 
-const mockFiles = import.meta.glob<{ default: unknown }>('@/infrastructure//mocks/**/*.json', { eager: true });
+const mockFiles = import.meta.glob<{ default: unknown }>('@/infrastructure/mocks/**/*.json', { eager: true });
 
 @injectable()
 export default class HttpClientMock implements IHttpClient {
@@ -15,10 +15,10 @@ export default class HttpClientMock implements IHttpClient {
     public lastEndpointNumber = 1;
 
     private async loadMockResponse(endpoint: string): Promise<void> {
-        const formattedEndpoint = this.getLastEndpointParts(endpoint, this.lastEndpointNumber);
+        const formattedEndpoint = this.getLastEndpointParts(endpoint);
         const fileName = !this.error ? `${formattedEndpoint}.json` : `${formattedEndpoint}.${this.error.code}${!this.error.type ? '' : `.${this.error.type}`}.json`;
-
         const mockEntry = Object.entries(mockFiles).find(([key]) => key.endsWith(`/${fileName}`));
+        console.log(fileName)
 
         if (!mockEntry) {
             console.warn(`[MOCK] JSON для ${endpoint} по пути ${fileName} не найден`);
@@ -34,32 +34,33 @@ export default class HttpClientMock implements IHttpClient {
         method: 'GET' | 'POST' | 'PUT' | 'DELETE',
         payload?: TRequest,
     ): Promise<Result<TResponse>> {
-        await this.loadMockResponse(endpoint);
-
-        if (!this.mockResponses.has(endpoint)) {
-            throw new Error(`[MOCK] No mock response found for ${endpoint}`);
+        const path = `${endpoint}${method.toLocaleLowerCase()}`
+        await this.loadMockResponse(path);
+        if (!this.mockResponses.has(path)) {
+            throw new Error(`[MOCK] No mock response found for ${path}`);
         }
 
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         if (!!this.error) {
-            const response = this.mockResponses.get(endpoint) as IErrorResponse;
+            const response = this.mockResponses.get(path) as IErrorResponse;
             return Result.failure(new NetworkError('', '', response));
         }
 
-        const response = this.mockResponses.get(endpoint) as TResponse;
+        const response = this.mockResponses.get(path) as TResponse;
+
         return Result.success(response);
     }
 
     public get<TResponse>(endpoint: string): Promise<Result<TResponse>> {
-        return this.request<TResponse, undefined>(`${endpoint}.get`, 'GET');
+        return this.request<TResponse, undefined>(`${endpoint}`, 'GET');
     }
 
     public post<TResponse, TRequest extends Record<string, any> | FormData | undefined>(
         endpoint: string,
         payload: TRequest,
     ): Promise<Result<TResponse>> {
-        return this.request<TResponse, TRequest>(`${endpoint}.post`, 'POST', payload);
+        return this.request<TResponse, TRequest>(endpoint, 'POST', payload);
     }
 
     public put<TResponse, TRequest extends Record<string, any> | FormData | undefined>(
@@ -73,12 +74,8 @@ export default class HttpClientMock implements IHttpClient {
         return this.request<TResponse, undefined>(endpoint, 'DELETE');
     }
 
-    private getLastEndpointParts(endpoint: string, partsCount: number): string {
-        const [path, query] = endpoint.split('?');
-
-        const methodMatch = query?.match(/\.(get|post|put|delete)$/i);
-        const methodSuffix = methodMatch ? methodMatch[0] : '';
-
-        return path + methodSuffix;
+    private getLastEndpointParts(endpoint: string): string {
+        console.log(endpoint)
+        return endpoint.replace(/\/\.(get|post|put|delete)$/i, '.$1');
     }
 }

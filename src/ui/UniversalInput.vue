@@ -81,14 +81,14 @@ const inputStyle = computed(() => ({
             :style="inputStyle"
         />
         <InputText
-        v-if="type === 'email'"
-        :type="type"
-        class="!px-[20px] !py-[14px] !placeholder-text_primary"
-        :disabled="disabled"
-        :placeholder="placeholder ?? 'email@example.com'"
-        v-model="modelValue"
-        :style="inputStyle"
-    />
+            v-if="type === 'email'"
+            :type="type"
+            class="!px-[20px] !py-[14px] !placeholder-text_primary"
+            :disabled="disabled"
+            :placeholder="placeholder ?? 'email@example.com'"
+            v-model="modelValue"
+            :style="inputStyle"
+        />
     </FieldWrapper>
 </template>
 

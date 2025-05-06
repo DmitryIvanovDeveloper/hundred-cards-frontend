@@ -13,12 +13,12 @@ const presenter = container.get<RegistrationPresenter>(
 <template>
   <CardContent :title="'Нужна помощь'">
     <template #right>
-      <span class="font-roboto-700 text-[20px] p-2 text-[#9747FF] text-left">
+      <span class="font-roboto-700 text-[20px] text-[#9747FF] text-left">
         _________
       </span>
     </template>
     <div
-      class="flex flex-col w-[409px] bg-[#FFFFFF] rounded-[12px] w-[371px p-[25px] gap-[30px]"
+      class="flex flex-col w-[409px] bg-[#FFFFFF] rounded-[12px] w-[371px] p-[15px] gap-[10px]"
     >
       <div class="flex flex-col">
         <span class="font-roboto-600 text-[17px] text-left text-[#424242]">{{

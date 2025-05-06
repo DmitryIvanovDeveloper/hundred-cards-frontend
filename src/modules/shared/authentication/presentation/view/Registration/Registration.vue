@@ -10,49 +10,48 @@ import Verefication from "./components/Verefication.vue";
 import Help from "./components/Help.vue";
 import CardContent from "@/ui/CardContent.vue";
 import ButtonsSwitcher from "@/ui/Buttons/ButtonsSwitcher.vue";
+import RegistrationController from "../../controller/registration.controller";
+import { RegistrationType } from "../../../business/dtos/registration-type";
 
 const presenter = container.get<RegistrationPresenter>(
   TYPES.RegistrationPresenter
 );
+
+const controller = container.get<RegistrationController>(
+  TYPES.RegistrationController
+);
+
 const router = useRouter();
 
-const form = ref({
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  password: "",
-  confirmPassword: "",
-  termsAccepted: false,
-});
 </script>
 
 <template>
   <div
-    class="flex gap-[30px] scale-100 scale-100"
+    class="flex gap-[30px]"
   >
-    <CardContent :title="'Регистрация'">
+    <CardContent :title="presenter.labels.title">
       <template #right>
-        <div class="flex w-[260px] ">
+        <div class="grid w-full max-w-[250px]">
           <ButtonsSwitcher
+            :value="controller.form.value.type"
             :options="[
               {
-                label: 'Для бизнеса',
-                value: 'business',
+                label: presenter.labels.registrationType.business,
+                value: RegistrationType.Business,
               },
               {
-                label: 'Для себя',
-                value: 'own',
+                label: presenter.labels.registrationType.personal,
+                value: RegistrationType.Personal,
               },
             ]"
-            :handlePress="(type) => {}"
+            :handlePress="(type) => controller.updateType(type)"
           />
         </div>
       </template>
       <Form />
     </CardContent>
 
-    <div class="grid flex-col gap-[30px]">
+    <div class="flex flex-col gap-[30px] justify-between">
       <Advantages />
       <Verefication />
       <Help />

@@ -19,7 +19,7 @@ const presenter = container.get<RegistrationPresenter>(
       _________
     </span>
   </template>
-  <div class="flex flex-col w-[409px] bg-[#FFFFFF] rounded-[12px] w-[371px p-[25px] gap-[30px]">
+  <div class="flex flex-col  bg-[#FFFFFF] rounded-[12px] p-[25px] gap-[30px]">
     <div class="flex flex-col">
       <span class="font-rubik-700  text-[17px] text-left text-[#424242]">{{'Безопасное хранение данных'}}</span>
       <span class="font-rubik-500 text-[10px] text-left text-[#7D8B91]">{{'Защищенный личный кабинет для хранения ваших данных'}}</span>

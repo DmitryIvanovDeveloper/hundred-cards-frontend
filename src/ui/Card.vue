@@ -4,7 +4,7 @@ export interface ILogoProps {}
 
 <template>
     <div
-        class="w-full bg-background  p-6 rounded-[20px] shadow-lg "
+        class="grid flex-col w-full bg-background  px-[20px] pb-[20px] pt-[15px]  rounded-[20px] shadow-lg "
     >
         <slot />
     </div>

@@ -6,6 +6,6 @@ export interface ILogoProps {
 
 <template>
     <div>
-        <img src="@assets/images/hartia-logo.svg" class="h-[44px] sm:h-[63px]" />
+        <img src="@assets/images/logo.svg" class="h-[44px] sm:h-[63px]" />
     </div>
 </template>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { CSSProperties } from 'vue';
 import Button from 'primevue/button';
-import Icon from '@assets/images/navigation-pointer-ico.svg';
 
 export interface IUniversalRoundedButton {
     rounded?: boolean;

@@ -49,15 +49,7 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             beforeEnter: async (to, from, next) => {
                 const authToken = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases);
 
-                if (to.path === RouterPaths.admin && to.query.token) {
-                    const token = to.query.token as string;
-                    authToken.store(token);
-
-                    next();
-
-                    return;
-                }
-
+                console.log(authToken.isAuthenticated())
                 if (to.meta.requiresAuth && !authToken.isAuthenticated()) {
                     next(RouterPaths.registration);
                     return;

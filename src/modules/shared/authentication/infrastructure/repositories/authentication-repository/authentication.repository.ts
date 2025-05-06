@@ -38,11 +38,13 @@ export default class AuthenticationRepository implements IAuthenticationReposito
     };
 
     public signIn = async (email: string, password: string): Promise<Result<string>> => {
-        const endpoint = 'api/client/v1/auth';
+        const endpoint = 'sign_in/';
 
         const request: ILoginRequest = {
-            login: email,
-            password: password,
+            user: {
+                email,
+                password,
+            }
         };
 
         const response = await this._httpClient.post<ILoginResponse, ILoginRequest>(endpoint, request);
