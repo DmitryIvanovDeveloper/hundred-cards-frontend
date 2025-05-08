@@ -34,7 +34,9 @@ export default class HttpClientMock implements IHttpClient {
         method: 'GET' | 'POST' | 'PUT' | 'DELETE',
         payload?: TRequest,
     ): Promise<Result<TResponse>> {
-        const path = `${endpoint}${method.toLocaleLowerCase()}`
+        const path = `${endpoint}${method.toLocaleLowerCase()}`;
+
+
         await this.loadMockResponse(path);
         if (!this.mockResponses.has(path)) {
             throw new Error(`[MOCK] No mock response found for ${path}`);
@@ -75,7 +77,6 @@ export default class HttpClientMock implements IHttpClient {
     }
 
     private getLastEndpointParts(endpoint: string): string {
-        console.log(endpoint)
-        return endpoint.replace(/\/\.(get|post|put|delete)$/i, '.$1');
+        return endpoint.replace(/\/\.(get|post|put|delete)$/i, '.$1').replace('?', '');
     }
 }

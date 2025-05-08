@@ -20,7 +20,8 @@ export const enum Enviroment {
 
 const container = new Container();
 
-if (import.meta.env.VITE_APP_ENV === Enviroment.local) {
+console.log(import.meta.env.VITE_APP_ENV )
+if (import.meta.env.VITE_APP_ENV === Enviroment.development) {
     container.bind<IHttpClient>(TYPES.HttpClient).to(HttpClient);
 } else {
     container.bind<IHttpClient>(TYPES.HttpClient).to(HttpClientMock);

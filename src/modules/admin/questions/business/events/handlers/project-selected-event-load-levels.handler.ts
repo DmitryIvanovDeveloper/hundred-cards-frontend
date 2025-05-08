@@ -1,0 +1,22 @@
+import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugin";
+import { TYPES } from "../../../types";
+import { inject } from "inversify";
+import LoadPresentQuestionsUseCase from "../../usecases/load-present-questons.usecase";
+import LevelSelectedEvent from "@/modules/admin/levels/business/events/level-selected-event";
+
+export default class LevelSelectedEventLoadQuestionsHandler
+  implements IAsyncEventHandler<LevelSelectedEvent>
+{
+  constructor(
+    @inject(TYPES.LoadPresentQuestionsUseCase)
+    private readonly _loadPresentQuestionsUseCase: LoadPresentQuestionsUseCase
+  ) {}
+
+  canHandle(event: LevelSelectedEvent): boolean {
+    return event instanceof LevelSelectedEvent;
+  }
+
+  async handleAsync(event: LevelSelectedEvent): Promise<void> {
+    await this._loadPresentQuestionsUseCase.execute({ levelId: event.levelId });
+  }
+}

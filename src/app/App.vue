@@ -12,7 +12,7 @@ const usecase = container.get<ToastNotificationUseCases>(TYPES.ToastNotification
 </script>
 
 <template>
-  <div class="">
+  <div class="flex w-full max-w-[1440px] sm:justify-center items-center">
     <Toast />
     <RouterView />
   </div>

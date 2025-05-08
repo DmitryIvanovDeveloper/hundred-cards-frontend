@@ -5,10 +5,13 @@ import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
+import svgLoader from 'vite-svg-loader';
+
 export default defineConfig({
     base: '/',
     cacheDir: './node_modules/vite',
     plugins: [
+        svgLoader(), 
         vue(),
         tailwindcss(),
         AutoImport({

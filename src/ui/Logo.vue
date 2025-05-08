@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Logo from '@/assets/Logo (2).svg'; 
 export interface ILogoProps {
 }
 
@@ -6,6 +7,6 @@ export interface ILogoProps {
 
 <template>
     <div>
-        <img src="@assets/images/logo.svg" class="h-[44px] sm:h-[63px]" />
+        <Logo />
     </div>
 </template>

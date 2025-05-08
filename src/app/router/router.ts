@@ -11,6 +11,11 @@ import AdminAuthenticatedEvent from '@/modules/shared/authentication/business/ev
 import AuthTokenUseCases from '@/modules/shared/authStorage/business/usecases/auth-token.usecases';
 import Login from '@/modules/shared/authentication/presentation/view/Login/Login.vue';
 import Registration from '@/modules/shared/authentication/presentation/view/Registration/Registration.vue';
+import ProjectConstructor from '@/modules/admin/projects/presentation/view/ProjectConstructor.vue';
+import Projects from '@/modules/admin/projects/presentation/view/Projects.vue';
+import ProjectsList from '@/modules/admin/projects/presentation/view/ProjectsList.vue';
+import Levels from '@/modules/admin/levels/presentation/view/Levels.vue';
+import LevelList from '@/modules/admin/levels/presentation/view/LevelList.vue';
 
 const getRoutes = (): Array<RouteRecordRaw> => {
     return [{
@@ -49,7 +54,6 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             beforeEnter: async (to, from, next) => {
                 const authToken = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases);
 
-                console.log(authToken.isAuthenticated())
                 if (to.meta.requiresAuth && !authToken.isAuthenticated()) {
                     next(RouterPaths.registration);
                     return;
@@ -60,7 +64,35 @@ const getRoutes = (): Array<RouteRecordRaw> => {
 
                 next();
             },
-            children: [],
+            children: [{
+                path: RouterPaths.projects,
+                component: Projects,
+                children: [
+                    {
+                        path: RouterPaths.constructor,
+                        component: ProjectConstructor,
+                    },
+                    {
+                        path: RouterPaths.list,
+                        component: ProjectsList,
+                    }
+                ]
+            },
+            {
+                path: RouterPaths.levels,
+                component: Levels,
+                children: [
+                    {
+                        path: RouterPaths.constructor,
+                        component: ProjectConstructor,
+                    },
+                    {
+                        path: RouterPaths.list,
+                        component: LevelList,
+                    }
+                ]
+            }
+        ],
         },
     ];
 };

@@ -25,7 +25,7 @@ export default class TrySignInUseCase {
         ;
         
         const result = await this._repository.signIn(login, dto.password);
-        if (!result.isSuccess || !result.data) {
+        if (!result.hasData()) {
             return  Result.failure();
         }
 
