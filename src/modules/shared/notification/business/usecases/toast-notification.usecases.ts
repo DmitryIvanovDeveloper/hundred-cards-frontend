@@ -9,6 +9,7 @@ export class ToastNotificationUseCases implements INotificationUseCases {
     }
 
     public success(message: string): void {
+        console.log( this.toast)
         if (!this.toast) {
             return;
         }

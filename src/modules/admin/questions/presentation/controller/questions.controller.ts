@@ -1,22 +1,109 @@
 import { inject } from "inversify";
 import { TYPES } from "../../types";
+import { TYPES as LevelTYPES } from "@/modules/admin/levels/types";
 import SelectQuestionUseCase from "../../business/usecases/select-question.usecase";
 import CreateQuestionUseCase from "../../business/usecases/create-question.usecase";
+import ILevelsService from "@/modules/admin/levels/business/plugins/levels.service.plugin";
+import Result from "@/infrastructure/helpers/result";
+import QuestionNotCreatedError from "../../business/errors/questions-not-created.error";
+import { CreateQuestionsOutput } from "../../business/usecases/types/create-question.type";
+import IQuestionsLocalRepository from "../../business/plugins/questions.local.repository.plugin";
+import NextQuestionUseCase from "../../business/usecases/next-question.usecase";
+import PreviousQuestionUseCase from "../../business/usecases/previous-question.usecase";
 
-export default class QuestionsController  {
+export default class QuestionsController {
     constructor(
         @inject(TYPES.SelectQuestionUseCase)
         private readonly _selectQueationUseCase: SelectQuestionUseCase,
 
         @inject(TYPES.CreateQuestionUseCase)
-        private readonly _createQuestionUseCase: CreateQuestionUseCase
-    ){}  
+        private readonly _createQuestionUseCase: CreateQuestionUseCase,
 
-    public selectQuestion = (questionId: string) => {
-        this._selectQueationUseCase.execute({ questionId });
+        @inject(LevelTYPES.LevelsService)
+        private readonly _levelService: ILevelsService,
+
+        @inject(TYPES.QuestionsLocalRepository)
+        private readonly _repository: IQuestionsLocalRepository,
+
+        @inject(TYPES.NextQuestionUseCase)
+        private readonly _nextQuestionUseCase: NextQuestionUseCase,
+
+        @inject(TYPES.PreviousQuestionUseCase)
+        private readonly _previousQuestionUseCase: PreviousQuestionUseCase
+    ) {}
+
+    public selectQuestion = async (questionId: string): Promise<Result<void>> => {
+        return await this._selectQueationUseCase.execute({ questionId });
+    };
+
+    public createQuestion = async (): Promise<CreateQuestionsOutput> => {
+        const result = this._levelService.getSelectedLevelId();
+        if (!result.hasData()) {
+            return Result.failure(new QuestionNotCreatedError());
+        }
+
+        const levelId = result.data;
+
+        return await this._createQuestionUseCase.execute({ levelId });
+    };
+
+    public updateText(newText: string): void {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updated = question.withUpdatedText(newText);
+        this._repository.updateQuestions(updated);
     }
 
-    public createQueustion = async (): Promise<void> => {
-        await this._createQuestionUseCase.execute();
+    public updatePoints(newPoints: number): void {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updated = question.withUpdatedPoints(newPoints);
+        this._repository.updateQuestions(updated);
     }
-} 
+
+    public updateAnswerText(answerId: string, newText: string): void {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+        const updatedQuestion = question.withUpdatedAnswerText(answerId, newText);
+
+        this._repository.updateQuestions(updatedQuestion);
+    }
+
+    public updateAnswerSelection(answerId: string, isCorrect: boolean): void {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updatedQuestion = question.withUpdatedCorrectAnswer(
+            answerId,
+            isCorrect
+        );
+
+        this._repository.updateQuestions(updatedQuestion);
+    }
+
+    public addNewAnswer() {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updatedQuestion = question.withNewAswer();
+        this._repository.updateQuestions(updatedQuestion);
+    }
+
+    public removeAnswer(answerId: string) {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updatedQuestion = question.withRemovedAswer(answerId);
+        this._repository.updateQuestions(updatedQuestion);
+    }
+
+    public next() {
+        this._nextQuestionUseCase.execute();
+    }
+
+    public previous() {
+        this._previousQuestionUseCase.execute();
+    }
+}

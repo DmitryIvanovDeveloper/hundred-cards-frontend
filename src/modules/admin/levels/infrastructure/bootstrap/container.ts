@@ -2,21 +2,24 @@ import { TYPES } from '../../types';
 
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import { IAsyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
-import ILevelsPresenter from '../../business/plugins/levels.presenter.plugin';
 import LevelsPresenter from '../../presentation/presenter/levels.presenter';
 import LevelsController from '../../presentation/controller/levels.controller';
-import LoadPresentLevelsUseCase from '../../business/usecases/load-present-levels.usecase';
-import ILevelsRepository from '../../business/plugins/levels.repository.plugin';
-import LevelsRepository from '../repositories/levels.repository';
+import LoadLevelsUseCase from '../../business/usecases/load-levels.usecase';
+import LevelsHttpRepository from '../repositories/levels.http.repository';
 import ProjectSelectedEvent from '@/modules/admin/projects/business/events/project-selected-event';
 import ProjectSelectedEventLoadLevelsHandler from '../../business/events/handlers/project-selected-event-load-levels.handler';
 import SelectLevelUseCase from '../../business/usecases/select-level.usecase';
 import CreateLevelUseCase from '../../business/usecases/create-level.usecase';
 import LevelService from '../../business/services/level.service';
-import InitializeLevelsUseCase from '../../business/usecases/initialize-levels.usecase';
+import ILevelsLocalRepository from '../../business/plugins/levels.local.repository.plugin';
+import LevelsLocalRepository from '../repositories/levels.local.repository';
+import ILevelsHttpRepository from '../../business/plugins/levels.http.repository.plugin';
+import SaveProjectEvent from '@/modules/admin/projects/business/events/save-project-event';
+import SaveProjectEventUpdateLevelHandler from '../../business/events/handlers/save-project-event-update-level.handler';
+import UpdateLevelUseCase from '../../business/usecases/update-level.usecase';
 
 container
-    .bind<ILevelsPresenter>(TYPES.LevelsPresenter)
+    .bind<LevelsPresenter>(TYPES.LevelsPresenter)
     .to(LevelsPresenter)
     .inSingletonScope()
 ;
@@ -34,14 +37,8 @@ container
 ;
 
 container
-    .bind<LoadPresentLevelsUseCase>(TYPES.LoadPresentLevelsUseCase)
-    .to(LoadPresentLevelsUseCase)
-    .inTransientScope()
-;
-
-container
-    .bind<InitializeLevelsUseCase>(TYPES.InitializeLevelsUseCase)
-    .to(InitializeLevelsUseCase)
+    .bind<LoadLevelsUseCase>(TYPES.LoadPresentLevelsUseCase)
+    .to(LoadLevelsUseCase)
     .inTransientScope()
 ;
 
@@ -58,8 +55,20 @@ container
 ;
 
 container
-    .bind<ILevelsRepository>(TYPES.LevelsRepository)
-    .to(LevelsRepository)
+    .bind<UpdateLevelUseCase>(TYPES.UpdateLevelUseCase)
+    .to(UpdateLevelUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind<ILevelsLocalRepository>(TYPES.LevelsLocalRepository)
+    .to(LevelsLocalRepository)
+    .inSingletonScope()
+;
+
+container
+    .bind<ILevelsHttpRepository>(TYPES.LevelsHttpRepository)
+    .to(LevelsHttpRepository)
     .inSingletonScope()
 ;
 
@@ -68,3 +77,10 @@ container
     .to(ProjectSelectedEventLoadLevelsHandler)
     .inTransientScope()
 ;
+
+container
+    .bind<IAsyncEventHandler<SaveProjectEvent>>(TYPES.SaveProjectEventHandler)
+    .to(SaveProjectEventUpdateLevelHandler)
+    .inTransientScope()
+;
+

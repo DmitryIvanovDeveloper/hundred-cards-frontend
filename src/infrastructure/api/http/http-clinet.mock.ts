@@ -18,7 +18,6 @@ export default class HttpClientMock implements IHttpClient {
         const formattedEndpoint = this.getLastEndpointParts(endpoint);
         const fileName = !this.error ? `${formattedEndpoint}.json` : `${formattedEndpoint}.${this.error.code}${!this.error.type ? '' : `.${this.error.type}`}.json`;
         const mockEntry = Object.entries(mockFiles).find(([key]) => key.endsWith(`/${fileName}`));
-        console.log(fileName)
 
         if (!mockEntry) {
             console.warn(`[MOCK] JSON для ${endpoint} по пути ${fileName} не найден`);
@@ -42,7 +41,7 @@ export default class HttpClientMock implements IHttpClient {
             throw new Error(`[MOCK] No mock response found for ${path}`);
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
         if (!!this.error) {
             const response = this.mockResponses.get(path) as IErrorResponse;

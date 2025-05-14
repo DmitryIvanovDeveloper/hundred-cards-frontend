@@ -24,7 +24,7 @@ export class PostAnswerRequest {
   is_correct: boolean;
 
   constructor(createAnswerRequest: CreateAnswerRequest) {
-    this.lang_iso = createAnswerRequest.lang_iso;
+    this.lang_iso = createAnswerRequest.lang;
     this.text = createAnswerRequest.text;
     this.is_correct = createAnswerRequest.isCorrect;
   }

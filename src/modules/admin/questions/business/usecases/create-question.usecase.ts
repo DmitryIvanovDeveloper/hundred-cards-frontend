@@ -2,39 +2,28 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
 import { TYPES as LevelTYPES } from "@/modules/admin/levels/types";
 import Result from "@/infrastructure/helpers/result";
-import IQuestionsRepository from "../plugins/questions.repository.plugin";
-import IQuestionPresenter from "../plugins/questions.presenter.plugin";
+import IQuestionsHttpRepository from "../plugins/questions.http.repository.plugin";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
-import { SelectQuestionInput } from "./types/select-question.type";
 import { CreateQuestionInput, CreateQuestionsOutput } from "./types/create-question.type";
 import Question from "../entities/question";
-import ILevelsService from "@/modules/admin/levels/business/plugins/levels.service.plugin";
 import QuestionNotCreatedError from "../errors/questions-not-created.error";
-import InitializeQuestionsUseCase from "./initialize-questions.usecase";
+import QuestionsLocalRepository from "../../infrastructure/repositories/questions.local.repository";
 
 @injectable()
 export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInput, CreateQuestionsOutput>{
     constructor(
-        @inject(TYPES.QuestionsRepository)
-        private readonly _repository: IQuestionsRepository,
+        @inject(TYPES.QuestionsHttpRepository)
+        private readonly _repository: IQuestionsHttpRepository,
 
-        @inject(LevelTYPES.LevelsService)
-        private readonly _levelService: ILevelsService,
-
-        @inject(TYPES.InitializeQuestionsUseCase)
-        private readonly _initializeQuestionsUseCase: InitializeQuestionsUseCase,
+        @inject(TYPES.QuestionsLocalRepository)
+        private readonly _localRepository: QuestionsLocalRepository,
     ) {
         super()
     }
 
     public execute = async (input: CreateQuestionInput): Promise<CreateQuestionsOutput> => {
 
-        const levelResult = await this._levelService.getSelectedLevelId();
-        if (!levelResult.hasData()) {
-            return Result.failure(new QuestionNotCreatedError())
-        }
-
-        const levelId = levelResult.data;
+        const levelId = input.levelId
 
         const question = Question.create(levelId).toCreateRequest();
 
@@ -43,9 +32,9 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
             return Result.failure(new QuestionNotCreatedError())
         }
 
-        this._initializeQuestionsUseCase.execute({
-            dto: result.data
-        });
+        const questions = result.data.map(dto => Question.toEntity(dto))
+      
+        this._localRepository.storeQuestions(questions);
 
         return Result.success();
     }

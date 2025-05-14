@@ -1,19 +1,37 @@
-import { ref } from "vue";
-import Level from "../../business/entities/level";
-import ILevelsPresenter from "../../business/plugins/levels.presenter.plugin";
+import { inject } from "inversify";
+import ILevelsLocalRepository from "../../business/plugins/levels.local.repository.plugin";
+import { TYPES } from "../../types";
 import LevelViewModel from "../view-models/level.view-model";
+import { computed } from "vue";
 
-export default class LevelsPresenter implements ILevelsPresenter {
+export default class LevelsPresenter  {
    
-
-    public readonly levelsViewModel = ref<Array<LevelViewModel>>([]);
-    public readonly levelViewModel = ref<LevelViewModel>();
-    
-    public presentLevels(levels: Array<Level>): void {
-       this.levelsViewModel.value = levels.map(level => new LevelViewModel(level));
+    constructor(
+        @inject(TYPES.LevelsLocalRepository)
+        private readonly _repository: ILevelsLocalRepository
+    ) {}
+      
+    public readonly labels = {
+        title: 'Категории',
+        categoryName: 'Название категории'
     }
 
-    public presentLevel(level: Level): void {
-        this.levelViewModel.value = new LevelViewModel(level);
+    public levelViewModel =  computed(() => this.presentLevel());
+    public levelsViewModel = computed(() => this.presentLevels());
+    
+    private presentLevels(): Array<LevelViewModel> {
+        return this._repository
+            .getLevels().value
+            .map(level => new LevelViewModel(level))
+        ;
+    }
+
+    private presentLevel(): LevelViewModel | null {
+        const level = this._repository.getLevel().value;
+        if (!level) {
+            return null;
+        }
+
+        return new LevelViewModel(level);
     }
 } 

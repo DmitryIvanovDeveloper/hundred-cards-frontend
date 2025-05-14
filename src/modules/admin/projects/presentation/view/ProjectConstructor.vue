@@ -1,26 +1,37 @@
-<script setup>
-import { ref } from "vue";
-import { Bold, Italic, Check, X, GripVertical } from "lucide-vue-next";
+<script setup lang="ts">
 import LevelEditor from "@/modules/admin/levels/presentation/view/LevelEditor.vue";
 import QuestionEditor from "@/modules/admin/questions/presentation/view/QuestionEditor.vue";
+import ConstructorLayout from "@/ui/ConstructorLayout.vue";
+import { Button } from "primevue";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/24/solid";
+import { container } from "@/infrastructure/bootstrap/inversify.config";
+import ProjectsController from "../controller/projects.controller";
+import { TYPES } from "../../types";
 
-const category = ref("Category 1");
-const question = ref("Раз два три");
-const answers = ref([
-  { text: "Раз два три", isCorrect: true },
-  { text: "Раз два три четыре пять", isCorrect: false },
-  { text: "", isCorrect: false },
-]);
+const controller = container.get<ProjectsController>(TYPES.ProjectsController)
 </script>
 
 <template>
-  <div
-    class="flex w-full items-center justify-center min-h-screen bg-gray-100 bg-opacity-80"
-    style="background-image: url(&quot;path-to-wavy-background.png&quot;)"
-  >
-    <div class="flex  flex-col w-full max-w-[500px]">
+  <ConstructorLayout>
+    <div class="flex flex-col w-full">
       <LevelEditor />
       <QuestionEditor />
     </div>
-  </div>
+    <template #buttons>
+      <div class="flex gap-[10px]">
+        <Button
+            @click="controller.nextQuestion"
+            class="text-[#FFFFFF] px-4 py-2 rounded w-[48px] h-[38px] !border-none !bg-[#FF811B]"
+            >
+          <ArrowLeftIcon class="w-[15px] h-[15px]" />
+        </Button>
+        <Button
+            @click="controller.previousQuestion"
+            class="text-[#FFFFFF] px-4 py-2 rounded w-[48px] h-[38px] !border-none !bg-[#FF811B]"
+        >
+            <ArrowRightIcon class="w-[15px] h-[15px]" />
+        </Button>
+      </div>
+    </template>
+  </ConstructorLayout>
 </template>

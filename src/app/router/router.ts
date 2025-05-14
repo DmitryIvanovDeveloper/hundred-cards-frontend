@@ -16,6 +16,7 @@ import Projects from '@/modules/admin/projects/presentation/view/Projects.vue';
 import ProjectsList from '@/modules/admin/projects/presentation/view/ProjectsList.vue';
 import Levels from '@/modules/admin/levels/presentation/view/Levels.vue';
 import LevelList from '@/modules/admin/levels/presentation/view/LevelList.vue';
+import AchievementsConstructor from '@/modules/admin/achievements/presentation/view/AchievementsConstructor.vue';
 
 const getRoutes = (): Array<RouteRecordRaw> => {
     return [{
@@ -32,7 +33,7 @@ const getRoutes = (): Array<RouteRecordRaw> => {
                     return;
                 }
 
-                next();
+                next(`${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.list}`);
             },
         },
         {
@@ -91,7 +92,11 @@ const getRoutes = (): Array<RouteRecordRaw> => {
                         component: LevelList,
                     }
                 ]
-            }
+            },
+            {
+                path: RouterPaths.achievements,
+                component: AchievementsConstructor,
+            },
         ],
         },
     ];

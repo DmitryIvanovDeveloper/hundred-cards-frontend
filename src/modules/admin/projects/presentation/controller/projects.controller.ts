@@ -1,21 +1,35 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
-import CreatePresentProjectUseCase from "../../business/usecases/create-present-project.usecase";
+import { TYPES as SharedTYPES } from "@infrastructure/bootstrap/types";
+import CreateProjectUseCase from "../../business/usecases/create-project.usecase";
 import { ref } from "vue";
 import Result from "@/infrastructure/helpers/result";
 import SelectProjectUseCase from "../../business/usecases/select-project.usecase";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import SaveProjectEvent from "../../business/events/save-project-event";
+import NextQuestionEvent from "@/modules/admin/questions/business/events/next-question-event";
+import PreviouseQuestionEvent from "@/modules/admin/questions/business/events/previous-question-event";
+import IProjectsLocalRepository from "../../business/plugins/projects.local.repository.plugin";
 
 @injectable()
 export default class ProjectsController {
     constructor(
         @inject(TYPES.CreateProjectPresentConstructorUseCase)
-        private readonly _createNewProjectUseCase: CreatePresentProjectUseCase,
+        private readonly _createNewProjectUseCase: CreateProjectUseCase,
 
         @inject(TYPES.SelectProjectUseCase)
-        private readonly _selectProjectUseCae: SelectProjectUseCase
+        private readonly _selectProjectUseCae: SelectProjectUseCase,
+
+
+        @inject(TYPES.ProjectsLocalRepository)
+        private readonly _repoitory: IProjectsLocalRepository,
+
+        @inject(SharedTYPES.EventBus)
+        private readonly _eventBus: IEventBus,
     ) {}
 
     public loading = ref<boolean>(false);
+    public isEdit = ref<boolean>(false);
 
     public createProject = async (): Promise<Result<void>> => {
         this.loading.value = true;
@@ -30,4 +44,32 @@ export default class ProjectsController {
         this.loading.value = false;
         return result;
     };
+
+    public saveProject = async (): Promise<void> => {
+        this.loading.value = true;
+        await this._eventBus.publishAsync(new SaveProjectEvent())
+        this.loading.value = false;
+    }
+
+    public nextQuestion = (): void => {
+        this._eventBus.publish(new NextQuestionEvent());
+    }
+    
+    public previousQuestion = (): void => {
+        this._eventBus.publish(new PreviouseQuestionEvent());
+    }
+
+    public updateName = (name: string): void => {
+        const project = this._repoitory.getProject().value;
+        if (!project) {
+            return;
+        }
+
+        const updatedProject = project.withUpdatedName(name);
+        this._repoitory.updateProjects(updatedProject);
+    }
+
+    public edit = (edit: boolean): void => {
+        this.isEdit.value = edit;
+    }
 }

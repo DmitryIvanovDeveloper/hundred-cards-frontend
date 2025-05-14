@@ -7,6 +7,7 @@ export const RouterPaths = {
   projects: 'projects',
   list: 'list',
   constructor: 'constructor',
-  levels: 'levels'
+  levels: 'levels',
+  achievements: '/admin/achievements/constructor'
 };
 

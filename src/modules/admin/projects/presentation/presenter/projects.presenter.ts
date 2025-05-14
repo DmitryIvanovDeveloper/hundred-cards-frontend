@@ -1,21 +1,36 @@
-import { ref } from "vue";
-import Project from "../../business/entities/project";
-import IProjectsPresenter from "../../business/plugins/projects.presenter.plugin";
-import ProjectViewModel from "../view-models/project.view-model";
+import ProjectViewModel from "../view/view-models/project.view-model";
+import { inject } from "inversify";
+import { TYPES } from "../../types";
+import IProjectsLocalRepository from "../../business/plugins/projects.local.repository.plugin";
+import { computed } from "@vue/reactivity";
 
-export default class ProjectsPresenter implements IProjectsPresenter {
-    readonly projectViewModel = ref<ProjectViewModel>();
-    readonly projectsViewModel = ref<Array<ProjectViewModel>>([]);
+export default class ProjectsPresenter {
 
-    public presentProject(project: Project): void {
-        const viewModel = new ProjectViewModel(project);
+    constructor(
+        @inject(TYPES.ProjectsLocalRepository)
+        private readonly _repository: IProjectsLocalRepository
+    ) {}
 
-        this.projectViewModel.value = viewModel;
+
+    public readonly label = {
+        title: 'Проекты'
+    }
+    readonly projectViewModel =  computed(() => this.presentProject());
+    readonly projectsViewModel = computed(() =>this.presentProjects());
+
+    private presentProject(): ProjectViewModel | null {
+        const project = this._repository.getProject().value;
+        if (!project) {
+            return null;
+        }
+
+        return new ProjectViewModel(project);
     }
 
-    public presentProjects(project: Array<Project>): void {
-        const viewModels = project.map(project => new ProjectViewModel(project));
-
-        this.projectsViewModel.value = viewModels;
+    private presentProjects(): Array<ProjectViewModel> {
+        return this._repository
+            .getProjects().value
+            .map(project => new ProjectViewModel(project))
+        ;
     }
 }

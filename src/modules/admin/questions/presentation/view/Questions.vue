@@ -6,7 +6,5 @@ import ProjectSidebar from '@/modules/admin/projects/presentation/view/ProjectSi
 
 <template>
     <div class="flex w-full bg-[#A5BBC5]">
-        <ProjectSidebar />
-        <router-view />
     </div>
 </template>

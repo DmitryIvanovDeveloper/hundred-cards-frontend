@@ -8,7 +8,7 @@ export class CreateQuestionRequest {
 } 
 
 export class CreateAnswerRequest {
-   lang_iso:string;
+   lang:string;
    text: string;
    isCorrect: boolean
 } 

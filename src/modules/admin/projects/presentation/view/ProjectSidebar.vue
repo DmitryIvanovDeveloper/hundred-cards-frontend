@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import ProjectsController from "../controller/projects.controller";
-import { TYPES } from "../../types";
-import { container } from "@/infrastructure/bootstrap/inversify.config";
-import ProjectsPresenter from "../presenter/projects.presenter";
-
 import ProjectsListBar from "./ProjectsListBar.vue";
 import LevelListBar from "@/modules/admin/levels/presentation/view/LevelListBar.vue";
 import QuestionListBar from "@/modules/admin/questions/presentation/view/QuestionListBar.vue";
-
-const controller = container.get<ProjectsController>(TYPES.ProjectsController);
-const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
-
+import AchievementsListBar from "@/modules/admin/achievements/presentation/view/AchievementsListBar.vue";
 
 </script>
 
 <template>
-    <div class="w-70 bg-blue-50 flex flex-col border-r border-gray-200">
+    <div class="w-80 bg-[#C7D9E1] min-w-[300px] flex flex-col border-r border-gray-200">
         <div class="p-4 flex items-center">
             <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white mr-3"><svg
                     xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -25,10 +17,12 @@ const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg></div><span class="text-xl font-light text-gray-700">Lalala</span>
         </div>
-        <div class="px-3">
+
+        <div class="flex flex-col p-3 gap-[20px]">
             <ProjectsListBar />
             <LevelListBar />
             <QuestionListBar />
+            <AchievementsListBar />
         </div>
         <div class="mt-auto p-4 border-t border-gray-200">
             <div class="flex items-center text-gray-500 text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16"

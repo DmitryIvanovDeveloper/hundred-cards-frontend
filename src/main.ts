@@ -15,15 +15,16 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'element-plus/theme-chalk/dark/css-vars.css';
 
 import '@/modules/shared/authentication/infrastructure/bootstrap/container'
-import '@/modules/admin/profile/infrastructure/bootstrap/container'
 import '@/modules/admin/projects/infrastructure/bootstrap/container'
+
+import '@/modules/admin/profile/infrastructure/bootstrap/container'
 import '@/modules/admin/levels/infrastructure/bootstrap/container'
 import '@/modules/admin/questions/infrastructure/bootstrap/container'
+import '@/modules/admin/achievements/infrastructure/bootstrap/container'
 
 import 'primeicons/primeicons.css';
 import Aura from '@primeuix/themes/aura';
 import App from './app/App.vue';
-import { createI18n } from 'vue-i18n';
 
 
 const pinia = createPinia();
@@ -35,14 +36,6 @@ for (const [key, component] of Object.entries(ElementPlusIconVue)) {
 }
 app.use(ElementPlus, {locale: ru});
 
-const i18n = createI18n({
-    legacy: false,
-    locale: 'ru',
-    fallbackLocale: 'en',
-    onmessage,
-  });
-
-app.use(i18n);
 
 app.use(PrimeVue, {
     theme: {

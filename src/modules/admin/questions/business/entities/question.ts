@@ -1,73 +1,123 @@
-import { CreateQuestionRequest, CreateQuestionResponse } from "../dtos/create-question.dto";
+import { v4 as uuidv4 } from "uuid";
+import {
+  CreateQuestionRequest,
+  CreateQuestionResponse,
+} from "../dtos/create-question.dto";
 import { LoadQuestionResponse } from "../dtos/load-question.dto";
+import { UpdateQuestionRequestDTO } from "../dtos/update-question.dto";
+import { Answer } from "./Answer";
 
-export class Answer {
-	readonly id: string;
-	readonly text: string;
-	readonly isCorrect: boolean;
-	readonly lang: string;
-	readonly questionId: string;
-
-	constructor(id: string, text: string, isCorrect: boolean, lang: string, questionId: string) {
-		this.id = id;
-		this.text = text;
-		this.isCorrect = isCorrect;
-		this.lang = lang;
-		this.questionId = questionId;
-	}
+export interface QuestionProps {
+  id: string;
+  text: string;
+  points: number;
+  levelId: string;
+  lang: string;
+  answers: Answer[];
+  edited?: boolean;
 }
 
 export default class Question {
-	readonly id: string;
-	readonly text: string;
-	readonly points: number;
-	readonly levelId: string;
-	readonly answers: Answer[];
-	readonly questionId: string;
-	readonly lang: string;
+  readonly id: string;
+  readonly text: string;
+  readonly points: number;
+  readonly levelId: string;
+  readonly answers: Answer[];
+  readonly lang: string;
+  readonly edited: boolean;
 
+  constructor(
+    id: string,
+    text: string,
+    points: number,
+    levelId: string,
+    lang: string,
+    answers: Answer[],
+    edited: boolean = false
+  ) {
+    this.id = id;
+    this.text = text;
+    this.points = points;
+    this.levelId = levelId;
+    this.answers = answers;
+    this.lang = lang;
+    this.edited = edited;
+  }
 
-	constructor(id: string, text: string, points: number, levelId:string, lang: string, answers: Answer[]) {
-		this.id = id;
-		this.text = text;
-		this.points = points;
-		this.levelId = levelId;
-		this.answers = answers;
-		this.lang = lang;
-	}
+  public withUpdatedText(text: string): this {
+    return this.cloneWith({ text, edited: true });
+  }
 
-	static create(levelId: string): Question {
-		const answers = new Array<Answer>();
-		return new Question('', 'New Question', 0, levelId, "RU", answers);
-	}
+  public withUpdatedPoints(points: number): this {
+    return this.cloneWith({ points, edited: true });
+  }
 
-	toCreateRequest(): CreateQuestionRequest {
-		return {
-			id: this.id,
-			text: this.text,
-			points: this.points,
-			levelId: this.levelId,
-			lang: this.lang,
-			answers: []
-		};
-	}
+  public withUpdatedAnswerText(answerId: string, newText: string): this {
+    const updatedAnswers = this.answers.map((a) =>
+      a.id === answerId ? a.withUpdatedText(newText) : a
+    );
+    return this.cloneWith({ answers: updatedAnswers, edited: true });
+  }
 
-	static fromDto(dto: LoadQuestionResponse | CreateQuestionResponse): Question {
-		const answers: Answer[] = dto.answers.map(answer => new Answer(
-			answer.id,
-			answer.text,
-			answer.isCorrect,
-			answer.lang,
-			dto.levelId
-		));
+  public withUpdatedCorrectAnswer(answerId: string, isCorrect: boolean): this {
+    const updatedAnswers = this.answers.map((a) =>
+      a.id === answerId ? a.withUpdatedCorrect(isCorrect) : a.withUpdatedCorrect(false)
+    );
+    return this.cloneWith({ answers: updatedAnswers, edited: true });
+  }
 
-		return new Question(
-			dto.id,
-			dto.text,
-			dto.points,
-			dto.levelId,
-			dto.lang,
-			answers
-		);
-	}
+  public withNewAnswer(): this {
+    const newAnswer = new Answer(uuidv4(), "", false, this.lang, this.id);
+    return this.cloneWith({ answers: [...this.answers, newAnswer], edited: true });
+  }
+
+  public withRemovedAnswer(answerId: string): this {
+    const updatedAnswers = this.answers.filter((a) => a.id !== answerId);
+    return this.cloneWith({ answers: updatedAnswers, edited: true });
+  }
+
+  public cloneWith(props: Partial<QuestionProps>): this {
+    return new Question(
+      this.id,
+      props.text ?? this.text,
+      props.points ?? this.points,
+      props.levelId ?? this.levelId,
+      props.lang ?? this.lang,
+      props.answers ?? this.answers,
+      props.edited ?? this.edited
+    ) as this;
+  }
+
+  static create(levelId: string): Question {
+    return new Question("", "New Question", 0, levelId, "RU", []);
+  }
+
+  static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse): Question {
+    const answers = dto.answers.map(
+      (a) => new Answer(a.id, a.text, a.isCorrect, a.lang, dto.levelId)
+    );
+    return new Question(dto.id, dto.text, dto.points, dto.levelId, dto.lang, answers);
+  }
+
+  toCreateRequest(): CreateQuestionRequest {
+    return {
+      id: this.id,
+      text: this.text,
+      points: this.points,
+      levelId: this.levelId,
+      lang: this.lang,
+      answers: this.answers.map((a) => ({ ...a })),
+    };
+  }
+
+  toUpdateRequest(): UpdateQuestionRequestDTO {
+    return {
+      id: this.id,
+      text: this.text,
+      points: this.points,
+      levelId: this.levelId,
+      lang: this.lang,
+      answers: this.answers.map((a) => ({ ...a })),
+    };
+  }
 }

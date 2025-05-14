@@ -15,10 +15,8 @@ const presenter = container.get<QuestionsPresenter>(TYPES.QuestionsPresenter);
 
 const router = useRouter();
 
-const createLevel = async (): Promise<void> => {
-    const result = await controller.createLevel();
-   
-
+const createQueation = async (): Promise<void> => {
+    await controller.createQuestion();
     router.push(`${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.constructor}`);
 }
 
@@ -27,13 +25,13 @@ const createLevel = async (): Promise<void> => {
 <template>
     
     <div class="flex items-start gap-[25px] p-[60px]">
-        <button :onclick="createLevel">
+        <button :onclick="createQueation">
             <Create />
             <span>{{"Создать новую категорию"}}</span>
         </button>
         <button v-for="(item, index) in presenter.questionsViewModel.value" :key="index">
             <Folder />
-            <span>{{item.text}}</span>
+            <span>{{item.name}}</span>
         </button>
     </div>
 </template>

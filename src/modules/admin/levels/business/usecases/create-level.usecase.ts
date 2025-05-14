@@ -1,62 +1,52 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
 import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
-import { TYPES as ProjectTYPES } from "@/modules/admin/projects/types";
 import Result from "@/infrastructure/helpers/result";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
-import ILevelsRepository from "../plugins/levels.repository.plugin";
-import ILevelsPresenter from "../plugins/levels.presenter.plugin";
 import Level from "../entities/level";
-import IProjectsService from "@/modules/admin/projects/business/plugins/projects.service.plugin";
 import LevelNotCreatedError from "../errors/level-not-created.error";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { CreateLevelInput, CreateLevelOutput } from "./types/create-level.type";
 import LevelSelectedEvent from "../events/level-selected-event";
+import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
+import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
+import SelectLevelUseCase from "./select-level.usecase";
 
 @injectable()
-export default class CreateLevelUseCase extends BaseUseCase<
-  CreateLevelInput,
-  CreateLevelOutput
-> {
-  constructor(
-    @inject(TYPES.LevelsRepository)
-    private readonly _repository: ILevelsRepository,
+export default class CreateLevelUseCase extends BaseUseCase<CreateLevelInput, CreateLevelOutput> {
+    constructor(
+        @inject(TYPES.LevelsHttpRepository)
+        private readonly _repository: ILevelsHttpRepository,
 
-    @inject(TYPES.LevelsPresenter)
-    private readonly _presenter: ILevelsPresenter,
+        @inject(TYPES.LevelsLocalRepository)
+        private readonly _localRepository: ILevelsLocalRepository,
 
-    @inject(SharedTYPES.EventBus)
-    private readonly _eventBus: IEventBus,
-
-    @inject(ProjectTYPES.ProjectsService)
-    private readonly _projectsService: IProjectsService
-  ) {
-    super();
-  }
-
-  public async execute(input: CreateLevelInput): Promise<CreateLevelOutput> {
-    const { name } = input;
-
-    const projectResult = this._projectsService.getSelectedProjectId();
-    if (!projectResult.hasData()) {
-      return Result.failure(new LevelNotCreatedError());
+        @inject(TYPES.SelectLevelUseCase)
+        private readonly _selectLevelUseCase: SelectLevelUseCase,
+    ) {
+        super();
     }
 
-    const projectId = projectResult.data;
-    const levelEntity = Level.create(name, "RU", projectId);
-    const result = await this._repository.createLevel(
-      levelEntity.toCreateDto()
-    );
+    public async execute(input: CreateLevelInput): Promise<CreateLevelOutput> {
+            const { name } = input;
 
-    if (!result.hasData()) {
-      return Result.failure(new LevelNotCreatedError());
-    }
+            const projectId = input.projectId;
 
-    const level = Level.fromResponseDto(result.data);
-    this._repository.storeLevel(level);
-    this._presenter.presentLevel(level);
+            const levelEntity = Level.create(name, "RU", projectId);
+            const dto = levelEntity.toCreateRequest();
 
-    await this._eventBus.publishAsync(new LevelSelectedEvent(level.id));
-    return Result.success();
-  }
+            const result = await this._repository.createLevel(dto);
+
+            if (!result.hasData()) {
+                return Result.failure(new LevelNotCreatedError());
+            }
+
+            const level = Level.toEntity(result.data);
+
+            this._localRepository.addLevel(level);
+            
+            this._selectLevelUseCase.execute({ levelId: level.id });
+
+            return Result.success();
+        }
 }

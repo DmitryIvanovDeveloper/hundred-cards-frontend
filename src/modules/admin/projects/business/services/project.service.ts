@@ -1,23 +1,23 @@
 import { inject } from "inversify";
 import { TYPES } from "../../types";
-import IProjectsRepository from "../plugins/projects.repository.plugin";
 import Result from "@/infrastructure/helpers/result";
 import IProjectsService from "../plugins/projects.service.plugin";
+import IProjectsLocalRepository from "../plugins/projects.local.repository.plugin";
+import ProjectNotSelectedError from "../errors/project-not-selected.error";
 
 export default class ProjectsService  implements IProjectsService {
 
     constructor(
-        @inject(TYPES.ProjectsRepository)
-        private readonly _repository: IProjectsRepository
+        @inject(TYPES.ProjectsLocalRepository)
+        private readonly _repository: IProjectsLocalRepository
     ){}
 
     public getSelectedProjectId = (): Result<string> => {
-        const result = this._repository.getProject();
-        if (!result.hasData()) {
-            return Result.failure();
+        const project = this._repository.getProject().value;
+        if (!project) {
+            return Result.failure(new ProjectNotSelectedError())
         }
 
-        const project = result.data;
-        return Result.success(project?.id);
+        return Result.success(project.id);
     }
 }

@@ -43,7 +43,7 @@ export default class RegistrationPresenter implements IRegistrationPresenter {
         },
         confirm: 'Зарегистрироваться',
         registeredAlready: {
-            title: 'Уже зареистрированны?',
+            title: 'Уже зарегистрированы?',
             goto: "Войти"
         },
         registrationType: {

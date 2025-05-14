@@ -3,13 +3,13 @@ import InputText from 'primevue/inputtext';
 import InputMask from 'primevue/inputmask';
 import Password from 'primevue/password';
 import FieldWrapper from './FieldWrapper.vue';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 
 export interface IUniversalInput {
     error?: string;
     label?: string;
     placeholder?: string;
-    value?: string;
+    value?: string | number | null;  // Updated to handle both string and number
     defaultValue?: string;
     required?: boolean;
     disabled?: boolean;
@@ -19,7 +19,7 @@ export interface IUniversalInput {
         title: string;
         path: string;
     };
-    onChange: (value: string) => void;
+    onChange: (value: string | number | null) => void;  // Updated to handle both string and number
 }
 
 const { 
@@ -36,18 +36,28 @@ const {
     placeholder
  } = defineProps<IUniversalInput>();
 
+// Model for v-model binding
 const modelValue = computed({
-    get: () => value ?? defaultValue ?? '',
-    set: (newValue: string) => onChange(newValue),
+    get: () => {
+        const val = value ?? defaultValue ?? null;
+        return val === null ? '' : String(val); // Convert null to an empty string and ensure the value is a string
+    },
+    set: (newValue: string | number | null) => {
+        if (type === 'number' && typeof newValue === 'string') {
+            // Ensure that when the type is 'number', the value is correctly converted to number
+            onChange(Number(newValue));  // Convert to number if it's a string
+        } else {
+            onChange(newValue);  // Pass string or null as is
+        }
+    },
 });
 
-// 👉 Вычисляем стиль фона
+// 👉 Computed input style
 const inputStyle = computed(() => ({
     backgroundColor: 'white'
 }));
 
 </script>
-
 
 <template>
     <FieldWrapper :label="label" :isRequired="isRequired" :error="error" :errorlink="errorlink">
@@ -68,7 +78,7 @@ const inputStyle = computed(() => ({
             :feedback="false"
             :placeholder="placeholder"
             :modelValue="modelValue"
-            @update:modelValue="(value) => onChange(value as string)"
+            @update:modelValue="(value) => onChange(value)"
             :inputStyle="inputStyle"
         />
         <InputText
@@ -91,7 +101,6 @@ const inputStyle = computed(() => ({
         />
     </FieldWrapper>
 </template>
-
 
 <style scoped>
 

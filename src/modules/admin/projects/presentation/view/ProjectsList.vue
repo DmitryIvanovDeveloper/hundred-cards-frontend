@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import Folder from '@assets/folder.svg'
+import Folder from '@/assets/folder.svg'
+import Add from '@assets/emptyFolder.svg'
 import Create from '@assets/emptyFolder.svg'
 import ProjectsController from '../controller/projects.controller';
 import { TYPES } from '../../types';
@@ -19,7 +20,7 @@ const createProject = async (): Promise<void> => {
         return;
     }
 
-    router.push(`${RouterPaths.admin}/${RouterPaths.levels}/${RouterPaths.list}`);
+    goToConstructor();
 }
 
 const selectProject = async (projectId: string): Promise<void> => {
@@ -28,7 +29,11 @@ const selectProject = async (projectId: string): Promise<void> => {
         return;
     }
 
-    router.push(`${RouterPaths.admin}/${RouterPaths.levels}/${RouterPaths.list}`);
+    goToConstructor();
+}
+
+const goToConstructor = () => {
+    router.push(`${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.constructor}`);
 }
 
 </script>
@@ -36,11 +41,16 @@ const selectProject = async (projectId: string): Promise<void> => {
 <template>
     
     <div class="flex items-start gap-[25px] p-[60px]">
-        <button :onclick="createProject" >
-            <Create />
+        <button :onclick="createProject" class="flex flex-col">
+                <Add />
             <span>{{"Создать Новый проект"}}</span>
+
         </button>
-        <button v-for="(project, index) in presenter.projectsViewModel.value" :key="index" :onclick="() => selectProject(project.id)">
+         
+      
+        <button 
+            v-for="(project, index) in presenter.projectsViewModel.value" :key="index" 
+            :onclick="() => selectProject(project.id)">
             <Folder />
             <span>{{project.name}}</span>
         </button>

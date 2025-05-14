@@ -2,14 +2,14 @@ import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugi
 import ProjectSelectedEvent from "@/modules/admin/projects/business/events/project-selected-event";
 import AdminAuthenticatedEvent from "@/modules/shared/authentication/business/events/admin-authenticated.event";
 import { TYPES } from "../../../types";
-import LoadPresentLevelsUseCase from "../../usecases/load-present-levels.usecase";
+import LoadLevelsUseCase from "../../usecases/load-levels.usecase";
 import { inject } from "inversify";
 
 export default class ProjectSelectedEventLoadLevelsHandler implements IAsyncEventHandler<ProjectSelectedEvent> {
 
   constructor(
     @inject(TYPES.LoadPresentLevelsUseCase)
-    private readonly _loadPresentLevelsUseCase: LoadPresentLevelsUseCase
+    private readonly _loadPresentLevelsUseCase: LoadLevelsUseCase
   ){
 
   }
@@ -18,6 +18,6 @@ export default class ProjectSelectedEventLoadLevelsHandler implements IAsyncEven
   }
 
   async handleAsync(event: ProjectSelectedEvent): Promise<void> {
-     await this._loadPresentLevelsUseCase.execute(event.projectId);
+      await this._loadPresentLevelsUseCase.execute(event.projectId);
   }
 }

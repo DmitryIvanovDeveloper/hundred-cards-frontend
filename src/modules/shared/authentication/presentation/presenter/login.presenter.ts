@@ -23,7 +23,7 @@ export default class LoginPresenter implements ILoginPresenter {
         },
         confirm: 'Войти',
         notRegistered: {
-            title: 'Еще не зареистрированны?',
+            title: 'Еще не зарегистрированы?',
             goto: "Зарегистрироваться"
         },
         loginType: {

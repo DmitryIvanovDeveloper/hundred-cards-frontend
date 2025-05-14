@@ -2,22 +2,23 @@ import Result from "@/infrastructure/helpers/result";
 import ILevelsService from "../plugins/levels.service.plugin";
 import { inject } from "inversify";
 import { TYPES } from "../../types";
-import ILevelsRepository from "../plugins/levels.repository.plugin";
+import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
+import LevelNotSelectedError from "../errors/level-not-selected.error";
 
 export default class LevelService implements ILevelsService {
 
     constructor(
-        @inject(TYPES.LevelsRepository)
-        private readonly _repository: ILevelsRepository
+        @inject(TYPES.LevelsLocalRepository)
+        private readonly _repository: ILevelsLocalRepository
     ){}
 
-    getSelectedLevelId(): Result<string> {
-        const result = this._repository.getLevel();
-        if (!result.hasData()) {
-            return Result.failure();
+    public getSelectedLevelId(): Result<string> {
+        const level = this._repository.getLevel();
+        if (!level.value) {
+            return Result.failure(new LevelNotSelectedError());
         }
 
-        return Result.success(result.data.id);
+        return Result.success(level.value.id);
     }
 
 }

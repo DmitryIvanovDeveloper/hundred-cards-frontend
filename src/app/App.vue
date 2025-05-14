@@ -8,11 +8,15 @@ import { TYPES } from '@/infrastructure/bootstrap/types';
 
 const usecase = container.get<ToastNotificationUseCases>(TYPES.ToastNotificationUseCases);
 
+const toast = useToast();
+onMounted(() => {
+  usecase.setToast(toast);
 
+})
 </script>
 
 <template>
-  <div class="flex w-full max-w-[1440px] sm:justify-center items-center">
+  <div class="flex w-screen lg:justify-center max-w-[1980px] sm:justify-center items-center">
     <Toast />
     <RouterView />
   </div>

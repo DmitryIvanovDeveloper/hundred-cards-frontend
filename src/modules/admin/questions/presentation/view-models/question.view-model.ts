@@ -2,25 +2,37 @@ import Question, { Answer } from "../../business/entities/question";
 
 
 export default class QuestionViewModel {
-    readonly id: string;
-    readonly text: string;
-    readonly answers: Array<AnswerViewModel>;
+	readonly id: string;
+	readonly levelId: string;
+	readonly edited: boolean;
+	readonly answers: Array<AnswerViewModel>;
 
-    constructor(question: Question) {
-        this.text = question.text
-        this.id = question.id
-        this.answers = question.answers.map(answer => new AnswerViewModel(answer));
-    }
+	readonly name: string;
+	readonly points: number
+
+	constructor(question: Question) {
+		this.id = question.id;
+		this.name = question.text;
+		this.points = question.points;
+		this.levelId = question.levelId;
+		this.answers = question.answers.map(answer => new AnswerViewModel(answer));
+		this.edited = question.edited ?? false;
+	}
 }
 
 export class AnswerViewModel {
-    readonly id: string;
-    readonly text: string;
-    readonly isCorrect: boolean;
+	readonly id: string;
+	readonly name: string;
+	readonly isCorrect: boolean;
+	readonly questionId: string;
+	readonly lang: string;
 
-    constructor(answer: Answer) {
-        this.id = answer.id;
-        this.text = answer.text;
-        this.isCorrect = answer.isCorrect;
-    }
+	constructor(answer: Answer) {
+		this.id = answer.id;
+		this.name = answer.text;
+		this.questionId = answer.questionId;
+		this.isCorrect = answer.isCorrect;
+		this.lang = answer.lang;
+	}
 }
+
