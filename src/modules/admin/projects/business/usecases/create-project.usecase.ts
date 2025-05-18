@@ -7,10 +7,13 @@ import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { CreateProjectInput, CreateProjectOutput} from "./types/create-project.type";
 import ProjectNotCreatedError from "../errors/project-not-created.error";
 import IProjectsLocalRepository from "../plugins/projects.local.repository.plugin";
-import SelectProjectUseCase from "./select-project.usecase";
+import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import ProjectCreatedEvent from "../events/project-created-event";
 
 @injectable()
 export default class CreateProjectUseCase extends BaseUseCase<CreateProjectInput, CreateProjectOutput> {
+
     constructor(
         @inject(TYPES.ProjectsHttpRepository)
         private readonly _projectsRepository: IProjectsRepository,
@@ -18,8 +21,8 @@ export default class CreateProjectUseCase extends BaseUseCase<CreateProjectInput
         @inject(TYPES.ProjectsLocalRepository)
         private readonly _localRepository: IProjectsLocalRepository,
 
-        @inject(TYPES.SelectProjectUseCase)
-    private readonly _selectProjectUseCase: SelectProjectUseCase,
+        @inject(SharedTYPES.EventBus)
+        private readonly _eventBus: IEventBus
     ) {
         super()
     }
@@ -34,8 +37,9 @@ export default class CreateProjectUseCase extends BaseUseCase<CreateProjectInput
 
         const project = Project.toEntity(result.data);
         this._localRepository.addProject(project);
+
+        await this._eventBus.publishAsync(new ProjectCreatedEvent(project.id));
         
-        this._selectProjectUseCase.execute({ projectId: project.id });
         return Result.success();
     }
 }

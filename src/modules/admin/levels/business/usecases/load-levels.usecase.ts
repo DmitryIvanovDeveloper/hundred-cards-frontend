@@ -33,7 +33,10 @@ export default class LoadLevelsUseCase extends BaseUseCase<LoadLevelInput, LoadL
         const levels = result.data.map(dto => Level.toEntity(dto));
         this._localRepository.storeLevels(levels);
 
-        this._selectLevelUseCase.execute( { levelId: levels[0].id })
+        if (!!levels.length) {
+            this._selectLevelUseCase.execute( { levelId: levels[0].id })
+        }
+        
         return Result.success();
     }
 }

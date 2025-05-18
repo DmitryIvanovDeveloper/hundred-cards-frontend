@@ -2,7 +2,7 @@ import { TYPES } from '../../types';
 
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import { IAsyncEventHandler, ISyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
-import LoadPresentQuestionsUseCase from '../../business/usecases/load-questons.usecase';
+import LoadQuestionsUseCase from '../../business/usecases/load-questons.usecase';
 import IQuestionsHttpRepository from '../../business/plugins/questions.http.repository.plugin';
 import QuestionsPresenter from '../../presentation/presenter/questions.presenter';
 import QuestionsController from '../../presentation/controller/questions.controller';
@@ -22,6 +22,8 @@ import NextQuestionEvent from '../../business/events/next-question-event';
 import NextQuestionEventSetNextQuestionHandler from '../../business/events/handlers/next-question-event-set-next-question.handler';
 import PreviouseQuestionEvent from '../../business/events/previous-question-event';
 import PreviousQuestionEventSetPreviousQuestionHandler from '../../business/events/handlers/previous-question-event-set-previous-question.handler';
+import LevelCreatedEvent from '@/modules/admin/levels/business/events/level-created-event';
+import LevelCreatedEventCreateDefaultQuestionHandler from '../../business/events/handlers/level-created-event-create-defult-question.handler';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -35,8 +37,8 @@ container
 ;
 
 container
-    .bind<LoadPresentQuestionsUseCase>(TYPES.LoadPresentQuestionsUseCase)
-    .to(LoadPresentQuestionsUseCase)
+    .bind<LoadQuestionsUseCase>(TYPES.LoadPresentQuestionsUseCase)
+    .to(LoadQuestionsUseCase)
     .inTransientScope()
 ;
 
@@ -94,6 +96,12 @@ container
     .inTransientScope()
 ;
 
+
+container
+    .bind<IAsyncEventHandler<LevelCreatedEvent>>(TYPES.LevelCreatedEventHandler)
+    .to(LevelCreatedEventCreateDefaultQuestionHandler)
+    .inTransientScope()
+;
 
 container
     .bind<ISyncEventHandler<NextQuestionEvent>>(TYPES.NextQuestionEventHandler)

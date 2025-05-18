@@ -1,5 +1,6 @@
 const TYPES = {
-    AuthenticationRepository: Symbol.for('AuthenticationRepository'),
+    AuthenticationHttpRepository: Symbol.for('AuthenticationHttpRepository'),
+    AuthenticationLocalRepository: Symbol.for('AuthenticationLocalRepository'),
     RegistrationPresenter: Symbol.for('RegistrationPresenter'),
     TrySignUpUseCase: Symbol.for('TrySignUpUseCase'),
     TrySignInUseCase: Symbol.for('TrySignInUseCase'),

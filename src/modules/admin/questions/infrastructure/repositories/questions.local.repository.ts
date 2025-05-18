@@ -1,5 +1,5 @@
 import Result from "@/infrastructure/helpers/result";
-import Question, { Answer } from "../../business/entities/question";
+import Question from "../../business/entities/question";
 import QuestionNotFoundError from '../../business/errors/question-not-found.error';
 import IQuestionsLocalRepository from '../../business/plugins/questions.local.repository.plugin';
 import { Ref, ref } from "vue";

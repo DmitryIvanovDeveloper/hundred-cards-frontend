@@ -11,7 +11,7 @@ import Question from "../entities/question";
 import SelectQuestionUseCase from "./select-question.usecase";
 
 @injectable()
-export default class LoadPresentQuestionsUseCase extends BaseUseCase<LoadQuestionsInput, LoadQuestionsOutput>{
+export default class LoadQuestionsUseCase extends BaseUseCase<LoadQuestionsInput, LoadQuestionsOutput>{
     constructor(
         @inject(TYPES.QuestionsHttpRepository)
         private readonly _httpRepository: IQuestionsHttpRepository,

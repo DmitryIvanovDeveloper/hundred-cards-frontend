@@ -2,13 +2,12 @@
 import RegistrationPresenter from "../../../presenter/registration.presenter";
 import { TYPES } from "../../../../types";
 import { container } from "@/infrastructure/bootstrap/inversify.config";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
 import UniversalRoundedButton from "@/ui/Buttons/UniversalRoundedButton.vue";
 import UniversalInput from "@/ui/UniversalInput.vue";
-import { RouterPaths } from "@/app/router/router-paths";
 import RegistrationController from "../../../controller/registration.controller";
 import { RegistrationType } from "../../../../business/dtos/registration-type";
+import { useRouter } from "vue-router";
+import { RouterPaths } from "@/app/router/router-paths";
 
 const presenter = container.get<RegistrationPresenter>(
   TYPES.RegistrationPresenter
@@ -20,12 +19,23 @@ const controller = container.get<RegistrationController>(
 
 const router = useRouter();
 
+const signup = async (): Promise<void> => {
+  const result = await controller.trySignUp();
+  if (!result.isSuccess) {
+    return;
+  }
+
+  router.push(RouterPaths.admin);
+}
+
+
+
 </script>
 
 <template>
   <div class="flex w-full flex flex-col gap-[10px] pt-[20px]">
     <UniversalInput
-        v-if="controller.form.value.type === RegistrationType.Business"
+        v-if="presenter.registrationViewModel.value?.type === RegistrationType.Business"
         :label="presenter.labels.company.label"
         :onChange="() => {}"
         :required="presenter.labels.company.required"
@@ -34,41 +44,41 @@ const router = useRouter();
 
     <UniversalInput
         :label="presenter.labels.name.label"
-        :onChange="() => {}"
+        :onChange="(value) => controller.updateName(value as string)"
         :required="presenter.labels.name.required"
         :placeholder="presenter.labels.name.placeholder"
     />
     <UniversalInput
         :label="presenter.labels.lastName.label"
-        :onChange="() => {}"
+        :onChange="(value) => controller.updateLastName(value as string)"
         :required="presenter.labels.lastName.required"
         :placeholder="presenter.labels.lastName.placeholder"
     />
 
     <UniversalInput
         :label="presenter.labels.email.label"
-        :onChange="() => {}"
+        :onChange="(value) => controller.updateEmail(value as string)"
         :required="presenter.labels.email.required"
         :placeholder="presenter.labels.email.placeholder"
     />
 
     <UniversalInput
         :label="presenter.labels.phone.label"
-        :onChange="() => {}"
+         :onChange="(value) => controller.updatePhone(value as string)"
         :required="presenter.labels.phone.required"
         :placeholder="presenter.labels.phone.placeholder"
     />
 
     <UniversalInput
         :label="presenter.labels.password.label"
-        :onChange="() => {}"
+        :onChange="(value) => controller.updatePassword(value as string)"
         :required="presenter.labels.password.required"
         :placeholder="presenter.labels.password.placeholder"
     />
 
     <UniversalInput
         :label="presenter.labels.confirmPassword.label"
-        :onChange="() => {}"
+        :onChange="(value) => controller.updateConfirmPassword(value as string)"
         :required="presenter.labels.confirmPassword.required"
         :placeholder="presenter.labels.confirmPassword.placeholder"
     />
@@ -90,7 +100,7 @@ const router = useRouter();
     <UniversalRoundedButton
         :loading="controller.isLoading.value"
         :label="'Зарегистрироваться'"
-        :handle-press="controller.trySignUp"
+        :handle-press="signup"
     />
 
     <p class="text-center text-sm text-gray-600 text-left">

@@ -34,6 +34,13 @@ const selectProject = async (id: string): Promise<void> => {
     );
 };
 
+const deleteProject = async (id: string): Promise<void> => {
+    const result = await controller.deleteProject(id);
+    if (!result.isSuccess) {
+        return;
+    }
+};
+
 </script>
 
 <template>
@@ -41,6 +48,7 @@ const selectProject = async (id: string): Promise<void> => {
         :title="presenter.label.title"
         :items="presenter.projectsViewModel.value"
         :onCreate="createProject"
+        :onDelete="deleteProject"
         :onEdit="() => {}"
         :onSelect="selectProject"
         :selected-id="presenter.projectViewModel.value?.id ?? ''"

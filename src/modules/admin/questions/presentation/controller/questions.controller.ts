@@ -87,7 +87,7 @@ export default class QuestionsController {
         const question = this._repository.getQuestion().value;
         if (!question) return;
 
-        const updatedQuestion = question.withNewAswer();
+        const updatedQuestion = question.withNewAnswer();
         this._repository.updateQuestions(updatedQuestion);
     }
 
@@ -95,7 +95,7 @@ export default class QuestionsController {
         const question = this._repository.getQuestion().value;
         if (!question) return;
 
-        const updatedQuestion = question.withRemovedAswer(answerId);
+        const updatedQuestion = question.withRemovedAnswer(answerId);
         this._repository.updateQuestions(updatedQuestion);
     }
 

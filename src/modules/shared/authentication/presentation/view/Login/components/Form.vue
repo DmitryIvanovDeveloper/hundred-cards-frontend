@@ -6,8 +6,8 @@ import UniversalRoundedButton from "@/ui/Buttons/UniversalRoundedButton.vue";
 import UniversalInput from "@/ui/UniversalInput.vue";
 import LoginPresenter from "../../../presenter/login.presenter";
 import LoginController from "../../../controller/login.controller";
-import { LoginType } from "@/modules/shared/authentication/business/dtos/login.type";
 import { RouterPaths } from "@/app/router/router-paths";
+import { LoginType } from "@/modules/shared/authentication/business/entities/login";
 
 const presenter = container.get<LoginPresenter>(TYPES.LoginPresenter);
 
@@ -20,7 +20,6 @@ const signIn = async () => {
     if (!result.isSuccess) {
         return;
     }
-    console.log(RouterPaths.admin)
 
     router.push(RouterPaths.admin);
 }
@@ -29,22 +28,22 @@ const signIn = async () => {
 <template>
   <div class="flex w-full flex flex-col gap-[10px] pt-[20px]">
     <UniversalInput
-      v-if="controller.form.value.type === LoginType.Email"
+      v-if="presenter.loginVewModel.value?.type === LoginType.Email"
       :label="presenter.labels.email.label"
-      :onChange="controller.updateEmail"
+      :onChange="(value) => controller.updateEmail(value as string)"
       type="email"
     />
 
     <UniversalInput
-      v-if="controller.form.value.type === LoginType.Phone"
+      v-if="presenter.loginVewModel.value?.type === LoginType.Phone"
       :label="presenter.labels.phone.label"
-      :onChange="controller.updatePhone"
+      :onChange="(value) => controller.updatePhone(value as string)"
       type="phone"
     />
 
     <UniversalInput
       :label="presenter.labels.password.label"
-      :onChange="controller.updatePassword"
+      :onChange="(value) => controller.updatePassword(value as string)"
       type="password"
     />
 

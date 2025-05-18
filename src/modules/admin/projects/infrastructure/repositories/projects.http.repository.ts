@@ -11,6 +11,7 @@ import CreateProjectResponseDTO from "../../business/dtos/create-project.dto";
 import UpdateProjectResponseDTO, { UpdateProjectRequestDTO } from "../../business/dtos/update-project.dto";
 import PutProjectResponse, { PutProjectRequest } from './dtos/update-project';
 import { PostProjectRequest, PostProjectResponse } from "./dtos/post-project";
+import { DeleteProjectResponse } from "./dtos/delete-project";
 
 export default class ProjectsHttpRepository implements IProjectsHttpRepository  {
 
@@ -59,6 +60,19 @@ export default class ProjectsHttpRepository implements IProjectsHttpRepository  
         const dto = response.data.map(mapProjectResponseToDto);
 
         return Result.success(dto);
+    }
+
+
+    public deleteProject = async (projectId: string): Promise<Result<void>> => {
+        const endpoint = `cards/admin/projects/${projectId}/`;
+
+        const response = await this._httpClient.delete<DeleteProjectResponse>(endpoint);
+        console.log(response)
+        if (!response.hasData()) {
+            return this.handleNetworkError(response.errors as NetworkError)
+        }
+        
+        return Result.success();
     }
 
 

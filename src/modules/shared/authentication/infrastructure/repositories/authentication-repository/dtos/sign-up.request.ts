@@ -1,11 +1,23 @@
+import RegistrationRequestDTO from "@/modules/shared/authentication/business/dtos/registration.dto";
+
 export default class SignUpRequest {
-    phone: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    middle_name: string;
-    password: string;
-    confirm_phone_code: string;
-    confirm_password: string;
-    check_id: string;
+    public readonly user: {
+        readonly email: string;
+        readonly first_name: string;
+        readonly last_name: string;
+        readonly password: string;
+
+    }
+    public readonly avatar: null;
+
+
+    constructor(dto: RegistrationRequestDTO) {
+        this.user = {
+            email: dto.email,
+            first_name: dto.name,
+            last_name: dto.lastName,
+            password: dto.password
+        }
+        this.avatar = null;
+    }
 }

@@ -11,6 +11,7 @@ const TYPES = {
     UpdateQuestionUseCase: Symbol.for('UpdateQuestionUseCase'),
     LevelSelectedEventHandler: Symbol.for('IAsyncEventHandler<LevelSelectedEvent>'),
     SaveProjectEventHandler: Symbol.for('IAsyncEventHandler<SaveProjectEvent>'),
+    LevelCreatedEventHandler: Symbol.for('IAsyncEventHandler<LevelCreatedEvent>'),
     NextQuestionEventHandler: Symbol.for('ISyncEventHandler<NextQuestionEvent>'),
     PreviousQuestionEventHandler: Symbol.for('ISyncEventHandler<PreviouseQuestionEvent>'),
     NextQuestionUseCase: Symbol.for('NextQuestionUseCase'),

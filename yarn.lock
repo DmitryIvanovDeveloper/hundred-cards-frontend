@@ -3787,6 +3787,11 @@ picomatch@^4.0.2:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.2.tgz#77c742931e8f3b8820946c76cd0c1f13730d1dab"
   integrity sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==
 
+ping@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/ping/-/ping-0.4.4.tgz#f70c5c8ad7b476d903100c9d45ecd52cf83e1de3"
+  integrity sha512-56ZMC0j7SCsMMLdOoUg12VZCfj/+ZO+yfOSjaNCRrmZZr6GLbN2X/Ui56T15dI8NhiHckaw5X2pvyfAomanwqQ==
+
 pinia@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/pinia/-/pinia-3.0.2.tgz#0616c2e1b39915f253c7626db3c81b7cdad695da"

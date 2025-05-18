@@ -1,9 +1,19 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import IRegistrationPresenter from '../../business/plugins/registration.presenter.interface';
+import { computed } from '@vue/reactivity';
+import { TYPES } from '../../types';
+import IAuthenticationLocalRepository from '../../business/plugins/authentication.local.repository.plugin';
+import RegistrationViewModel from './view-models/registration.view-model';
 
 @injectable()
 export default class RegistrationPresenter implements IRegistrationPresenter {
   
+    constructor(
+        @inject(TYPES.AuthenticationLocalRepository)
+        private readonly _authenticationLocalRepository: IAuthenticationLocalRepository
+    ) {}
+
+
     public labels = {
         title: 'Регистрация',
         company: {
@@ -51,4 +61,13 @@ export default class RegistrationPresenter implements IRegistrationPresenter {
             business: 'Для бизнеса'
         }
     }
+
+    public registrationViewModel = computed(() => {
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return null;
+        }
+
+        return new RegistrationViewModel(registration)
+    });
 }

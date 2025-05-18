@@ -21,8 +21,6 @@ const controller = container.get<RegistrationController>(
   TYPES.RegistrationController
 );
 
-const router = useRouter();
-
 </script>
 
 <template>
@@ -33,7 +31,7 @@ const router = useRouter();
       <template #right>
         <div class="grid w-full max-w-[250px]">
           <ButtonsSwitcher
-            :value="controller.form.value.type"
+            :value="presenter.registrationViewModel.value?.type"
             :options="[
               {
                 label: presenter.labels.registrationType.business,

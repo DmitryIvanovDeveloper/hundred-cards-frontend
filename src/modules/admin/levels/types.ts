@@ -8,8 +8,11 @@ const TYPES = {
     SelectLevelUseCase: Symbol.for('SelectLevelUseCase'),
     CreateLevelUseCase: Symbol.for('CreateLevelUseCase'),
     UpdateLevelUseCase:  Symbol.for('UpdateLevelUseCase'),
+    DeleteLevelUseCase: Symbol.for('DeleteLevelUseCase'),
     ProjectSelectedEventHandler: Symbol.for('IAsyncEventHandler<ProjectSelectedEvent>'),
     SaveProjectEventHandler: Symbol.for('IAsyncEventHandler<SaveProjectEvent>'),
+    ProjectCreatedEventHandler: Symbol.for('IAsyncEventHandler<ProjectCreatedEvent>'),
+    LevelCreatedEventHandler: Symbol.for('IAsyncEventHandler<LevelCreatedEvent>'),
     
 };
 

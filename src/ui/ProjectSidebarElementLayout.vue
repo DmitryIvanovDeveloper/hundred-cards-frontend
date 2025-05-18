@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import Humburger from "@assets/hamburger.svg";
+import Delete from 'vue-material-design-icons/DeleteOutline.vue';
 
 export interface IProjectSidbarElementLayout {
 	title?: string;
 	onEdit: () => void;
+	onDelete: () => void;
+	onSelect: () => void;
 	droppable: boolean;
 	selected: boolean;
 	checkable: boolean;
@@ -11,8 +14,8 @@ export interface IProjectSidbarElementLayout {
 	edited?: boolean;
 }
 
-const { title, onEdit, droppable, checkable, checked, edited } =
-	defineProps<IProjectSidbarElementLayout>();
+const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited } = defineProps<IProjectSidbarElementLayout>();
+
 </script>
 <template>
 	<div
@@ -24,14 +27,21 @@ const { title, onEdit, droppable, checkable, checked, edited } =
 			class="flex justify-between w-full p-1 cursor-pointer hover:bg-gray-200"
 			:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"
 		>
+		<button
+			@click="onSelect"
+			class="flex items-center gap-[10px] w-full p-1 cursor-pointer hover:bg-gray-200"
+			:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"
+		>
 		<span class="font-roboto-400 text-[13px] text-[#424242] text-left block truncate">
 			{{ title }}
 		  </span>	
+		</button>
+	
 
 			<div class="flex gap-[10px]">
 				<span v-if="edited">⚠️</span>
 
-				<button @click="onEdit">
+				<button @click="onEdit" class="cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
 						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 						class="lucide lucide-square-pen text-gray-400" aria-hidden="true">
@@ -41,8 +51,18 @@ const { title, onEdit, droppable, checkable, checked, edited } =
 						</path>
 					</svg>
 				</button>
+				
+				<button :onclick="onDelete"  class="cursor-pointer">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="1\24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="lucide lucide-square-xmark text-gray-400" aria-hidden="true">
+						<path d="M9 9l6 6"></path>
+						<path d="M15 9l-6 6"></path>
+					</svg>
+				</button>
+
 			</div>
-		
+			
 		</div>
 	</div>
 </template>

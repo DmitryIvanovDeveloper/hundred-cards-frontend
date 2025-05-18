@@ -56,6 +56,7 @@ export default class Level {
     }
 
     public toUpdateRequest(): ILevelUpdateRequestDTO {
+        console.log(this)
         return {
             level: this.name,
             lang: this.lang,

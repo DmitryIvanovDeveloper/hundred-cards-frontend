@@ -29,10 +29,10 @@ export default defineConfig({
             strict: false,
         },
         proxy: {
-            '/api': {
-                target: 'https://lk.hartiya.ykdev.ru', // Адрес вашего бэкенда
+            '/cards/': {
+                target: 'https://hundredcards.onrender.com',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, ''),
+                rewrite: (path) => path.replace(/^\/cards/, ''),
             },
         },
     },

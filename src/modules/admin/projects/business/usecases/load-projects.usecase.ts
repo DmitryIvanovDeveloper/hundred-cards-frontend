@@ -8,37 +8,37 @@ import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { LoadProjectsInput, LoadProjectsOutput } from "./types/load-projects.type";
 import ProjectsNotLoadedError from "../errors/projects-not-loaded.error";
 import IProjectsLocalRepository from "../plugins/projects.local.repository.plugin";
-import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
-import ProjectSelectedEvent from "../events/project-selected-event";
 import SelectProjectUseCase from "./select-project.usecase";
 
 @injectable()
-export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, LoadProjectsOutput>
-{
-  constructor(
-    @inject(TYPES.ProjectsHttpRepository)
-    private readonly _projectsRepository: IProjectsHttpRepository,
+export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, LoadProjectsOutput> {
+	constructor(
+		@inject(TYPES.ProjectsHttpRepository)
+		private readonly _projectsRepository: IProjectsHttpRepository,
 
-    @inject(TYPES.ProjectsLocalRepository)
-    private readonly _localRepository: IProjectsLocalRepository,
+		@inject(TYPES.ProjectsLocalRepository)
+		private readonly _localRepository: IProjectsLocalRepository,
 
-	@inject(TYPES.SelectProjectUseCase)
-    private readonly _selectProjectUseCase: SelectProjectUseCase,
-  ) {
-    super();
-  }
+		@inject(TYPES.SelectProjectUseCase)
+		private readonly _selectProjectUseCase: SelectProjectUseCase,
+	) {
+		super();
+	}
 
-  public async execute(): Promise<LoadProjectsOutput> {
+	public async execute(): Promise<LoadProjectsOutput> {
 
-    const result = await this._projectsRepository.loadProjects();
-    if (!result.hasData()) {
-        return Result.failure<void>(new ProjectsNotLoadedError());
-    }
+		const result = await this._projectsRepository.loadProjects();
+		if (!result.hasData()) {
+			return Result.failure<void>(new ProjectsNotLoadedError());
+		}
 
-    const projects = result.data.map(Project.toEntity);
-    this._localRepository.storeProjects(projects);
+		const projects = result.data.map(Project.toEntity);
+		this._localRepository.storeProjects(projects);
 
-	// this._selectProjectUseCase.execute({ projectId: projects[0].id });
-    return Result.success<void>();
-  }
+		if (!!projects.length) {
+			this._selectProjectUseCase.execute({ projectId: projects[0].id });
+		}
+
+		return Result.success<void>();
+	}
 }

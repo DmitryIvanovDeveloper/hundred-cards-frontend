@@ -6,7 +6,7 @@ import ButtonsSwitcher from "@/ui/Buttons/ButtonsSwitcher.vue";
 import LoginPresenter from "../../presenter/login.presenter";
 import LoginController from "../../controller/login.controller";
 import Form from "./components/Form.vue";
-import { LoginType } from "../../../business/dtos/login.type";
+import { LoginType } from "../../../business/entities/login";
 
 const presenter = container.get<LoginPresenter>(TYPES.LoginPresenter);
 const controller = container.get<LoginController>(TYPES.LoginController);
@@ -20,7 +20,7 @@ const controller = container.get<LoginController>(TYPES.LoginController);
         <template #right>
           <div class="flex w-[200px]">
             <ButtonsSwitcher
-              :value="controller.form.value.type"
+              :value="presenter.loginVewModel.value?.type"
               :options="[
                 {
                   label: presenter.labels.loginType.phone,

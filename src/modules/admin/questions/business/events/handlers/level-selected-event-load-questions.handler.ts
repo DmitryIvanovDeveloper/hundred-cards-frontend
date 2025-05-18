@@ -1,7 +1,7 @@
 import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugin";
 import { TYPES } from "../../../types";
 import { inject } from "inversify";
-import LoadPresentQuestionsUseCase from "../../usecases/load-questons.usecase";
+import LoadQuestionsUseCase from "../../usecases/load-questons.usecase";
 import LevelSelectedEvent from "@/modules/admin/levels/business/events/level-selected-event";
 
 export default class LevelSelectedEventLoadQuestionsHandler
@@ -9,7 +9,7 @@ export default class LevelSelectedEventLoadQuestionsHandler
 {
   constructor(
     @inject(TYPES.LoadPresentQuestionsUseCase)
-    private readonly _loadPresentQuestionsUseCase: LoadPresentQuestionsUseCase
+    private readonly _loadPresentQuestionsUseCase: LoadQuestionsUseCase
   ) {}
 
   canHandle(event: LevelSelectedEvent): boolean {

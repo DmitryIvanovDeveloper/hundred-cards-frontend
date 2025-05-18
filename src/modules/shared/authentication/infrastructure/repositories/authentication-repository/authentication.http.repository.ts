@@ -1,6 +1,6 @@
 import Result from '@/infrastructure/helpers/result';
 import { inject, injectable } from 'inversify';
-import IAuthenticationRepository from '../../../business/plugins/authentication.repository.interface';
+import IAuthenticationHttpRepository from '../../../business/plugins/authentication.http.repository.plugin';
 import SignUpRequest from './dtos/sign-up.request';
 import IRegistrationResponse from './dtos/registration-response';
 import IHttpClient from '@/infrastructure//api/http/http.interface';
@@ -10,31 +10,28 @@ import ILoginRequest from './dtos/login.request';
 import { TYPES } from '@/infrastructure/bootstrap/types';
 import { NetworkError } from '@/infrastructure//errors/network.error';
 import AuthenticationError from '../../../business/errors/authentication.error';
+import RegistrationRequestDTO from '../../../business/dtos/registration.dto';
 
 @injectable()
-export default class AuthenticationRepository implements IAuthenticationRepository {
+export default class AuthenticationHttpRepository implements IAuthenticationHttpRepository {
 
     constructor(
         @inject(TYPES.HttpClient)
         private readonly _httpClient: IHttpClient,
     ){} 
 
-    private _checkId: string = '';
+    public signUp = async (signupDto: RegistrationRequestDTO): Promise<Result<string>> => {
+        const endpoint = 'sign_up/';
 
-    public signUp = async (): Promise<Result<string>> => {
-        // const endpoint = 'api/client/v1/register';
+        const request = new SignUpRequest(signupDto);
 
-        // const request = Mapper.mapDtoToRequest(signUpDto, this._checkId);
+        const response = await this._httpClient.post<IRegistrationResponse, SignUpRequest>(endpoint, request);
 
+        if (!response.isSuccess || !response.data) {
+            return this.handleNetworkError(response.errors as AuthenticationError);
+        }
 
-        // const response = await this._httpClient.post<IRegistrationResponse, SignUpRequest>(endpoint, request);
-
-        // if (!response.isSuccess || !response.data) {
-        //     return this.handleNetworkError(response.errors as AuthenticationError);
-        // }
-
-        // return Result.success(response.data.token);
-        return Result.failure();
+        return Result.success(response.data.token);
     };
 
     public signIn = async (email: string, password: string): Promise<Result<string>> => {

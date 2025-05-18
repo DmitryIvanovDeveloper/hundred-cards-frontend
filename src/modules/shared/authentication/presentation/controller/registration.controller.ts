@@ -1,64 +1,111 @@
 import { ref } from "vue";
 import { RegistrationType } from "../../business/dtos/registration-type";
-import RegistrationDTO from "../../business/dtos/registration.dto";
+import RegistrationRequestDTO from "../../business/dtos/registration.dto";
 import { inject } from "inversify";
 import { TYPES } from "../../types";
-import TrySignInUseCase from "../../business/usecases/try-sign-in.usecase";
 import TrySignUpUseCase from "../../business/usecases/try-sign-up.usecase";
+import IAuthenticationLocalRepository from "../../business/plugins/authentication.local.repository.plugin";
+import Result from "@/infrastructure/helpers/result";
 
 export default class RegistrationController {
 
     constructor(
         @inject(TYPES.TrySignUpUseCase)
-        private readonly _trySignUpUseCase: TrySignUpUseCase
+        private readonly _trySignUpUseCase: TrySignUpUseCase,
+
+        @inject(TYPES.AuthenticationLocalRepository)
+        private readonly _authenticationLocalRepository: IAuthenticationLocalRepository
     ) {}
     
-    public form = ref<RegistrationDTO>({
-        type: RegistrationType.Business,
-        company: '',
-        name: '',
-        lasName: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirmPassword: '',
-    });
-
     public readonly isLoading = ref<boolean>(false);
 
     public updateCompany = (company: string) => {
-        this.form.value.company = company;
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithCompany(company);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updateName = (name: string) => {
-        this.form.value.name = name;
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+        const updatedRegistraton = registration.updateWithName(name);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
+
     }
 
     public updateLastName = (lastName: string) => {
-        this.form.value.lasName = lastName;
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithLastName(lastName);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updateEmail = (email: string) => {
-        this.form.value.email = email;
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithEmail(email);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updatePhone = (phone: string) => {
-        this.form.value.phone = phone;
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithPhone(phone);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updatePassword = (password: string) => {
-        this.form.value.password = password;
+
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithPassword(password);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updateConfirmPassword = (confirmPassword: string) => {
-        this.form.value.confirmPassword = confirmPassword;
+
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+
+        const updatedRegistraton = registration.updateWithConfirmPassword(confirmPassword);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
     public updateType = (type: RegistrationType) => {
-        this.form.value.type = type;
+
+        const registration = this._authenticationLocalRepository.getRegistration().value;
+        if (!registration) {
+            return;
+        }
+        const updatedRegistraton = registration.updateWithType(type);
+        this._authenticationLocalRepository.storeRegistration(updatedRegistraton);
     }
 
-    public trySignUp = async (): Promise<void> => {
-       await this._trySignUpUseCase.execute(this.form.value);
+    public trySignUp = async (): Promise<Result<void>> => {
+        this.isLoading.value = true;
+        const result = await this._trySignUpUseCase.execute({});
+        this.isLoading.value = false;
+
+        return result;
     }
 }

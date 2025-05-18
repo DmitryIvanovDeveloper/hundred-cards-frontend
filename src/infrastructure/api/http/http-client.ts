@@ -26,6 +26,7 @@ export default class HttpClient implements IHttpClient {
 
         const headers: Record<string, string> = {
             Accept: 'application/json',
+            Origin: 'http://localhost:5174',
         };
 
         const result = this._authTokenUseCases.get();
@@ -33,7 +34,7 @@ export default class HttpClient implements IHttpClient {
        
         
         if (token) {
-            headers['Authorization'] = `Bearer ${result.data}`;
+            headers['Authorization'] = `Token ${result.data}`;
         }
 
         if (!isFormData) {

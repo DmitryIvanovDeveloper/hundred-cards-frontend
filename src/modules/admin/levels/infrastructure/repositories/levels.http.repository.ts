@@ -12,6 +12,7 @@ import { ILevelUpdateRequestDTO, ILevelUpdateResponseDTO } from "../../business/
 import  { UpdateLevelRequest, UpdateLevelResponse } from "./dtos/update-level.request";
 import { mapLevelResponseToDto } from "./dtos/mapper";
 import { ILevelLoadResponseDTO } from "../../business/dtos/level.load.dto";
+import { DeleteLevelResponse } from "./dtos/delete-level";
 
 export default class LevelsHttpRepository implements ILevelsHttpRepository  {
 
@@ -22,9 +23,10 @@ export default class LevelsHttpRepository implements ILevelsHttpRepository  {
     
   
     public loadLevels = async (projectId: string): Promise<Result<Array<ILevelLoadResponseDTO>>> => {
-        const endpoint = `cards/admin/levels/?project_id=${projectId}/`;
+        const endpoint = `cards/admin/levels/?project_id=${projectId}`;
 
         const response = await this._httpClient.get<Array<GetProjectResponse>>(endpoint);
+
         if (!response.isSuccess || !response.data) {
             return this.handleNetworkError(response.errors as NetworkError)
         }
@@ -49,8 +51,8 @@ export default class LevelsHttpRepository implements ILevelsHttpRepository  {
         return Result.success(dto);
     }
 
-    public updateLevel = async (updateRequest: ILevelUpdateRequestDTO): Promise<Result<ILevelUpdateResponseDTO>> => {
-        const endpoint = `cards/admin/levels/`;
+    public updateLevel = async (updateRequest: ILevelUpdateRequestDTO, levelId: string): Promise<Result<ILevelUpdateResponseDTO>> => {
+        const endpoint = `cards/admin/levels/${levelId}/`;
 
         const request = new UpdateLevelRequest(updateRequest);
 
@@ -61,6 +63,17 @@ export default class LevelsHttpRepository implements ILevelsHttpRepository  {
 
 
         return Result.success({});
+    }
+
+    public deleteLevel = async (levelId: string): Promise<Result<void>> => {
+        const endpoint = `cards/admin/levels/${levelId}/`;
+
+        const response = await this._httpClient.delete<DeleteLevelResponse>(endpoint);
+        if (!response.isSuccess || !response.data) {
+            return this.handleNetworkError(response.errors as NetworkError)
+        }
+
+        return Result.success();
     }
 
     private handleNetworkError<T>(networkError: NetworkError): Result<T> {

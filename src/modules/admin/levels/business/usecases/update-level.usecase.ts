@@ -3,11 +3,7 @@ import { TYPES } from "../../types";
 import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
 import Result from "@/infrastructure/helpers/result";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
-import Level from "../entities/level";
-import LevelNotCreatedError from "../errors/level-not-created.error";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
-import { CreateLevelInput, CreateLevelOutput } from "./types/create-level.type";
-import LevelSelectedEvent from "../events/level-selected-event";
 import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import { UpdateLevelInput, UpdateLevelOutput } from "./types/update-level.type";
@@ -21,7 +17,6 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 
 		@inject(TYPES.LevelsLocalRepository)
 		private readonly _localRepository: ILevelsLocalRepository,
-	
 
 		@inject(SharedTYPES.EventBus)
 		private readonly _eventBus: IEventBus,
@@ -31,14 +26,20 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 
   public async execute(input: UpdateLevelInput): Promise<UpdateLevelOutput> {
 		const level = this._localRepository.getLevel().value;
+        console.log(level)
+
 		if (!level) {
-		return Result.failure(new LevelNotUpdatedError())
+			return Result.failure(new LevelNotUpdatedError())
 		}
 
-		const updateRequest = level.toUpateRequest();
+		const updateRequest = level.toUpdateRequest();
+        console.log(updateRequest)
 
-		const result = await this._repository.updateLevel(updateRequest);
-		console.log(result)
+		const result = await this._repository.updateLevel(updateRequest, level.id);
+		if (!result.isSuccess) {
+			return Result.failure(new LevelNotUpdatedError(level.id));
+		}
+
 		return Result.success();
   }
 }

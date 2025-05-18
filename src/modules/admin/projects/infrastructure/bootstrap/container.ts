@@ -17,6 +17,10 @@ import { TYPES } from '../../types';
 import SaveProjectEvent from '../../business/events/save-project-event';
 import SaveProjectEventUpdateProjectHandler from '../../business/events/handlers/save-project-event-update-project.handler';
 import UpdateProjectUseCase from '../../business/usecases/update-project.usecase';
+import DeleteProjectUseCase from '../../business/usecases/delete-project.usecase';
+import ProjectDeletedEvent from '../../business/events/project-deleted-event';
+import ProjectCreatedEvent from '../../business/events/project-created-event';
+import ProjectCreatedEventSelectProjectHandler from '../../business/events/handlers/project-created-event-select-project.handler';
 
 container
     .bind<ProjectsPresenter>(TYPES.ProjectsPresenter)
@@ -60,6 +64,11 @@ container
     .inTransientScope()
 ;
 
+container
+    .bind<DeleteProjectUseCase>(TYPES.DeleteProjectUseCase)
+    .to(DeleteProjectUseCase)
+    .inTransientScope()
+;
 
 container
   .bind<IProjectsLocalRepository>(TYPES.ProjectsLocalRepository)
@@ -80,7 +89,19 @@ container
 ;
 
 container
+    .bind<IAsyncEventHandler<ProjectDeletedEvent>>(TYPES.ProjectDeletedEventHandler)
+    .to(AdminAuthenticatedEventLaodProjectsHandler)
+    .inTransientScope()
+;
+
+container
     .bind<IAsyncEventHandler<SaveProjectEvent>>(TYPES.SaveProjectEventHandler)
     .to(SaveProjectEventUpdateProjectHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<IAsyncEventHandler<ProjectCreatedEvent>>(TYPES.ProjectCreatedEventHandler)
+    .to(ProjectCreatedEventSelectProjectHandler)
     .inTransientScope()
 ;

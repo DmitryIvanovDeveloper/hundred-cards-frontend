@@ -10,9 +10,11 @@ import SaveProjectEvent from "../../business/events/save-project-event";
 import NextQuestionEvent from "@/modules/admin/questions/business/events/next-question-event";
 import PreviouseQuestionEvent from "@/modules/admin/questions/business/events/previous-question-event";
 import IProjectsLocalRepository from "../../business/plugins/projects.local.repository.plugin";
+import DeleteProjectUseCase from "../../business/usecases/delete-project.usecase";
 
 @injectable()
 export default class ProjectsController {
+    
     constructor(
         @inject(TYPES.CreateProjectPresentConstructorUseCase)
         private readonly _createNewProjectUseCase: CreateProjectUseCase,
@@ -20,6 +22,8 @@ export default class ProjectsController {
         @inject(TYPES.SelectProjectUseCase)
         private readonly _selectProjectUseCae: SelectProjectUseCase,
 
+        @inject(TYPES.DeleteProjectUseCase)
+        private readonly _deleteProjectUseCase: DeleteProjectUseCase,
 
         @inject(TYPES.ProjectsLocalRepository)
         private readonly _repoitory: IProjectsLocalRepository,
@@ -71,5 +75,9 @@ export default class ProjectsController {
 
     public edit = (edit: boolean): void => {
         this.isEdit.value = edit;
+    }
+
+    public async deleteProject(id: string): Promise<Result<void>> {
+        return await this._deleteProjectUseCase.execute({ projectId: id} );
     }
 }

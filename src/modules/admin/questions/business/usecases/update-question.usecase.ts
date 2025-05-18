@@ -31,8 +31,11 @@ export default class UpdateQuestionUseCase extends BaseUseCase<UpdateQuestionInp
         }
 
         const updateRequest = question.toUpdateRequest();
-
+        
         const result = await this._repository.update(question.id, updateRequest);
+        if (!result.hasData()) {
+            return Result.failure(new QuestionNotUpdatedError(question.id))
+        }
 
         const updatedQuestion = Question.toEntity(result.data);
         

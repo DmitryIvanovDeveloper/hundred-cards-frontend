@@ -22,6 +22,16 @@ const createLevel = async (): Promise<void> => {
 	goToConstructor();
 };
 
+const deleteLevel = async (id: string): Promise<void> => {
+	const result = await controller.deleteLevel(id);
+
+	if (!result.hasData()) {
+		return;
+	}
+
+};
+
+
 const selectLevel = async (levelId: string): Promise<void> => {
 	const result = await controller.selectLevel(levelId);
 	if (result.hasData()) {
@@ -45,6 +55,7 @@ const goToConstructor = (): void => {
 		:items="presenter.levelsViewModel.value"
 		:onCreate="createLevel"
 		:onEdit="() => {}"
+		:onDelete="deleteLevel"
 		:onSelect="selectLevel"
 		:selected-id="presenter.levelViewModel.value?.id ?? ''"
 		droppable

@@ -4,6 +4,6 @@ import { CreateAchievementRequestDTO, CreateAchievementResponseDTO } from "../dt
 
 export default interface IAchievementsHttpRepository {
     create(dto: CreateAchievementRequestDTO): Promise<Result<CreateAchievementResponseDTO>> 
-    load(projectId: string): Promise<Result<LoadAchievementsResponseDTO[]>>
+    load(projectId: string): Promise<Result<ReadonlyArray<LoadAchievementsResponseDTO>>>
     
 }

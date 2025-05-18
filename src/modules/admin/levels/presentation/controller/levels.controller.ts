@@ -8,8 +8,10 @@ import Result from "@/infrastructure/helpers/result"
 import IProjectsService from "@/modules/admin/projects/business/plugins/projects.service.plugin"
 import LevelNotCreatedError from "../../business/errors/level-not-created.error"
 import ILevelsLocalRepository from "../../business/plugins/levels.local.repository.plugin"
+import DeleteLevelUseCase from "../../business/usecases/delete-level.usecase"
 
 export default class LevelsController  {
+	
     
     constructor(
         @inject(TYPES.SelectLevelUseCase)
@@ -21,10 +23,11 @@ export default class LevelsController  {
         @inject(ProjectTYPES.ProjectsService)
         private readonly _projectsService: IProjectsService,
 
-
         @inject(TYPES.LevelsLocalRepository)
         private readonly _repository: ILevelsLocalRepository,
 
+        @inject(TYPES.DeleteLevelUseCase)
+        private readonly _deleteLevelUseCase: DeleteLevelUseCase,
     ){}  
 
     public createLevel = async (): Promise<Result<void>> => {
@@ -47,6 +50,10 @@ export default class LevelsController  {
         }
 
         const updatedLevel = level.withUpdatedName(text);
-        this._repository.updateLevel(updatedLevel);
+        this._repository.storeLevel(updatedLevel);
     }
+
+    public deleteLevel = async (id: string): Promise<Result<void>> => {
+		return await this._deleteLevelUseCase.execute({ levelId: id }); 
+	}
 } 

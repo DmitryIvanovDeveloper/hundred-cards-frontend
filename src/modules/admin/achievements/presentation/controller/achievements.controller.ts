@@ -33,6 +33,14 @@ export default class AchievementsController {
 		private readonly _projectsService: IProjectsService
 	) {}
 
+	private get _selectedAchievement() {
+		const achievement = this._repository.getAchievement().value;
+		if (!achievement) {
+			return null;
+		}
+		return achievement;
+	}
+
 	public createAchievement = async (): Promise<Result<void>> => {
 		const result = this._projectsService.getSelectedProjectId();
 		if (!result.hasData()) {

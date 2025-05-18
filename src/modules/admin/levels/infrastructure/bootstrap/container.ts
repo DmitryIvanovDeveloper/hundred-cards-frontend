@@ -1,5 +1,4 @@
 import { TYPES } from '../../types';
-
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import { IAsyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
 import LevelsPresenter from '../../presentation/presenter/levels.presenter';
@@ -17,6 +16,11 @@ import ILevelsHttpRepository from '../../business/plugins/levels.http.repository
 import SaveProjectEvent from '@/modules/admin/projects/business/events/save-project-event';
 import SaveProjectEventUpdateLevelHandler from '../../business/events/handlers/save-project-event-update-level.handler';
 import UpdateLevelUseCase from '../../business/usecases/update-level.usecase';
+import ProjectCreatedEventCreateDefaultLevelHandler from '../../business/events/handlers/project-created-event-create-default-level.handler';
+import ProjectCreatedEvent from '@/modules/admin/projects/business/events/project-created-event';
+import LevelCreatedEvent from '../../business/events/level-created-event';
+import LevelCreatedEventSelectLevelHandler from '../../business/events/handlers/level-created-event-select-level.handler';
+import DeleteLevelUseCase from '../../business/usecases/delete-level.usecase';
 
 container
     .bind<LevelsPresenter>(TYPES.LevelsPresenter)
@@ -61,6 +65,12 @@ container
 ;
 
 container
+    .bind<DeleteLevelUseCase>(TYPES.DeleteLevelUseCase)
+    .to(DeleteLevelUseCase)
+    .inTransientScope()
+;
+
+container
     .bind<ILevelsLocalRepository>(TYPES.LevelsLocalRepository)
     .to(LevelsLocalRepository)
     .inSingletonScope()
@@ -84,3 +94,14 @@ container
     .inTransientScope()
 ;
 
+container
+    .bind<IAsyncEventHandler<ProjectCreatedEvent>>(TYPES.ProjectCreatedEventHandler)
+    .to(ProjectCreatedEventCreateDefaultLevelHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<IAsyncEventHandler<LevelCreatedEvent>>(TYPES.LevelCreatedEventHandler)
+    .to(LevelCreatedEventSelectLevelHandler)
+    .inTransientScope()
+;

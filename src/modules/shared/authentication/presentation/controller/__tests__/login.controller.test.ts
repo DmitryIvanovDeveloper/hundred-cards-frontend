@@ -4,7 +4,7 @@ import HttpClientMock from '@/infrastructure/api/http/http-clinet.mock';
 import ILoginPresenter from '../../../business/plugins/login.presenter.interface';
 import TrySignInUseCase from '../../../business/usecases/try-signin.usecase';
 import ValidateLoginRequiredDataUseCase from '../../../business/usecases/valdiate-login-required-data.usecase';
-import AuthenticationRepository from '../../../infrastructure/repositories/authentication-repository/authentication.repository';
+import AuthenticationHttpRepository from '../../../infrastructure/repositories/authentication-repository/authentication.http.repository';
 import LoginPresenter from '../../presenter/login.presenter';
 import { ToastNotificationUseCases } from '@/modules/shared/notification/business/usecases/toast-notification.usecases';
 import AuthTokenUseCases from '@/modules/shared/authStorage/business/usecases/auth-token.usecases';
@@ -15,7 +15,7 @@ import { SessionStorageRespository } from '@/modules/shared/authStorage/infrastr
 describe('LoginController', () => {
     const httpClient = new HttpClientMock();
     
-    const authenticationRepository = new AuthenticationRepository(httpClient);
+    const authenticationRepository = new AuthenticationHttpRepository(httpClient);
     const validateLoginRequiredDataUseCase = new ValidateLoginRequiredDataUseCase();
     const loginPresenter: ILoginPresenter = new LoginPresenter();
 

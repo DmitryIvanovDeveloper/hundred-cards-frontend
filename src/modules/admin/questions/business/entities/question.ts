@@ -4,7 +4,7 @@ import {
   CreateQuestionResponse,
 } from "../dtos/create-question.dto";
 import { LoadQuestionResponse } from "../dtos/load-question.dto";
-import { UpdateQuestionRequestDTO } from "../dtos/update-question.dto";
+import { UpdateQuestionRequestDTO, UpdateQuestionResponseDTO } from "../dtos/update-question.dto";
 import { Answer } from "./Answer";
 
 export interface QuestionProps {
@@ -92,9 +92,9 @@ export default class Question {
     return new Question("", "New Question", 0, levelId, "RU", []);
   }
 
-  static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse): Question {
+  static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse | UpdateQuestionResponseDTO): Question {
     const answers = dto.answers.map(
-      (a) => new Answer(a.id, a.text, a.isCorrect, a.lang, dto.levelId)
+      (a) => new Answer(a.id, a.text, a.isCorrect, a.lang, a.questionId)
     );
     return new Question(dto.id, dto.text, dto.points, dto.levelId, dto.lang, answers);
   }
@@ -111,6 +111,8 @@ export default class Question {
   }
 
   toUpdateRequest(): UpdateQuestionRequestDTO {
+    console.log(this.answers)
+
     return {
       id: this.id,
       text: this.text,

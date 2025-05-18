@@ -16,12 +16,13 @@ export interface IProjectItemListProps {
   onCreate: () => void;
   onEdit: (id: string) => void;
   onSelect: (id: string) => void;
+  onDelete: (id: string) => void;
   selectedId: string;
   droppable?: boolean;
   checkable?: boolean;
 }
 
-const { title, items, onCreate, onEdit, onSelect, selectedId, droppable } =
+const { title, items, onCreate, onEdit, onSelect, onDelete, selectedId, droppable } =
   defineProps<IProjectItemListProps>();
 
 const draggedItem = ref<number | null>(null);
@@ -60,7 +61,6 @@ const onDrop = (index: number): void => {
     <div class="flex flex-col gap-[10px] w-full pl-6">
       <div
         v-for="(item, index) in items"
-        @click="() => onSelect(item.id)"
         :key="item.id"
         draggable="true"
         @dragstart="onDragStart(index)"
@@ -72,7 +72,9 @@ const onDrop = (index: number): void => {
       >
         <ProjectSidebarElementLayout
             :title="item.name"
+            :onSelect="() => onSelect(item.id)"
             :onEdit="() => onEdit(item.id)"
+            :onDelete="() => onDelete(item.id)"
             :droppable="droppable"
             :selected="item.id === selectedId"
             :checkable="checkable ?? false"

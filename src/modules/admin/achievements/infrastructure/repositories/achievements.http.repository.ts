@@ -20,7 +20,6 @@ export default class AchievementsHttpRepository implements IAchievementsHttpRepo
         const endpoint = `cards/admin/rewards/`;
 
         const request = new PostAchievementRequest(requestDto);
-        console.log(request)
 
         const response = await this._httpClient.post<PostAchievemensResponse, PostAchievementRequest>(endpoint, request);
 
@@ -33,10 +32,10 @@ export default class AchievementsHttpRepository implements IAchievementsHttpRepo
         return Result.success(dto);
     }
 
-	public async load(projectId: string): Promise<Result<LoadAchievementsResponseDTO[]>> {
-		const endpoint = `cards/admin/rewards/?project_id=${projectId}/`;
+	public async load(projectId: string): Promise<Result<ReadonlyArray<LoadAchievementsResponseDTO>>> {
+		const endpoint = `cards/admin/rewards/?project_id=${projectId}`;
 
-        const response = await this._httpClient.get<Array<GetAchievementsResponse>>(endpoint);
+        const response = await this._httpClient.get<ReadonlyArray<GetAchievementsResponse>>(endpoint);
         if (!response.hasData()) {
             return this.handleNetworkError(response.errors as NetworkError)
         }

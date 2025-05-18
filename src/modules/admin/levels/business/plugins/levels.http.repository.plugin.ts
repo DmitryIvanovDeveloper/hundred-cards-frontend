@@ -4,7 +4,8 @@ import { ILevelLoadResponseDTO } from "../dtos/level.load.dto";
 import { ILevelUpdateRequestDTO, ILevelUpdateResponseDTO } from "../dtos/level.update.dto";
 
 export default interface ILevelsHttpRepository {
-    updateLevel(updateRequest: ILevelUpdateRequestDTO): Promise<Result<ILevelUpdateResponseDTO>>;
+    deleteLevel(levelId: string): Promise<Result<void>>;
+    updateLevel(updateRequest: ILevelUpdateRequestDTO, levelId: string): Promise<Result<ILevelUpdateResponseDTO>>;
     createLevel(dto: ILevelCreateRequestDTO): Promise<Result<ILevelCreateResponseDTO>>;
     loadLevels(projectId: string): Promise<Result<Array<ILevelLoadResponseDTO>>>;
 }

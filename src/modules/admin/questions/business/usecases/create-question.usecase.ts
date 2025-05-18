@@ -1,6 +1,5 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
-import { TYPES as LevelTYPES } from "@/modules/admin/levels/types";
 import Result from "@/infrastructure/helpers/result";
 import IQuestionsHttpRepository from "../plugins/questions.http.repository.plugin";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
@@ -25,16 +24,16 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
 
         const levelId = input.levelId
 
-        const question = Question.create(levelId).toCreateRequest();
+        const request = Question.create(levelId).toCreateRequest();
 
-        const result = await this._repository.save(question);
+        const result = await this._repository.save(request);
         if (!result.hasData()) {
             return Result.failure(new QuestionNotCreatedError())
         }
 
-        const questions = result.data.map(dto => Question.toEntity(dto))
+        const question =  Question.toEntity(result.data)
       
-        this._localRepository.storeQuestions(questions);
+        this._localRepository.updateQuestions(question);
 
         return Result.success();
     }

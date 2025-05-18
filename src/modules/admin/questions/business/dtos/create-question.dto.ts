@@ -46,14 +46,14 @@ export class CreateAnswerResponse {
    text: string;
    isCorrect: boolean;
    lang: string;
-   question_id: string;
+   questionId: string;
 
    constructor(id: string, text: string, isCorrect: boolean, lang: string, question_id: string) {
       this.id = id;
       this.text = text;
       this.isCorrect = isCorrect;
       this.lang = lang;
-      this.question_id = question_id;
+      this.questionId = question_id;
    }
 }
 
