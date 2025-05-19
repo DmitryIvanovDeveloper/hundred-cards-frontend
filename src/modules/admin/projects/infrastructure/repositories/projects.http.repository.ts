@@ -62,12 +62,10 @@ export default class ProjectsHttpRepository implements IProjectsHttpRepository  
         return Result.success(dto);
     }
 
-
     public deleteProject = async (projectId: string): Promise<Result<void>> => {
         const endpoint = `cards/admin/projects/${projectId}/`;
 
         const response = await this._httpClient.delete<DeleteProjectResponse>(endpoint);
-        console.log(response)
         if (!response.hasData()) {
             return this.handleNetworkError(response.errors as NetworkError)
         }

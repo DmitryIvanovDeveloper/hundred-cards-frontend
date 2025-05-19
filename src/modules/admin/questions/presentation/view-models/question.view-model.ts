@@ -1,10 +1,12 @@
-import Question, { Answer } from "../../business/entities/question";
+import { Answer } from "../../business/entities/Answer";
+import Question from "../../business/entities/question";
 
 
 export default class QuestionViewModel {
 	readonly id: string;
 	readonly levelId: string;
 	readonly edited: boolean;
+	readonly deleting: boolean;
 	readonly answers: Array<AnswerViewModel>;
 
 	readonly name: string;
@@ -17,6 +19,7 @@ export default class QuestionViewModel {
 		this.levelId = question.levelId;
 		this.answers = question.answers.map(answer => new AnswerViewModel(answer));
 		this.edited = question.edited ?? false;
+		this.deleting = question.deleting ?? false;
 	}
 }
 

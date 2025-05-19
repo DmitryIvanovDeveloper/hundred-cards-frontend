@@ -8,6 +8,7 @@ import { NetworkError } from "@/infrastructure/errors/network.error";
 import { LoadAchievementsResponseDTO } from "../../business/dtos/load-achievements.dto";
 import { CreateAchievementRequestDTO, CreateAchievementResponseDTO } from "../../business/dtos/create-achievements.dto";
 import { PostAchievementRequest, PostAchievemensResponse } from "./dtos/post-achievements.dto";
+import { DeleteAchievementResponse } from "./dtos/delete-achievements.dto";
 
 export default class AchievementsHttpRepository implements IAchievementsHttpRepository {
 
@@ -15,7 +16,7 @@ export default class AchievementsHttpRepository implements IAchievementsHttpRepo
 		@inject(TYPES.HttpClient)
 		private readonly _httpClient: IHttpClient 
 	){}
-  
+   
     public async create(requestDto: CreateAchievementRequestDTO): Promise<Result<CreateAchievementResponseDTO>> {
         const endpoint = `cards/admin/rewards/`;
 
@@ -31,6 +32,18 @@ export default class AchievementsHttpRepository implements IAchievementsHttpRepo
         
         return Result.success(dto);
     }
+
+    public async delete(achievementId: string): Promise<Result<void>> {
+        const endpoint = `cards/admin/rewards/${achievementId}`;
+
+        const response = await this._httpClient.delete<DeleteAchievementResponse>(endpoint);
+        if (!response.isSuccess) {
+            return this.handleNetworkError(response.errors as NetworkError)
+        }
+
+        return Result.success();
+    }
+  
 
 	public async load(projectId: string): Promise<Result<ReadonlyArray<LoadAchievementsResponseDTO>>> {
 		const endpoint = `cards/admin/rewards/?project_id=${projectId}`;

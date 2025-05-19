@@ -40,7 +40,9 @@ const goToConstructor = (): void => {
         :title="presenter.labels.title"
         :items="presenter.questionsViewModel.value"
         :onCreate="createQuestion"
+        :creating="controller.creating.value"
         :onEdit="() => {}"
+        :onDelete="controller.deleteQuestion"
         :onSelect="selectQuestion"
         :selected-id="presenter.questionViewModel.value?.id ?? ''"
         droppable

@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
-import IProjectsRepository from "../plugins/projects.http.repository.plugin";
+import IProjectsHttpRepository from "../plugins/projects.http.repository.plugin";
 import Result from "@/infrastructure/helpers/result";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { DeleteProjectInput, DeleteProjectOutput } from "./types/delete-project.type";
@@ -9,12 +9,16 @@ import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
 import ProjectDeletedEvent from "../events/project-deleted-event";
 import { ToastNotificationUseCases } from "@/modules/shared/notification/business/usecases/toast-notification.usecases";
+import DeleteProjectLocalUseCase from "./delete-project-local.usecase";
 
 @injectable()
 export default class DeleteProjectUseCase extends BaseUseCase<DeleteProjectInput, DeleteProjectOutput> {
     constructor(
         @inject(TYPES.ProjectsHttpRepository)
-        private readonly _projectsRepository: IProjectsRepository,
+        private readonly _projectsRepository: IProjectsHttpRepository,
+
+        @inject(TYPES.DeleteProjectLocalUseCase)
+        private readonly _deleteProjectLocalUseCase: DeleteProjectLocalUseCase,
 
         @inject(SharedTYPES.EventBus)
         private readonly _eventBus: IEventBus,
@@ -32,11 +36,11 @@ export default class DeleteProjectUseCase extends BaseUseCase<DeleteProjectInput
             return Result.failure(new ProjectNotDeletedError(input.projectId));
         }
 
+        this._deleteProjectLocalUseCase.execute(input);
+
         this._toastNotificationUseCases.success("Project successfully deleted");
 
-
         await this._eventBus.publishAsync(new ProjectDeletedEvent(input.projectId));
-
         
         return Result.success();
     }

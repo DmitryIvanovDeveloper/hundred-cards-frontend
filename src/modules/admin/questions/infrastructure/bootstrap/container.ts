@@ -24,6 +24,16 @@ import PreviouseQuestionEvent from '../../business/events/previous-question-even
 import PreviousQuestionEventSetPreviousQuestionHandler from '../../business/events/handlers/previous-question-event-set-previous-question.handler';
 import LevelCreatedEvent from '@/modules/admin/levels/business/events/level-created-event';
 import LevelCreatedEventCreateDefaultQuestionHandler from '../../business/events/handlers/level-created-event-create-defult-question.handler';
+import QuestionsLoadedEvent from '../../business/events/questions-loaded-event';
+import QueationLoadedEventSelectQuestionHandler from '../../business/events/handlers/questions-loaded-event-select-question.handler';
+import LoadQuestionsEvent from '../../business/events/next-question-event copy';
+import LoadQuestionsEventLoadQuestionSHandler from '../../business/events/handlers/load-questions-event-handler-load-questions.handler';
+import LoadQuestionsEventLoadQuestionsHandler from '../../business/events/handlers/load-questions-event-handler-load-questions.handler';
+import DeleteQuestionUseCase from '../../business/usecases/delete-queston.usecase';
+import DeleteQuestionLocalUseCase from '../../business/usecases/delete-queston-local.usecase';
+import DeleteQuestionsLocalUseCase from '../../business/usecases/delete-questons-local.usecase';
+import LevelDeletedEvent from '@/modules/admin/levels/business/events/level-deleted-event';
+import LevelDeletedEventDeleteQuestionsLocalQuestionHandler from '../../business/events/handlers/level-deleted-event-delete-questions-local.handler';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -37,7 +47,7 @@ container
 ;
 
 container
-    .bind<LoadQuestionsUseCase>(TYPES.LoadPresentQuestionsUseCase)
+    .bind<LoadQuestionsUseCase>(TYPES.LoadQuestionsUseCase)
     .to(LoadQuestionsUseCase)
     .inTransientScope()
 ;
@@ -73,6 +83,24 @@ container
 ;
 
 container
+    .bind<DeleteQuestionUseCase>(TYPES.DeleteQuestionUseCase)
+    .to(DeleteQuestionUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind<DeleteQuestionLocalUseCase>(TYPES.DeleteQuestionLocalUseCase)
+    .to(DeleteQuestionLocalUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind<DeleteQuestionsLocalUseCase>(TYPES.DeleteQuestionsLocalUseCase)
+    .to(DeleteQuestionsLocalUseCase)
+    .inTransientScope()
+;
+
+container
     .bind<IQuestionsLocalRepository>(TYPES.QuestionsLocalRepository)
     .to(QuestionsLocalRepository)
     .inSingletonScope()
@@ -96,10 +124,21 @@ container
     .inTransientScope()
 ;
 
-
 container
     .bind<IAsyncEventHandler<LevelCreatedEvent>>(TYPES.LevelCreatedEventHandler)
     .to(LevelCreatedEventCreateDefaultQuestionHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<IAsyncEventHandler<LevelDeletedEvent>>(TYPES.LevelDeletedEventHandler)
+    .to(LevelDeletedEventDeleteQuestionsLocalQuestionHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<IAsyncEventHandler<LoadQuestionsEvent>>(TYPES.LoadQuestionsEventHandler)
+    .to(LoadQuestionsEventLoadQuestionsHandler)
     .inTransientScope()
 ;
 
@@ -114,4 +153,11 @@ container
     .to(PreviousQuestionEventSetPreviousQuestionHandler)
     .inTransientScope()
 ;
+
+container
+    .bind<ISyncEventHandler<QuestionsLoadedEvent>>(TYPES.QuestionsLoadedEventHandler)
+    .to(QueationLoadedEventSelectQuestionHandler)
+    .inTransientScope()
+;
+
 

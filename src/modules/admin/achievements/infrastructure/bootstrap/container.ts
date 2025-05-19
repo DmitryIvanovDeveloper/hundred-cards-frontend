@@ -7,7 +7,7 @@ import AchievementsController from '@/modules/admin/achievements/presentation/co
 import AchievementsHttpRepository from '../repositories/achievements.http.repository';
 import AchievementsLocalRepository from '../repositories/achievements.local.repository';
 import LoadAchievementsUseCase from '../../business/usecases/load-achievements.usecase';
-import { IAsyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
+import { IAsyncEventHandler, ISyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
 import ProjectSelectedEvent from '@/modules/admin/projects/business/events/project-selected-event';
 import ProjectSelectedEventLoadAchievementsHandler from '../../business/events/handlers/project-selected-event-load-achievements.handler';
 import { TYPES } from '../../types';
@@ -15,6 +15,12 @@ import SelectAchievementUseCase from '../../business/usecases/select-achievement
 import CreateAchievementUseCase from '../../business/usecases/create-achievement.usecase';
 import PreviousAchievementUseCase from '../../business/usecases/previous-achievement.usecase';
 import NextAchievementUseCase from '../../business/usecases/next-achievement.usecase';
+import LevelsLoadedEventUpdateAvailableLevelsHandler from '../../business/events/handlers/levels-loaded-event-update-availableLevels.handler';
+import LevelsLoadedEvent from '@/modules/admin/levels/business/events/levels-loaded-event';
+import QuestionsLoadedEvent from '@/modules/admin/questions/business/events/questions-loaded-event';
+import QuestionsLoadedEventUpdateAvailableQuestionsHandler from '../../business/events/handlers/questions-loaded-event-update-available-question.handler';
+import DeleteAchievementUseCase from '../../business/usecases/delete-achievement.usecase';
+import DeleteAchievementLocalUseCase from '../../business/usecases/delete-achievement-local.usecase';
 
 container
   .bind<IAchievementsHttpRepository>(TYPES.AchievementsHttpRepository)
@@ -53,6 +59,18 @@ container
 ;
 
 container
+  .bind(TYPES.DeleteAchievementUseCase)
+  .to(DeleteAchievementUseCase)
+  .inTransientScope()
+;
+
+container
+  .bind(TYPES.DeleteAchievementLocalUseCase)
+  .to(DeleteAchievementLocalUseCase)
+  .inTransientScope()
+;
+
+container
   .bind(TYPES.PreviousAchievementUseCase)
   .to(PreviousAchievementUseCase)
   .inTransientScope()
@@ -64,13 +82,21 @@ container
   .inTransientScope()
 ;
 
-
-  
 container
     .bind<IAsyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandler)
     .to(ProjectSelectedEventLoadAchievementsHandler)
     .inTransientScope()
 ;
 
+container
+    .bind<ISyncEventHandler<QuestionsLoadedEvent>>(TYPES.QuestionsLoadedEventHandler)
+    .to(QuestionsLoadedEventUpdateAvailableQuestionsHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)
+    .to(LevelsLoadedEventUpdateAvailableLevelsHandler)
+   
 
 

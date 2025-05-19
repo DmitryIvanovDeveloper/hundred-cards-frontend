@@ -31,9 +31,11 @@ export class EventBus implements IEventBus {
         );
 
         for (const handler of fromContainer) {
-            if (handler.canHandle(event)) {
-                handler.handle(event);
+            if (!handler.canHandle(event)) {
+                return;
             }
+            handler.handle(event);
+            this._toastNotificationUseCases.success(`${eventType}`);
         }
     }
 

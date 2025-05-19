@@ -9,12 +9,17 @@ import { DeleteLevelInput, DeleteLevelOutput } from "./types/create-level.type";
 import LevelNotDeletedError from "../errors/level-not-deleted.error";
 import LevelDeletedEvent from "../events/level-deleted-event";
 import { ToastNotificationUseCases } from "@/modules/shared/notification/business/usecases/toast-notification.usecases";
+import DeleteLevelLocalUseCase from "./delete-level-local.usecase";
 
 @injectable()
 export default class DeleteLevelUseCase extends BaseUseCase<DeleteLevelInput, DeleteLevelOutput> {
     constructor(
         @inject(TYPES.LevelsHttpRepository)
         private readonly _repository: ILevelsHttpRepository,
+
+        @inject(TYPES.DeleteLevelLocalUseCase)
+        private readonly _deleteLevelLocalUseCase: DeleteLevelLocalUseCase,
+
 
         @inject(SharedTYPES.EventBus)
         private readonly _eventBus: IEventBus,
@@ -34,8 +39,10 @@ export default class DeleteLevelUseCase extends BaseUseCase<DeleteLevelInput, De
             return Result.failure(new LevelNotDeletedError(levelId));
         }
 
+        this._deleteLevelLocalUseCase.execute(input);
+
         this._toastNotificationUseCases.success('Level successfully deleted');
-        
+
         this._eventBus.publishAsync(new LevelDeletedEvent(levelId))
         return Result.success();
     }

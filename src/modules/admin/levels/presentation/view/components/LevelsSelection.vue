@@ -6,7 +6,6 @@ import { TYPES } from '../../../types';
 
 const presenter = container.get<LevelsPresenter>(TYPES.LevelsPresenter);
 
-
 export interface ILevelsSelectionProps {
     onChange: (id: string) => void;
 }

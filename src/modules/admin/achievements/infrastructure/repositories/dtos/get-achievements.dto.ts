@@ -9,5 +9,6 @@ export default interface GetAchievementsResponse {
     readonly project_id: string; 
     readonly description: string; 
     readonly published: boolean;
-    readonly levelsId: Array<string>;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly questionId: ReadonlyArray<string>;
 }

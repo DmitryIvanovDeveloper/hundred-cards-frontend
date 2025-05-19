@@ -10,7 +10,8 @@ export class CreateAchievementRequestDTO {
     readonly earnedMoney: number;
     readonly description: string;
     readonly published: boolean;
-    readonly levelsId: Array<string>;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly questionsId: ReadonlyArray<string>;
 }
 
 export class CreateAchievementResponseDTO {
@@ -25,7 +26,8 @@ export class CreateAchievementResponseDTO {
     readonly projectId: string;
     readonly description: string;
     readonly published: boolean;
-    readonly levelsId: Array<string>;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly questionsId: ReadonlyArray<string>;
 
     constructor(response: PostAchievemensResponse) {
         this.id = response.id;
@@ -40,6 +42,7 @@ export class CreateAchievementResponseDTO {
         this.description = response.description;
         this.published = response.published;
         this.levelsId = response.levelsId;
+        this.questionsId = response.questionsId;
     }
 }
 

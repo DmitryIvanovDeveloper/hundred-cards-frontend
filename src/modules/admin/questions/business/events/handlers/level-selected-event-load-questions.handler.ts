@@ -8,7 +8,7 @@ export default class LevelSelectedEventLoadQuestionsHandler
   implements IAsyncEventHandler<LevelSelectedEvent>
 {
   constructor(
-    @inject(TYPES.LoadPresentQuestionsUseCase)
+    @inject(TYPES.LoadQuestionsUseCase)
     private readonly _loadPresentQuestionsUseCase: LoadQuestionsUseCase
   ) {}
 

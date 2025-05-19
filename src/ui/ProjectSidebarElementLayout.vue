@@ -12,9 +12,10 @@ export interface IProjectSidbarElementLayout {
 	checkable: boolean;
 	checked?: boolean;
 	edited?: boolean;
+	deleting?: boolean;
 }
 
-const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited } = defineProps<IProjectSidbarElementLayout>();
+const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited, deleting } = defineProps<IProjectSidbarElementLayout>();
 
 </script>
 <template>
@@ -52,13 +53,14 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited 
 					</svg>
 				</button>
 				
-				<button :onclick="onDelete"  class="cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="1\24" viewBox="0 0 24 24" fill="none"
+				<button :onclick="onDelete"  class="flex items-center cursor-pointer">
+					<svg v-if="!deleting" xmlns="http://www.w3.org/2000/svg" width="24" height="1\24" viewBox="0 0 24 24" fill="none"
 						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 						class="lucide lucide-square-xmark text-gray-400" aria-hidden="true">
 						<path d="M9 9l6 6"></path>
 						<path d="M15 9l-6 6"></path>
 					</svg>
+					<span v-if="deleting" class="loader inline-block w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></span>
 				</button>
 
 			</div>

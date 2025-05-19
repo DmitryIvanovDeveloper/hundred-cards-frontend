@@ -34,12 +34,16 @@ export default class ProjectsController {
 
     public loading = ref<boolean>(false);
     public isEdit = ref<boolean>(false);
+    public readonly creating = ref<boolean>(false);
 
     public createProject = async (): Promise<Result<void>> => {
-        this.loading.value = true;
-        const result = await this._createNewProjectUseCase.execute({name: 'Новый проект'});
-        this.loading.value = false;
-        return result;
+        try {
+            this.creating.value = true;
+            return await this._createNewProjectUseCase.execute({name: 'Новый проект'});
+        }
+        finally {
+            this.creating.value = false;
+        }
     };
 
     public selectProject = async (projectId: string): Promise<Result<void>> => {
@@ -77,7 +81,18 @@ export default class ProjectsController {
         this.isEdit.value = edit;
     }
 
-    public async deleteProject(id: string): Promise<Result<void>> {
-        return await this._deleteProjectUseCase.execute({ projectId: id} );
+    public async deleteProject(id: string): Promise<void> {
+        
+        const result = this._repoitory.findProjectById(id);
+        if (!result.data) {
+            return;
+        }
+
+        const project = result.data;
+        
+        const updatedProject = project.withUpdatedDeleting(true);
+        this._repoitory.updateProjects(updatedProject);
+
+        await this._deleteProjectUseCase.execute({ projectId: id} );
     }
 }

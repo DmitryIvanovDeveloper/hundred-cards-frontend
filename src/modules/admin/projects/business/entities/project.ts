@@ -9,6 +9,7 @@ export interface ProjectProps {
     created: Date;
     userId: number;
     edited: boolean;
+    deleting: boolean;
 }
 
 export default class Project {
@@ -17,17 +18,23 @@ export default class Project {
     readonly created: Date;
     readonly userId: number;
     readonly edited: boolean;
+    readonly deleting: boolean;
 
-    constructor(id: string, name: string, created: Date, userId: number, edited: boolean = false) {
+    constructor(id: string, name: string, created: Date, userId: number, edited: boolean = false, deleting: boolean = false) {
         this.id = id;
         this.name = name;
         this.created = created;
         this.userId = userId;
         this.edited = edited;
+        this.deleting = deleting;
     }
 
     public withUpdatedName(name: string): this {
         return this.cloneWith({ name, edited: true });
+    }
+
+    public withUpdatedDeleting(deleting: boolean): this {
+        return this.cloneWith({ deleting });
     }
 
     public cloneWith(params: Partial<ProjectProps>): this {
@@ -36,7 +43,8 @@ export default class Project {
             params.name ?? this.name,
             params.created ?? this.created,
             params.userId ?? this.userId,
-            params.edited ?? this.edited
+            params.edited ?? this.edited,
+            params.deleting ?? this.deleting
         ) as this;
     }
 

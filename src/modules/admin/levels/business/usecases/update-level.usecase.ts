@@ -26,14 +26,12 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 
   public async execute(input: UpdateLevelInput): Promise<UpdateLevelOutput> {
 		const level = this._localRepository.getLevel().value;
-        console.log(level)
 
 		if (!level) {
 			return Result.failure(new LevelNotUpdatedError())
 		}
 
 		const updateRequest = level.toUpdateRequest();
-        console.log(updateRequest)
 
 		const result = await this._repository.updateLevel(updateRequest, level.id);
 		if (!result.isSuccess) {

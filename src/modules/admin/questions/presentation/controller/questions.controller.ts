@@ -10,6 +10,8 @@ import { CreateQuestionsOutput } from "../../business/usecases/types/create-ques
 import IQuestionsLocalRepository from "../../business/plugins/questions.local.repository.plugin";
 import NextQuestionUseCase from "../../business/usecases/next-question.usecase";
 import PreviousQuestionUseCase from "../../business/usecases/previous-question.usecase";
+import { ref } from "vue";
+import DeleteQuestionUseCase from "../../business/usecases/delete-queston.usecase";
 
 export default class QuestionsController {
     constructor(
@@ -18,6 +20,9 @@ export default class QuestionsController {
 
         @inject(TYPES.CreateQuestionUseCase)
         private readonly _createQuestionUseCase: CreateQuestionUseCase,
+
+        @inject(TYPES.DeleteQuestionUseCase)
+        private readonly _deleteQuestionUseCase: DeleteQuestionUseCase,
 
         @inject(LevelTYPES.LevelsService)
         private readonly _levelService: ILevelsService,
@@ -32,11 +37,14 @@ export default class QuestionsController {
         private readonly _previousQuestionUseCase: PreviousQuestionUseCase
     ) {}
 
+    public readonly creating = ref<boolean>(false);
+
     public selectQuestion = async (questionId: string): Promise<Result<void>> => {
         return await this._selectQueationUseCase.execute({ questionId });
     };
 
     public createQuestion = async (): Promise<CreateQuestionsOutput> => {
+        this.creating.value = true;
         const result = this._levelService.getSelectedLevelId();
         if (!result.hasData()) {
             return Result.failure(new QuestionNotCreatedError());
@@ -44,7 +52,23 @@ export default class QuestionsController {
 
         const levelId = result.data;
 
-        return await this._createQuestionUseCase.execute({ levelId });
+        const createResult = await this._createQuestionUseCase.execute({ levelId });
+
+        this.creating.value = false;
+
+        return createResult;
+    };
+
+    public deleteQuestion = async (id: string): Promise<void> => {
+        const result = this._repository.findQuestionById(id);
+        if (!result.data) return;
+
+        const question = result.data;
+        const updatedQuestion = question.withUpdatedDeleting(true);
+        console.log(updatedQuestion)
+        this._repository.updateQuestions(updatedQuestion);
+
+        await this._deleteQuestionUseCase.execute({ questionId: id });
     };
 
     public updateText(newText: string): void {

@@ -25,7 +25,7 @@ export default class AchievementsPresenter {
             return [];
         }
 
-        return achievements.map(achievement =>  new AchievementViewModel(achievement))
+        return achievements.map(achievement =>  new AchievementViewModel(achievement));
     }
 
     private presentViewModel(): AchievementViewModel | undefined {

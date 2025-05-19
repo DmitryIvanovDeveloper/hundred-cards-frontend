@@ -11,7 +11,8 @@ export class LoadAchievementsResponseDTO {
     readonly projectId: string; 
     readonly description: string; 
     readonly published: boolean;
-    readonly levelsId: Array<string>;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly questionsId: ReadonlyArray<string>;
 
     constructor(response: GetAchievementsResponse) {
         this.id = response.id;
@@ -25,5 +26,6 @@ export class LoadAchievementsResponseDTO {
         this.description = response.description
         this.published = response.published;
         this.levelsId = response.levelsId
+        this.questionsId = response.questionId;
     }
 }

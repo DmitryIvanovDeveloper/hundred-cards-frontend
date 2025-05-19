@@ -5,8 +5,6 @@ import { TYPES } from '../../types';
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import { RouterPaths } from '@/app/router/router-paths';
 import { useRouter } from 'vue-router';
-import LevelsController from '../controller/questions.controller';
-import LevelsPresenter from '../presenter/questions.presenter';
 import QuestionsController from '../controller/questions.controller';
 import QuestionsPresenter from '../presenter/questions.presenter';
 

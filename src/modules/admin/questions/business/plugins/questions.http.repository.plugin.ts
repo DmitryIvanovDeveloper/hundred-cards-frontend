@@ -5,6 +5,7 @@ import { LoadQuestionResponse, LoadQuestionsRequest } from "../dtos/load-questio
 import { CreateQuestionRequest } from "../dtos/create-question.dto";
 
 export default interface IQuestionsHttpRepository {
+    delete(questionId: string): Promise<Result<void>>;
     update(questionId: string, updateQuestionRequest: UpdateQuestionRequestDTO): Promise<Result<UpdateQuestionResponseDTO>>
     save(question: CreateQuestionRequest): Promise<Result<CreateQuestionResponse>>
     loadQuestions(loadQuestionsRequest: LoadQuestionsRequest): Promise<Result<Array<LoadQuestionResponse>>>

@@ -15,7 +15,6 @@ export default class NextQuestionEventSetNextQuestionHandler implements ISyncEve
     }
 
     public handle(event: NextQuestionEvent): void {
-        console.log("NextQuestionEvenHandler")
         this._nextQuestionUseCase.execute();
     }
 }

@@ -8,7 +8,8 @@ import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { LoadProjectsInput, LoadProjectsOutput } from "./types/load-projects.type";
 import ProjectsNotLoadedError from "../errors/projects-not-loaded.error";
 import IProjectsLocalRepository from "../plugins/projects.local.repository.plugin";
-import SelectProjectUseCase from "./select-project.usecase";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import ProjectsLoadedEvent from "../events/projects-loaded-event";
 
 @injectable()
 export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, LoadProjectsOutput> {
@@ -19,8 +20,8 @@ export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, 
 		@inject(TYPES.ProjectsLocalRepository)
 		private readonly _localRepository: IProjectsLocalRepository,
 
-		@inject(TYPES.SelectProjectUseCase)
-		private readonly _selectProjectUseCase: SelectProjectUseCase,
+		@inject(SharedTYPES.EventBus)
+		private readonly _eventBus: IEventBus,
 	) {
 		super();
 	}
@@ -35,9 +36,8 @@ export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, 
 		const projects = result.data.map(Project.toEntity);
 		this._localRepository.storeProjects(projects);
 
-		if (!!projects.length) {
-			this._selectProjectUseCase.execute({ projectId: projects[0].id });
-		}
+		const projectsId = projects.map((project) => project.id);
+		this._eventBus.publishAsync(new ProjectsLoadedEvent(projectsId))
 
 		return Result.success<void>();
 	}

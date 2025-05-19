@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
 import IAchievementsLocalRepository from "@/modules/admin/achievements/business/plugins/achievements.local-repository.plugin";
 import { TYPES } from "../../types";
-import { TYPES as SharedTYPES } from "@/modules/admin/projects/types";
+import { TYPES as ProjectTYPES } from "@/modules/admin/projects/types";
+import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
 import SelectAchievementUseCase from "../../business/usecases/select-achievements.usecase";
 import Result from "@/infrastructure/helpers/result";
 import CreateAchievementUseCase from "../../business/usecases/create-achievement.usecase";
@@ -9,6 +10,11 @@ import IProjectsService from "@/modules/admin/projects/business/plugins/projects
 import AchievementNotCreatedError from "../../business/errors/achievement-not-created.error";
 import NextAchievementUseCase from "../../business/usecases/next-achievement.usecase";
 import PreviousAchievementUseCase from "../../business/usecases/previous-achievement.usecase";
+import ILevelsService from "@/modules/admin/levels/business/plugins/levels.service.plugin";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import LoadQuestionsEvent from "@/modules/admin/questions/business/events/next-question-event copy";
+import { ref } from "vue";
+import DeleteAchievementUseCase from "../../business/usecases/delete-achievement.usecase";
 
 @injectable()
 export default class AchievementsController {
@@ -29,25 +35,43 @@ export default class AchievementsController {
 		@inject(TYPES.PreviousAchievementUseCase)
 		private readonly _previousAchievementUseCase: PreviousAchievementUseCase,
 
-		@inject(SharedTYPES.ProjectsService)
-		private readonly _projectsService: IProjectsService
+		@inject(TYPES.DeleteAchievementUseCase)
+		private readonly _deleteAchievementUseCase: DeleteAchievementUseCase,
+
+
+		@inject(ProjectTYPES.ProjectsService)
+		private readonly _projectsService: IProjectsService,
+
+		@inject(SharedTYPES.EventBus)
+		private readonly _eventBus: IEventBus,
 	) {}
 
-	private get _selectedAchievement() {
-		const achievement = this._repository.getAchievement().value;
-		if (!achievement) {
-			return null;
-		}
-		return achievement;
-	}
-
+	public readonly creating = ref<boolean>(false);
+	public readonly deleting = ref<boolean>(false);
+	
 	public createAchievement = async (): Promise<Result<void>> => {
 		const result = this._projectsService.getSelectedProjectId();
 		if (!result.hasData()) {
 			return Result.failure(new AchievementNotCreatedError())
 		}
 
-        return await this._createAchievementUseCase.execute({ projectId: result.data });
+		try {
+			this.creating.value = true
+			return await this._createAchievementUseCase.execute({ projectId: result.data });
+		} 
+		finally {
+			this.creating.value = false
+		}
+    }
+
+	public deleteAchievement = async (id: string): Promise<void> => {
+		const achievement = this._repository.findAchievementById(id);
+		if (!achievement) return;
+
+		const updatedAchievement = achievement.updatedWithDeleting(true);
+		this._repository.updateAchievements(updatedAchievement);
+
+		await this._deleteAchievementUseCase.execute({ achievementId: id})
     }
 
 	public updateName(name: string) {
@@ -93,24 +117,31 @@ export default class AchievementsController {
 		this._repository.updateAchievements(updatedAchievement);
     }
 
-	public updateLevelsId(id: string): void {
-		const achievement = this._repository.getAchievement().value;
-		if (!achievement) {
-			return;
-		}
+	public async updateLevelsId(levelsId: ReadonlyArray<string>): Promise<void> {
 
-		const updatedAchievement = achievement.updatedWithAddedLevelId(id);
-		this._repository.updateAchievements(updatedAchievement);
+		levelsId.forEach(async (levelId) => {
+			const achievement = this._repository.getAchievement().value;
+			if (!achievement) {
+				return;
+			}
+	
+			const updatedAchievement = achievement.updatedWithLevelId(levelId);
+			this._repository.updateAchievements(updatedAchievement);
+	
+			await this._eventBus.publishAsync(new LoadQuestionsEvent(levelId))
+		});
 	}
 
-	public updateQuestionsId(id: string): void {
+	public updateQuestionsId(questionsId: ReadonlyArray<string>): void {
 		const achievement = this._repository.getAchievement().value;
 		if (!achievement) {
 			return;
 		}
 
-		const updatedAchievement = achievement.updatedWithAddedLevelId(id);
-		this._repository.updateAchievements(updatedAchievement);
+		questionsId.forEach(async (questionId) => {
+			const updatedAchievement = achievement.updatedWithQuestionsId(questionId);
+			this._repository.updateAchievements(updatedAchievement);
+		});
 	}
 
 	public nextAchievement = (): void => {

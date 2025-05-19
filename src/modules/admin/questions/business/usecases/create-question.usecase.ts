@@ -33,7 +33,7 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
 
         const question =  Question.toEntity(result.data)
       
-        this._localRepository.updateQuestions(question);
+        this._localRepository.storeQuestion(question);
 
         return Result.success();
     }

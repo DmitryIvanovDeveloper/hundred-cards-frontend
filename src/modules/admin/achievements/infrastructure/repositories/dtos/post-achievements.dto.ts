@@ -10,6 +10,8 @@ export  class PostAchievementRequest {
     readonly earned_money: number;
     readonly description: string;
     readonly published: boolean;
+    readonly questionsId: ReadonlyArray<string>;
+    readonly levelsId: ReadonlyArray<string>;
 
     constructor(dto: CreateAchievementRequestDTO) {
         this.text = dto.text;
@@ -21,6 +23,8 @@ export  class PostAchievementRequest {
         this.earned_money = dto.earnedMoney;
         this.description = dto.description;
         this.published = dto.published;
+        this.questionsId = dto.questionsId;
+        this.levelsId = dto.levelsId;
     }
 }
 
@@ -36,5 +40,6 @@ export interface PostAchievemensResponse {
     readonly project_id: string;
     readonly description: string;
     readonly published: boolean;
-    readonly levelsId: Array<string>;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly questionsId: ReadonlyArray<string>;
 }

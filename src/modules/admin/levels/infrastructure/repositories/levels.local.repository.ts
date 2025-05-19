@@ -30,7 +30,6 @@ export default class LevelsLocalRepository implements ILevelsLocalRepository  {
 
     public storeLevel(level: Level): void {
         this._level.value = level;
-        console.log(this._level.value)
     }
 
     public getLevels(): Ref<Array<Level>> {

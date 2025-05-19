@@ -23,14 +23,8 @@ const createLevel = async (): Promise<void> => {
 };
 
 const deleteLevel = async (id: string): Promise<void> => {
-	const result = await controller.deleteLevel(id);
-
-	if (!result.hasData()) {
-		return;
-	}
-
+	await controller.deleteLevel(id);
 };
-
 
 const selectLevel = async (levelId: string): Promise<void> => {
 	const result = await controller.selectLevel(levelId);
@@ -54,6 +48,7 @@ const goToConstructor = (): void => {
 		:title="presenter.labels.title"
 		:items="presenter.levelsViewModel.value"
 		:onCreate="createLevel"
+		:creating="controller.creating.value"
 		:onEdit="() => {}"
 		:onDelete="deleteLevel"
 		:onSelect="selectLevel"

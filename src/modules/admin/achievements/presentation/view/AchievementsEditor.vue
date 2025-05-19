@@ -7,10 +7,9 @@ import AchievementsController from "../controller/achievements.controller";
 import AchievementsPresenter from "../presenter/achievements.presenter";
 import ToggleSwitch from "primevue/toggleswitch";
 import { Textarea } from "primevue";
-import UniversalSelect from "@/ui/UniversalSelect.vue";
 import ConstructorItemLayout from "@/ui/ConstructorItemLayout.vue";
 import AchievementsIconSelection from "./components/AchievementsIconSelection.vue";
-import LevelsSelection from "@/modules/admin/levels/presentation/view/components/LevelsSelection.vue";
+import UniversalSelect, { IOption } from "@/ui/UniversalSelect.vue";
 
 const controller = container.get<AchievementsController>(
 	TYPES.AchievementsController
@@ -48,17 +47,32 @@ const router = useRouter();
 	<AchievementsIconSelection />
 
 	<ConstructorItemLayout label="Выберите категорию достежения">
-		<LevelsSelection :onChange="(value) => controller.updateLevelsId(value)"/>
+
+		{{ presenter.achievementViewModel.value?.availableLevels }}
+		<UniversalSelect
+			label:=""
+			:type="'multiple'"
+			:options="presenter.achievementViewModel.value?.availableLevels"
+			:onChange="(value: ReadonlyArray<IOption>) => controller.updateLevelsId(value.map((item) => item.id ?? ''))"
+    	/>
 	</ConstructorItemLayout>
 
 
 	<ConstructorItemLayout label="Количество правильных ответов">
-		<UniversalInput :value="presenter.achievementViewModel.value?.correctAnswersInRow"
-			:onChange="(value) => controller.updateNumCorrectAnswers(value as number)" type="number" />
+		<UniversalInput 
+			:value="presenter.achievementViewModel.value?.correctAnswersInRow"
+			:onChange="(value) => controller.updateNumCorrectAnswers(value as number)" type="number" 
+		/>
 	</ConstructorItemLayout>
 
 	<ConstructorItemLayout label="Выберите вопросы для достижений">
-		<UniversalSelect :options="[]" :onChange="(value) => { }" />
+		{{ presenter.achievementViewModel.value?.availableQuestions }}
+		<UniversalSelect
+			label:=""
+			:type="'multiple'"
+			:options="presenter.achievementViewModel.value?.availableQuestions"
+			:onChange="(value: ReadonlyArray<IOption>) => controller.updateQuestionsId(value.map((item) => item.id ?? ''))"
+    	/>
 	</ConstructorItemLayout>
 </div>
 

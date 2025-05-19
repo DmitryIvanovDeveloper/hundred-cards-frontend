@@ -1,6 +1,6 @@
 import { TYPES } from '../../types';
 import { container } from '@/infrastructure/bootstrap/inversify.config';
-import { IAsyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
+import { IAsyncEventHandler, ISyncEventHandler } from '@/infrastructure/events/events-handler.plugin';
 import LevelsPresenter from '../../presentation/presenter/levels.presenter';
 import LevelsController from '../../presentation/controller/levels.controller';
 import LoadLevelsUseCase from '../../business/usecases/load-levels.usecase';
@@ -21,6 +21,9 @@ import ProjectCreatedEvent from '@/modules/admin/projects/business/events/projec
 import LevelCreatedEvent from '../../business/events/level-created-event';
 import LevelCreatedEventSelectLevelHandler from '../../business/events/handlers/level-created-event-select-level.handler';
 import DeleteLevelUseCase from '../../business/usecases/delete-level.usecase';
+import LevelsLoadedEventSelectLevelHandler from '../../business/events/handlers/levels-loaded-event-select-level.handler';
+import LevelsLoadedEvent from '../../business/events/levels-loaded-event';
+import DeleteLevelLocalUseCase from '../../business/usecases/delete-level-local.usecase';
 
 container
     .bind<LevelsPresenter>(TYPES.LevelsPresenter)
@@ -71,6 +74,12 @@ container
 ;
 
 container
+    .bind<DeleteLevelLocalUseCase>(TYPES.DeleteLevelLocalUseCase)
+    .to(DeleteLevelLocalUseCase)
+    .inTransientScope()
+;
+
+container
     .bind<ILevelsLocalRepository>(TYPES.LevelsLocalRepository)
     .to(LevelsLocalRepository)
     .inSingletonScope()
@@ -103,5 +112,11 @@ container
 container
     .bind<IAsyncEventHandler<LevelCreatedEvent>>(TYPES.LevelCreatedEventHandler)
     .to(LevelCreatedEventSelectLevelHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)
+    .to(LevelsLoadedEventSelectLevelHandler)
     .inTransientScope()
 ;

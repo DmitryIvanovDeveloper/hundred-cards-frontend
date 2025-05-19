@@ -13,11 +13,11 @@ export default class ProjectSelectedEventLoadLevelsHandler implements IAsyncEven
   ){
 
   }
-  canHandle(event: AdminAuthenticatedEvent): boolean {
+  public canHandle(event: AdminAuthenticatedEvent): boolean {
     return event instanceof ProjectSelectedEvent;
   }
 
-  async handleAsync(event: ProjectSelectedEvent): Promise<void> {
+  public async handleAsync(event: ProjectSelectedEvent): Promise<void> {
       await this._loadPresentLevelsUseCase.execute(event.projectId);
   }
 }

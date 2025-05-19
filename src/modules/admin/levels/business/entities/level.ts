@@ -10,6 +10,7 @@ export interface LevelProps {
     lang: string;
     projectId: string;
     edited: boolean;
+    deleting: boolean;
 }
 
 export default class Level {
@@ -18,23 +19,30 @@ export default class Level {
     readonly lang: string;
     readonly projectId: string;
     readonly edited: boolean;
+    readonly deleting: boolean;
 
     constructor(
         id: string,
         name: string,
         lang: string,
         projectId: string,
-        edited: boolean = false
+        edited: boolean = false,
+        deleting: boolean = false
     ) {
         this.id = id;
         this.name = name;
         this.lang = lang;
         this.projectId = projectId;
         this.edited = edited;
+        this.deleting = deleting;
     }
 
     public withUpdatedName(name: string): this {
         return this.cloneWith({ name, edited: true });
+    }
+
+    public withUpdatedDeleting(deleting: boolean): this {
+        return this.cloneWith({ deleting });
     }
 
     public cloneWith(params: Partial<LevelProps>): this {
@@ -43,7 +51,8 @@ export default class Level {
             params.name ?? this.name,
             params.lang ?? this.lang,
             params.projectId ?? this.projectId,
-            params.edited ?? this.edited
+            params.edited ?? this.edited,
+            params.deleting ?? this.deleting
         ) as this;
     }
 
@@ -56,7 +65,6 @@ export default class Level {
     }
 
     public toUpdateRequest(): ILevelUpdateRequestDTO {
-        console.log(this)
         return {
             level: this.name,
             lang: this.lang,

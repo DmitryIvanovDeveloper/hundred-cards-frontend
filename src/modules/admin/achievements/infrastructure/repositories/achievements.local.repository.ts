@@ -29,6 +29,7 @@ export default class AchievementsLocalRepository implements IAchievementsLocalRe
 		return this._achievement;
 	}
 	public storeAchievements(achievements: Array<Achievement>): void {
+		(achievements)
 		this._achievements.value = achievements;
 	}
 	

@@ -4,17 +4,18 @@ import { inject } from "inversify";
 import LoadProjectsUseCase from "../../usecases/load-projects.usecase";
 import ProjectDeletedEvent from "../project-deleted-event";
 
-export default class ProjectDeleteEventLoadProjectsHandler implements IAsyncEventHandler<ProjectDeletedEvent> {
+export default class ProjectDeletedEventLoadProjectsHandler implements IAsyncEventHandler<ProjectDeletedEvent> {
   constructor(
-		@inject(TYPES.UpdateProjectUseCase)
+		@inject(TYPES.LoadProjectsUseCase)
 		private readonly _loadProjectsUseCase: LoadProjectsUseCase,
 	) {}
 
-	canHandle(event: ProjectDeletedEvent): boolean {
+	public canHandle(event: ProjectDeletedEvent): boolean {
 		return event instanceof ProjectDeletedEvent;
 	}
 
-	async handleAsync(event: ProjectDeletedEvent): Promise<void> {
+	public async handleAsync(event: ProjectDeletedEvent): Promise<void> {
+		console.log("ProjectDeletedEventLoadProjectsHandler")
 		await this._loadProjectsUseCase.execute();
 	}
 }

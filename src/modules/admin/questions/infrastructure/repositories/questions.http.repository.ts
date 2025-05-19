@@ -28,6 +28,7 @@ import {
     PutQuestionRequest,
     PutQuestionResponse,
 } from "./dtos/put-questions.request";
+import { DeleteQuestionResponse } from "./dtos/delete-question";
 
 export default class QuestionsHttpRepository
     implements IQuestionsHttpRepository {
@@ -69,22 +70,32 @@ export default class QuestionsHttpRepository
     };
 
     public update = async (
-        questionId: string,
+        questionId: string, 
         updateQuestionRequest: UpdateQuestionRequestDTO
     ): Promise<Result<UpdateQuestionResponseDTO>> => {
+        
         const endpoint = `cards/admin/questions/${questionId}/`;
 
         const request = new PutQuestionRequest(updateQuestionRequest);
 
-        const response = await this._httpClient.put<
-            PutQuestionResponse,
-            PutQuestionRequest
-        >(endpoint, request);
+        const response = await this._httpClient.put<PutQuestionResponse, PutQuestionRequest>(endpoint, request);
         if (!response.hasData()) {
             return this.handleNetworkError(response.errors as NetworkError);
         }
 
         return Result.success(new UpdateQuestionResponseDTO(response.data));
+    };
+
+
+    public delete = async (questionId: string): Promise<Result<void>> => {
+        const endpoint = `cards/admin/questions/${questionId}/`;
+
+        const response = await this._httpClient.delete<DeleteQuestionResponse>(endpoint);
+        if (!response.isSuccess) {
+            return this.handleNetworkError(response.errors as NetworkError);
+        }
+
+        return Result.success();
     };
 
     private handleNetworkError<T>(networkError: NetworkError): Result<T> {

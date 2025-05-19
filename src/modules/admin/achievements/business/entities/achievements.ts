@@ -3,18 +3,23 @@ import { LoadAchievementsResponseDTO } from "../dtos/load-achievements.dto";
 import { v4 as uuidv4 } from 'uuid';
 
 export interface AchievementProps {
-    id: string;
-    name: string;
-    correctAnswersInRow: number;
-    timeCompleted: number;
-    stars: number;
-    earnedMoney: number;
-    lang: string;
-    projectId: string;
-    description: string;
-    published: boolean;
-    levelsId: Array<string>;
-    edited?: boolean;
+    readonly id: string;
+    readonly name: string;
+    readonly correctAnswersInRow: number;
+    readonly timeCompleted: number;
+    readonly stars: number;
+    readonly earnedMoney: number;
+    readonly lang: string;
+    readonly projectId: string;
+    readonly description: string;
+    readonly published: boolean;
+    readonly levelsId: ReadonlyArray<string>;
+    readonly edited?: boolean;
+    readonly questionsId: ReadonlyArray<string>,
+    readonly availableLevels: ReadonlyArray<{id: string, name: string}>
+    readonly availableQuestions: ReadonlyArray<{id: string, name: string}>
+    readonly deleting?: boolean;
+
 }
 
 export default class Achievement {
@@ -29,8 +34,12 @@ export default class Achievement {
         public readonly projectId: string,
         public readonly description: string,
         public readonly published: boolean,
-        public readonly levelsId: Array<string>,
+        public readonly levelsId: ReadonlyArray<string> = [],
+        public readonly questionsId: ReadonlyArray<string> = [],
+        public readonly availableLevels: ReadonlyArray<{id: string, name: string}> = [],
+        public readonly availableQuestions: ReadonlyArray<{id: string, name: string}> = [],
         public readonly edited?: boolean,
+        public readonly deleting?: boolean,
     ) {}
 
     public updatedWithName(name: string): this {
@@ -38,6 +47,10 @@ export default class Achievement {
     }
 
     public updatedWithCorrectAnswersInRow(correctAnswersInRow: number): this {
+        if (correctAnswersInRow < 0) {
+            return this;
+        }
+
         return this.cloneWith({ correctAnswersInRow });
     }
 
@@ -57,9 +70,47 @@ export default class Achievement {
         return this.cloneWith({ published });
     }
 
-    public updatedWithAddedLevelId(levelId: string): this {
-        const updatedLevelsId = [...this.levelsId, levelId];
-        return this.cloneWith({ levelsId: updatedLevelsId });
+    public updatedWithLevelId(levelId: string): this {
+        const includes = this.levelsId.includes(levelId) 
+
+        const updatedLevelsId = includes
+            ? this.levelsId.filter(id => id !== levelId) 
+            : [...this.levelsId, levelId]
+        ;
+
+        const filteredAvailableQeustions = this.availableQuestions.
+            filter(question => !updatedLevelsId.includes(question.id))
+        ;
+
+        const updated = this.cloneWith({ levelsId: updatedLevelsId })
+
+        return includes 
+            ? updated
+            : updated.cloneWith({ availableQuestions: filteredAvailableQeustions })
+        ;
+    }
+
+    public updatedWithAvailableLevels(availableLevels: ReadonlyArray<{id: string, name: string}>): this {
+        return this.cloneWith({ availableLevels });
+    }
+
+    public updatedWithAvailableQuestions(availableQuestions: ReadonlyArray<{id: string, name: string}>): this {
+        const filteredAvailableQeustiions = availableQuestions.filter(question => !this.levelsId.includes(question.id))
+
+        return this.cloneWith({ availableQuestions: filteredAvailableQeustiions });
+    }
+
+    public updatedWithQuestionsId(questonId: string): this {
+        const updatedQuestionsId = this.questionsId.includes(questonId) 
+            ? this.questionsId.filter(id => id !== questonId) 
+            : [...this.questionsId, questonId]
+        ;
+
+        return this.cloneWith({ levelsId: updatedQuestionsId });
+    }
+
+    public updatedWithDeleting(deleting: boolean): this {
+        return this.cloneWith({ deleting });
     }
 
     public cloneWith(params: Partial<AchievementProps>): this {
@@ -75,6 +126,11 @@ export default class Achievement {
             params.description ?? this.description,
             params.published ?? this.published,
             params.levelsId ?? this.levelsId,
+            params.questionsId ?? this.questionsId,
+            params.availableLevels ?? this.availableLevels,
+            params.availableQuestions ?? this.availableQuestions,
+            params.edited ?? this.edited,
+            params.deleting ?? this.deleting
         ) as this;
     }
 
@@ -91,6 +147,7 @@ export default class Achievement {
             dto.description,
             dto.published,
             dto.levelsId,
+            dto.questionsId,
         );
     }
 
@@ -105,7 +162,8 @@ export default class Achievement {
             earnedMoney: 0,
             description: '',
             published: false,
-            levelsId: []
+            levelsId: [],
+            questionsId: []
         };
     }
 }
