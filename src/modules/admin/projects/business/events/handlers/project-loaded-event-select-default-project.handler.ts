@@ -17,7 +17,6 @@ export default class ProjectsLoadedEventSelectDefaultProjectHandler implements I
 	public async handleAsync(event: ProjectsLoadedEvent): Promise<void> {
 		if (!event.projectsId.length) return;
 
-		console.log(event)
 		await this._selectProjectUseCase.execute({ projectId: event.projectsId[0] });
 	}
 }

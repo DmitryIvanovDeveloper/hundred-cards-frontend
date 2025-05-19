@@ -43,7 +43,6 @@ const createAchievement = async (): Promise<void> => {
 		:onEdit="() => {}"
 		:onSelect="selectAchievement"
 		:selected-id="presenter.achievementViewModel.value?.id ?? ''"
-        :deleting="controller.deleting.value"
 	/>
     
 </template>

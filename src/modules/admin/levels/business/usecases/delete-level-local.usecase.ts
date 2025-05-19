@@ -4,12 +4,22 @@ import Result from "@/infrastructure/helpers/result";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { DeleteLevelInput, DeleteLevelOutput } from "./types/create-level.type";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import { ToastNotificationUseCases } from "@/modules/shared/notification/business/usecases/toast-notification.usecases";
+import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
+import LevelDeletedEvent from "../events/level-deleted-event";
 
 @injectable()
 export default class DeleteLevelLocalUseCase extends BaseUseCase<DeleteLevelInput, DeleteLevelOutput> {
     constructor(
         @inject(TYPES.LevelsLocalRepository)
         private readonly _localRepository: ILevelsLocalRepository,
+
+        @inject(SharedTYPES.EventBus)
+        private readonly _eventBus: IEventBus,
+
+        @inject(SharedTYPES.ToastNotificationUseCases)
+        private readonly _toastNotificationUseCases: ToastNotificationUseCases,
     ) {
         super();
     }
@@ -20,6 +30,9 @@ export default class DeleteLevelLocalUseCase extends BaseUseCase<DeleteLevelInpu
         const filtredLevels = levels.filter(level => level.id !== levelId);
         this._localRepository.storeLevels(filtredLevels);
         
+        this._toastNotificationUseCases.success('Level successfully deleted');
+
+        this._eventBus.publishAsync(new LevelDeletedEvent(levelId))
         return Result.success();
     }
 }

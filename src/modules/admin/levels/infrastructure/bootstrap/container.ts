@@ -24,6 +24,8 @@ import DeleteLevelUseCase from '../../business/usecases/delete-level.usecase';
 import LevelsLoadedEventSelectLevelHandler from '../../business/events/handlers/levels-loaded-event-select-level.handler';
 import LevelsLoadedEvent from '../../business/events/levels-loaded-event';
 import DeleteLevelLocalUseCase from '../../business/usecases/delete-level-local.usecase';
+import LevelDeletedEventSelectDefaultLevelHandler from '../../business/events/handlers/level-deleted-event-select-default-level.handler';
+import LevelDeletedEvent from '../../business/events/level-deleted-event';
 
 container
     .bind<LevelsPresenter>(TYPES.LevelsPresenter)
@@ -114,6 +116,14 @@ container
     .to(LevelCreatedEventSelectLevelHandler)
     .inTransientScope()
 ;
+
+container
+    .bind<IAsyncEventHandler<LevelDeletedEvent>>(TYPES.LevelDeletedEventHandler)
+    .to(LevelDeletedEventSelectDefaultLevelHandler)
+    .inTransientScope()
+;
+
+
 
 container
     .bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)

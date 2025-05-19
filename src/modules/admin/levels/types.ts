@@ -12,6 +12,7 @@ const TYPES = {
     DeleteLevelLocalUseCase: Symbol.for('DeleteLevelLocalUseCase'),
     ProjectSelectedEventHandler: Symbol.for('IAsyncEventHandler<ProjectSelectedEvent>'),
     SaveProjectEventHandler: Symbol.for('IAsyncEventHandler<SaveProjectEvent>'),
+    LevelDeletedEventHandler: Symbol.for('IAsyncEventHandler<LevelDeletedEvent>'),
     ProjectCreatedEventHandler: Symbol.for('IAsyncEventHandler<ProjectCreatedEvent>'),
     LevelCreatedEventHandler: Symbol.for('IAsyncEventHandler<LevelCreatedEvent>'),
     LevelsLoadedEventHandler: Symbol.for('ISyncEventHandler<LevelsLoadedEvent>'),

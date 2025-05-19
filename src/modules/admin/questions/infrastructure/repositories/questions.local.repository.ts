@@ -5,6 +5,7 @@ import IQuestionsLocalRepository from '../../business/plugins/questions.local.re
 import { Ref, ref } from "vue";
 
 export default class QuestionsLocalRepository implements IQuestionsLocalRepository  {
+   
     private _questions = ref<Array<Question>>([]);
     private _question = ref<Question>()
 
@@ -20,6 +21,10 @@ export default class QuestionsLocalRepository implements IQuestionsLocalReposito
 
         this._questions.value[index] = updatedQuestion;
         this._question.value = updatedQuestion;
+    }
+
+    public addQuestion(question: Question) {
+        this._questions.value.push(question);
     }
 
     public getQuestions(): Ref<Array<Question>> {

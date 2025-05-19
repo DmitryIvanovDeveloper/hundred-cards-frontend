@@ -23,7 +23,7 @@ import ProjectCreatedEvent from '../../business/events/project-created-event';
 import ProjectCreatedEventSelectProjectHandler from '../../business/events/handlers/project-created-event-select-project.handler';
 import ProjectsLoadedEvent from '../../business/events/projects-loaded-event';
 import ProjectsLoadedEventSelectDefaultProjectHandler from '../../business/events/handlers/project-loaded-event-select-default-project.handler';
-import ProjectDeletedEventLoadProjectsHandler from '../../business/events/handlers/project-deleted-event-load-projects.handler';
+import ProjectDeletedEventSelectDefaultProjectHandler from '../../business/events/handlers/project-deleted-event-select-default-project.handler';
 import DeleteProjectLocalUseCase from '../../business/usecases/delete-project-local.usecase';
 
 container
@@ -107,7 +107,7 @@ container
 
 container
     .bind<IAsyncEventHandler<ProjectDeletedEvent>>(TYPES.ProjectDeletedEventHandler)
-    .to(ProjectDeletedEventLoadProjectsHandler)
+    .to(ProjectDeletedEventSelectDefaultProjectHandler)
     .inTransientScope()
 ;
 
@@ -128,5 +128,3 @@ container
     .to(ProjectsLoadedEventSelectDefaultProjectHandler)
     .inTransientScope()
 ;
-
-

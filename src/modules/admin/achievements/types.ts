@@ -13,6 +13,7 @@ const TYPES = {
   ProjectSelectedEventHandler: Symbol.for('IAsyncEventHandler<ProjectSelectedEvent>'),
   QuestionsLoadedEventHandler: Symbol.for('ISyncEventHandler<QuestionsLoadedEvent>'),
   LevelsLoadedEventHandler: Symbol.for('ISyncEventHandler<LevelsLoadedEvent>'),
+  AchievementDeletedEventHandler: Symbol.for('ISyncEventHandler<AchievementDeletedEvent>'),
 };
 
 export { TYPES }

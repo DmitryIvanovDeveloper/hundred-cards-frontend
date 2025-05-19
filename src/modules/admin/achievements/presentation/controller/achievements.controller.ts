@@ -10,11 +10,10 @@ import IProjectsService from "@/modules/admin/projects/business/plugins/projects
 import AchievementNotCreatedError from "../../business/errors/achievement-not-created.error";
 import NextAchievementUseCase from "../../business/usecases/next-achievement.usecase";
 import PreviousAchievementUseCase from "../../business/usecases/previous-achievement.usecase";
-import ILevelsService from "@/modules/admin/levels/business/plugins/levels.service.plugin";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
-import LoadQuestionsEvent from "@/modules/admin/questions/business/events/next-question-event copy";
 import { ref } from "vue";
 import DeleteAchievementUseCase from "../../business/usecases/delete-achievement.usecase";
+import LoadQuestionsEvent from "@/modules/admin/questions/business/events/load-questions-event";
 
 @injectable()
 export default class AchievementsController {
@@ -47,7 +46,6 @@ export default class AchievementsController {
 	) {}
 
 	public readonly creating = ref<boolean>(false);
-	public readonly deleting = ref<boolean>(false);
 	
 	public createAchievement = async (): Promise<Result<void>> => {
 		const result = this._projectsService.getSelectedProjectId();

@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
+import { TYPES as SharedTYPES } from "@infrastructure/bootstrap/types";
 import Result from "@/infrastructure/helpers/result";
 import IQuestionsHttpRepository from "../plugins/questions.http.repository.plugin";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
@@ -7,6 +8,8 @@ import { CreateQuestionInput, CreateQuestionsOutput } from "./types/create-quest
 import Question from "../entities/question";
 import QuestionNotCreatedError from "../errors/questions-not-created.error";
 import QuestionsLocalRepository from "../../infrastructure/repositories/questions.local.repository";
+import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
+import QuestionCreatedEvent from "../events/question-created-event";
 
 @injectable()
 export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInput, CreateQuestionsOutput>{
@@ -16,6 +19,9 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
 
         @inject(TYPES.QuestionsLocalRepository)
         private readonly _localRepository: QuestionsLocalRepository,
+
+        @inject(SharedTYPES.EventBus)
+        private readonly _eventBus: IEventBus,
     ) {
         super()
     }
@@ -31,10 +37,12 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
             return Result.failure(new QuestionNotCreatedError())
         }
 
-        const question =  Question.toEntity(result.data)
+        const question = Question.toEntity(result.data)
       
-        this._localRepository.storeQuestion(question);
+        this._localRepository.addQuestion(question);
 
+        this._eventBus.publish(new QuestionCreatedEvent(question.id));
+        
         return Result.success();
     }
 }

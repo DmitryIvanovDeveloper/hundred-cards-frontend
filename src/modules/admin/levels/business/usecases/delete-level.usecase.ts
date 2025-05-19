@@ -1,14 +1,11 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
-import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
 import Result from "@/infrastructure/helpers/result";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
 import { DeleteLevelInput, DeleteLevelOutput } from "./types/create-level.type";
 import LevelNotDeletedError from "../errors/level-not-deleted.error";
-import LevelDeletedEvent from "../events/level-deleted-event";
-import { ToastNotificationUseCases } from "@/modules/shared/notification/business/usecases/toast-notification.usecases";
 import DeleteLevelLocalUseCase from "./delete-level-local.usecase";
 
 @injectable()
@@ -19,13 +16,6 @@ export default class DeleteLevelUseCase extends BaseUseCase<DeleteLevelInput, De
 
         @inject(TYPES.DeleteLevelLocalUseCase)
         private readonly _deleteLevelLocalUseCase: DeleteLevelLocalUseCase,
-
-
-        @inject(SharedTYPES.EventBus)
-        private readonly _eventBus: IEventBus,
-
-        @inject(SharedTYPES.ToastNotificationUseCases)
-        private readonly _toastNotificationUseCases: ToastNotificationUseCases,
     ) {
         super();
     }
@@ -41,9 +31,6 @@ export default class DeleteLevelUseCase extends BaseUseCase<DeleteLevelInput, De
 
         this._deleteLevelLocalUseCase.execute(input);
 
-        this._toastNotificationUseCases.success('Level successfully deleted');
-
-        this._eventBus.publishAsync(new LevelDeletedEvent(levelId))
         return Result.success();
     }
 }

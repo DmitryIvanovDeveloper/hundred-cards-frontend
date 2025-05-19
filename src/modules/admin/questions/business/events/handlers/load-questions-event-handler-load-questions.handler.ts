@@ -1,7 +1,7 @@
 import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugin";
 import { TYPES } from "../../../types";
 import { inject } from "inversify";
-import LoadQuestionsEvent from "../next-question-event copy";
+import LoadQuestionsEvent from "../load-questions-event";
 import LoadQuestionsUseCase from "../../usecases/load-questons.usecase";
 
 export default class LoadQuestionsEventLoadQuestionsHandler implements IAsyncEventHandler<LoadQuestionsEvent> {

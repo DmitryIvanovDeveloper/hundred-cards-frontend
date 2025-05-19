@@ -4,7 +4,7 @@ import { inject } from "inversify";
 import QuestionsLoadedEvent from "../questions-loaded-event";
 import SelectQuestionUseCase from "../../usecases/select-question.usecase";
 
-export default class QueationLoadedEventSelectQuestionHandler implements ISyncEventHandler<QuestionsLoadedEvent> {
+export default class QuestionLoadedEventSelectQuestionHandler implements ISyncEventHandler<QuestionsLoadedEvent> {
 
 	constructor(
 		@inject(TYPES.SelectQuestionUseCase)

@@ -17,9 +17,11 @@ const TYPES = {
     LevelCreatedEventHandler: Symbol.for('IAsyncEventHandler<LevelCreatedEvent>'),
     NextQuestionEventHandler: Symbol.for('ISyncEventHandler<NextQuestionEvent>'),
     PreviousQuestionEventHandler: Symbol.for('ISyncEventHandler<PreviouseQuestionEvent>'),
+    QuestionCreatedEventHandler:  Symbol.for('ISyncEventHandler<QuestionCreatedEvent>'),
     QuestionsLoadedEventHandler: Symbol.for('ISyncEventHandler<QuestionsLoadedEvent>'),
     LoadQuestionsEventHandler: Symbol.for('IAsyncEventHandler<LoadQuestionsEvent>'),
     LevelDeletedEventHandler: Symbol.for('IAsyncEventHandler<LevelDeletedEvent>'),
+    QuestionDeletedEventHandler:  Symbol.for('IAsyncEventHandler<QuestionDeletedEvent>'),
     NextQuestionUseCase: Symbol.for('NextQuestionUseCase'),
     PreviousQuestionUseCase: Symbol.for('PreviousQuestionUseCase'),
 };

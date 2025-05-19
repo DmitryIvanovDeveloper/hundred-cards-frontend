@@ -65,7 +65,7 @@ export default class QuestionsController {
 
         const question = result.data;
         const updatedQuestion = question.withUpdatedDeleting(true);
-        console.log(updatedQuestion)
+        console.log(updatedQuestion )
         this._repository.updateQuestions(updatedQuestion);
 
         await this._deleteQuestionUseCase.execute({ questionId: id });

@@ -25,15 +25,18 @@ import PreviousQuestionEventSetPreviousQuestionHandler from '../../business/even
 import LevelCreatedEvent from '@/modules/admin/levels/business/events/level-created-event';
 import LevelCreatedEventCreateDefaultQuestionHandler from '../../business/events/handlers/level-created-event-create-defult-question.handler';
 import QuestionsLoadedEvent from '../../business/events/questions-loaded-event';
-import QueationLoadedEventSelectQuestionHandler from '../../business/events/handlers/questions-loaded-event-select-question.handler';
-import LoadQuestionsEvent from '../../business/events/next-question-event copy';
-import LoadQuestionsEventLoadQuestionSHandler from '../../business/events/handlers/load-questions-event-handler-load-questions.handler';
+import QuestionLoadedEventSelectQuestionHandler from '../../business/events/handlers/questions-loaded-event-select-question.handler';
+import LoadQuestionsEvent from '../../business/events/load-questions-event';
 import LoadQuestionsEventLoadQuestionsHandler from '../../business/events/handlers/load-questions-event-handler-load-questions.handler';
 import DeleteQuestionUseCase from '../../business/usecases/delete-queston.usecase';
 import DeleteQuestionLocalUseCase from '../../business/usecases/delete-queston-local.usecase';
 import DeleteQuestionsLocalUseCase from '../../business/usecases/delete-questons-local.usecase';
 import LevelDeletedEvent from '@/modules/admin/levels/business/events/level-deleted-event';
 import LevelDeletedEventDeleteQuestionsLocalQuestionHandler from '../../business/events/handlers/level-deleted-event-delete-questions-local.handler';
+import QuestionDeletedEventSelectDefaultQuestionHandler from '../../business/events/handlers/question-deleted-event-select-default-question.handler';
+import QuestionDeletedEvent from '../../business/events/question-deleted-event';
+import QuestionCreatedEventSelectQuestionHandler from '../../business/events/handlers/questions-created-event-select-question.handler';
+import QuestionCreatedEvent from '../../business/events/question-created-event';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -143,6 +146,12 @@ container
 ;
 
 container
+    .bind<IAsyncEventHandler<QuestionDeletedEvent>>(TYPES.QuestionDeletedEventHandler)
+    .to(QuestionDeletedEventSelectDefaultQuestionHandler)
+    .inTransientScope()
+;
+
+container
     .bind<ISyncEventHandler<NextQuestionEvent>>(TYPES.NextQuestionEventHandler)
     .to(NextQuestionEventSetNextQuestionHandler)
     .inTransientScope()
@@ -156,8 +165,12 @@ container
 
 container
     .bind<ISyncEventHandler<QuestionsLoadedEvent>>(TYPES.QuestionsLoadedEventHandler)
-    .to(QueationLoadedEventSelectQuestionHandler)
+    .to(QuestionLoadedEventSelectQuestionHandler)
     .inTransientScope()
 ;
 
-
+container
+    .bind<ISyncEventHandler<QuestionCreatedEvent>>(TYPES.QuestionCreatedEventHandler)
+    .to(QuestionCreatedEventSelectQuestionHandler)
+    .inTransientScope()
+;

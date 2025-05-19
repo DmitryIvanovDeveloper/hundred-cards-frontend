@@ -21,82 +21,88 @@ import QuestionsLoadedEvent from '@/modules/admin/questions/business/events/ques
 import QuestionsLoadedEventUpdateAvailableQuestionsHandler from '../../business/events/handlers/questions-loaded-event-update-available-question.handler';
 import DeleteAchievementUseCase from '../../business/usecases/delete-achievement.usecase';
 import DeleteAchievementLocalUseCase from '../../business/usecases/delete-achievement-local.usecase';
+import AchievemenetDeletedEventSelectDefaultAchievement from '../../business/events/handlers/achievement-deleted-event-select-default-achievement.handler';
+import AchievementDeletedEvent from '../../business/events/achievement-deleted-event';
 
 container
-  .bind<IAchievementsHttpRepository>(TYPES.AchievementsHttpRepository)
-  .to(AchievementsHttpRepository)
+	.bind<IAchievementsHttpRepository>(TYPES.AchievementsHttpRepository)
+	.to(AchievementsHttpRepository)
 
 container
-  .bind<IAchievementsLocalRepository>(TYPES.AchievementsLocalRepository)
-  .to(AchievementsLocalRepository)
-  .inSingletonScope();
+	.bind<IAchievementsLocalRepository>(TYPES.AchievementsLocalRepository)
+	.to(AchievementsLocalRepository)
+	.inSingletonScope();
 
 container
-  .bind(TYPES.AchievementsPresenter)
-  .to(AchievementsPresenter)
-  .inSingletonScope();
+	.bind(TYPES.AchievementsPresenter)
+	.to(AchievementsPresenter)
+	.inSingletonScope();
 
 container
-  .bind(TYPES.AchievementsController)
-  .to(AchievementsController)
-  .inSingletonScope();
+	.bind(TYPES.AchievementsController)
+	.to(AchievementsController)
+	.inSingletonScope();
 
 container
-  .bind(TYPES.LoadAchievementsUseCase)
-  .to(LoadAchievementsUseCase)
-  .inTransientScope();
+	.bind(TYPES.LoadAchievementsUseCase)
+	.to(LoadAchievementsUseCase)
+	.inTransientScope();
 
 container
-  .bind(TYPES.SelectAchievementUseCase)
-  .to(SelectAchievementUseCase)
-.inTransientScope()
+	.bind(TYPES.SelectAchievementUseCase)
+	.to(SelectAchievementUseCase)
+	.inTransientScope()
+	;
+
+container
+	.bind(TYPES.CreateAchievementUseCase)
+	.to(CreateAchievementUseCase)
+	.inTransientScope()
 ;
 
 container
-  .bind(TYPES.CreateAchievementUseCase)
-  .to(CreateAchievementUseCase)
-  .inTransientScope()
+	.bind(TYPES.DeleteAchievementUseCase)
+	.to(DeleteAchievementUseCase)
+	.inTransientScope()
 ;
 
 container
-  .bind(TYPES.DeleteAchievementUseCase)
-  .to(DeleteAchievementUseCase)
-  .inTransientScope()
+	.bind(TYPES.DeleteAchievementLocalUseCase)
+	.to(DeleteAchievementLocalUseCase)
+	.inTransientScope()
 ;
 
 container
-  .bind(TYPES.DeleteAchievementLocalUseCase)
-  .to(DeleteAchievementLocalUseCase)
-  .inTransientScope()
+	.bind(TYPES.PreviousAchievementUseCase)
+	.to(PreviousAchievementUseCase)
+	.inTransientScope()
 ;
 
 container
-  .bind(TYPES.PreviousAchievementUseCase)
-  .to(PreviousAchievementUseCase)
-  .inTransientScope()
+	.bind(TYPES.NextAchievementUseCase)
+	.to(NextAchievementUseCase)
+	.inTransientScope()
 ;
 
 container
-  .bind(TYPES.NextAchievementUseCase)
-  .to(NextAchievementUseCase)
-  .inTransientScope()
+	.bind<IAsyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandler)
+	.to(ProjectSelectedEventLoadAchievementsHandler)
+	.inTransientScope()
+	;
+
+container
+	.bind<ISyncEventHandler<QuestionsLoadedEvent>>(TYPES.QuestionsLoadedEventHandler)
+	.to(QuestionsLoadedEventUpdateAvailableQuestionsHandler)
+	.inTransientScope()
 ;
 
 container
-    .bind<IAsyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandler)
-    .to(ProjectSelectedEventLoadAchievementsHandler)
-    .inTransientScope()
-;
+	.bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)
+	.to(LevelsLoadedEventUpdateAvailableLevelsHandler)
 
-container
-    .bind<ISyncEventHandler<QuestionsLoadedEvent>>(TYPES.QuestionsLoadedEventHandler)
-    .to(QuestionsLoadedEventUpdateAvailableQuestionsHandler)
-    .inTransientScope()
-;
-
-container
-    .bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)
-    .to(LevelsLoadedEventUpdateAvailableLevelsHandler)
-   
+	container
+	.bind<ISyncEventHandler<AchievementDeletedEvent>>(TYPES.AchievementDeletedEventHandler)
+	.to(AchievemenetDeletedEventSelectDefaultAchievement)
 
 
+	

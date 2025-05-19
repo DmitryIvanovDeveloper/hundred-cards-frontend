@@ -22,6 +22,7 @@ export default class SelectAchievementUseCase extends BaseUseCase<SelectAchievem
     }
 
     public execute = async (input: SelectAchievementInput): Promise<SelectAchievementOutput> => {
+        console.log(input)
         const achievemnt = this._localRepository.findAchievementById(input.achievementId);
         if (!achievemnt) {
             return Result.failure(new AchievementsNotFoundError(input.achievementId))
