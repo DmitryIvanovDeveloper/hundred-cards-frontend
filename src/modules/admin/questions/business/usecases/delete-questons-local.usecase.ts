@@ -19,6 +19,13 @@ export default class DeleteQuestionsLocalUseCase extends BaseUseCase<DeleteQuest
         const questions = this._localRepository.getQuestions().value;
         const filteredQuestions = questions.filter(question => question.id === input.levelId);
         this._localRepository.storeQuestions(filteredQuestions);
+
+        const question = this._localRepository.getQuestion().value;
+        if(!question || question.levelId !== input.levelId) {
+            return Result.success();
+        }
+
+        this._localRepository.clearQuestion()
         return Result.success();
     }
 }

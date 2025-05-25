@@ -8,7 +8,7 @@ const { } = defineProps<ICorrectButtonsProps>();
 </script>
 
 <template>
-  <div>
+  <div class="">
     <button class="mr-2 p-1 text-gray-500">
         <svg
           xmlns="http://www.w3.org/2000/svg"

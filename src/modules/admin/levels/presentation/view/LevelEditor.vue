@@ -15,13 +15,16 @@ const router = useRouter();
 
 <template>
   <div class="mb-8">
-     <ConstructorItemLayout :label="presenter.labels.categoryName">
-        <UniversalInput
-          :label="''"
-          :value="presenter.levelViewModel.value?.name"
-          :onChange="(value) => controller.updateText(value as string)"
-      />
-     </ConstructorItemLayout>
+	<ConstructorItemLayout 
+		v-if="presenter.levelViewModel.value"
+		:label="presenter.labels.categoryName"
+	>
+		<UniversalInput
+			:label="''"
+			:value="presenter.levelViewModel.value?.name"
+			:onChange="(value) => controller.updateText(presenter.levelViewModel.value?.id ?? '', value as string)"
+		/>
+	</ConstructorItemLayout>
 
   </div>
 </template>

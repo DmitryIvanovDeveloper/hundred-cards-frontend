@@ -2,12 +2,12 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
 import Result from "@/infrastructure/helpers/result";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
-import { DeleteLevelInput, DeleteLevelOutput } from "./types/create-level.type";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
 import { ToastNotificationUseCases } from "@/modules/shared/notification/business/usecases/toast-notification.usecases";
 import { TYPES as SharedTYPES } from "@/infrastructure/bootstrap/types";
 import LevelDeletedEvent from "../events/level-deleted-event";
+import { DeleteLevelInput, DeleteLevelOutput } from "./types/delete-level.type";
 
 @injectable()
 export default class DeleteLevelLocalUseCase extends BaseUseCase<DeleteLevelInput, DeleteLevelOutput> {
@@ -33,6 +33,16 @@ export default class DeleteLevelLocalUseCase extends BaseUseCase<DeleteLevelInpu
         this._toastNotificationUseCases.success('Level successfully deleted');
 
         this._eventBus.publishAsync(new LevelDeletedEvent(levelId))
+
+        const level = this._localRepository.getLevel().value;
+        console.log(level)
+        console.log(levelId)
+        if (!level || level.id !== levelId) {
+            return Result.success();
+        }
+
+
+        this._localRepository.clearLevel();
         return Result.success();
     }
 }

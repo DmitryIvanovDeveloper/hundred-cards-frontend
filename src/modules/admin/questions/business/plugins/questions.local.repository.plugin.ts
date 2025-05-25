@@ -1,8 +1,10 @@
 import Result from "@/infrastructure/helpers/result";
-import Question, { Answer } from "../entities/question";
+import Question from "../entities/question";
 import { Ref } from "vue";
 
 export default interface IQuestionsLocalRepository {
+    clear(): void;
+    clearQuestion(): void;
     storeQuestions(questions: Array<Question>): void;
     storeQuestion(question: Question): void;
     updateQuestions(updatedQuestion: Question): void;

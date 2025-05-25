@@ -29,9 +29,9 @@ export default class Question {
 	readonly deleting: boolean;
 
 	constructor(
-		id: string,
+		id: string = uuidv4(),
 		text: string,
-		points: number,
+		points: number = 5,
 		levelId: string,
 		lang: string,
 		answers: Answer[],
@@ -72,17 +72,24 @@ export default class Question {
 	}
 
 	public withNewAnswer(): this {
-		const newAnswer = new Answer(uuidv4(), "", false, this.lang, this.id);
+		if (this.answers.length === 4) {
+			return this;
+		}
+
+		const newAnswer = new Answer({});
 		return this.cloneWith({ answers: [...this.answers, newAnswer], edited: true });
 	}
 
 	public withRemovedAnswer(answerId: string): this {
+		if (this.answers.length === 2) {
+			return this;
+		}
+
 		const updatedAnswers = this.answers.filter((a) => a.id !== answerId);
 		return this.cloneWith({ answers: updatedAnswers, edited: true });
 	}
 
 	public withUpdatedDeleting(deleting: boolean): this {
-		console.log(deleting)
 		return this.cloneWith({ deleting });
 	}
 
@@ -99,13 +106,14 @@ export default class Question {
 		) as this;
 	}
 
-	static create(levelId: string): Question {
-		return new Question("", "New Question", 0, levelId, "RU", []);
+	static create(levelId: string, text?: string): Question {
+		const id = uuidv4();
+		return new Question(uuidv4(), "New Question", 0, levelId, "RU", [Answer.create(id, 'Ответ 1', true), Answer.create(id, 'Ответ 2', false)]);
 	}
 
 	static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse | UpdateQuestionResponseDTO): Question {
 		const answers = dto.answers.map(
-			(a) => new Answer(a.id, a.text, a.isCorrect, a.lang, a.questionId)
+			(a) => new Answer({id: a.id, text: a.text, isCorrect: a.isCorrect, lang:a.lang, questionId: a.questionId})
 		);
 		return new Question(dto.id, dto.text, dto.points, dto.levelId, dto.lang, answers);
 	}

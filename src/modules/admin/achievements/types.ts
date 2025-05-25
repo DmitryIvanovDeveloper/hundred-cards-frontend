@@ -9,6 +9,7 @@ const TYPES = {
   DeleteAchievementUseCase: Symbol.for("DeleteAchievementUseCase"),
   DeleteAchievementLocalUseCase: Symbol.for("DeleteAchievementLocalUseCase"),
   NextAchievementUseCase: Symbol.for("NextAchievementUseCase"),
+  DeleteAchievementsLocalUseCase: Symbol.for("DeleteAchievementsLocalUseCase"),
   PreviousAchievementUseCase: Symbol.for("PreviousAchievementUseCase"),
   ProjectSelectedEventHandler: Symbol.for('IAsyncEventHandler<ProjectSelectedEvent>'),
   QuestionsLoadedEventHandler: Symbol.for('ISyncEventHandler<QuestionsLoadedEvent>'),

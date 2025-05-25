@@ -6,7 +6,6 @@ import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { UpateQuestionOutput, UpdateQuestionInput } from "./types/update-question.type";
 import QuestionNotUpdatedError from '../errors/questions-not-updated.error';
 import IQuestionsLocalRepository from '../plugins/questions.local.repository.plugin';
-import SelectQuestionUseCase from "./select-question.usecase";
 import Question from "../entities/question";
 
 @injectable()
@@ -17,31 +16,28 @@ export default class UpdateQuestionUseCase extends BaseUseCase<UpdateQuestionInp
 
         @inject(TYPES.QuestionsLocalRepository)
         private readonly _localRepository: IQuestionsLocalRepository,
-
-        @inject(TYPES.SelectQuestionUseCase)
-        private readonly _selectQuestionUseCase: SelectQuestionUseCase,
     ) {
         super()
     }
 
     public execute = async (input: UpdateQuestionInput): Promise<UpateQuestionOutput> => {
-        const question = this._localRepository.getQuestion().value;
-        if (!question) {
+        const questions = this._localRepository.getQuestions().value;
+        if (!questions.length) {
             return Result.failure(new QuestionNotUpdatedError())
         }
 
-        const updateRequest = question.toUpdateRequest();
-        
-        const result = await this._repository.update(question.id, updateRequest);
-        if (!result.hasData()) {
-            return Result.failure(new QuestionNotUpdatedError(question.id))
-        }
+        const editedQuestions = questions.filter(question => question.edited);
 
-        const updatedQuestion = Question.toEntity(result.data);
-        
-        this._localRepository.updateQuestions(updatedQuestion);
+        await Promise.all(editedQuestions.map(async question => {
+            const updateRequest = question.toUpdateRequest();
+            const result = await this._repository.update(question.id, updateRequest);
+            if (!result.hasData()) {
+                return Result.failure(new QuestionNotUpdatedError(question.id))
+            }
 
-        this._selectQuestionUseCase.execute({ questionId: question.id });
+            const updatedQuestion = Question.toEntity(result.data);
+            this._localRepository.updateQuestions(updatedQuestion);
+        }))
 
         return Result.success();
     }

@@ -8,7 +8,6 @@ import LevelsNotLoadedError from "../errors/level-not-loaded.error";
 import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
 import Level from "../entities/level";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
-import SelectLevelUseCase from "./select-level.usecase";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
 import LevelsLoadedEvent from "../events/levels-loaded-event";
 

@@ -3787,11 +3787,6 @@ picomatch@^4.0.2:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.2.tgz#77c742931e8f3b8820946c76cd0c1f13730d1dab"
   integrity sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==
 
-ping@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/ping/-/ping-0.4.4.tgz#f70c5c8ad7b476d903100c9d45ecd52cf83e1de3"
-  integrity sha512-56ZMC0j7SCsMMLdOoUg12VZCfj/+ZO+yfOSjaNCRrmZZr6GLbN2X/Ui56T15dI8NhiHckaw5X2pvyfAomanwqQ==
-
 pinia@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/pinia/-/pinia-3.0.2.tgz#0616c2e1b39915f253c7626db3c81b7cdad695da"
@@ -4640,6 +4635,13 @@ unimport@^3.13.4:
     strip-literal "^2.1.1"
     unplugin "^1.16.1"
 
+unity-webgl@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/unity-webgl/-/unity-webgl-4.4.2.tgz#3130b5ead79730fa149690e15be00a600a4f4ad9"
+  integrity sha512-HQyQylNJBRBjsXQa7SvlBDdjZ3Zo8cq25roJGaBWoGeoWr5Y9v1Pk/U6aUpY55KGLBw53KarvgXnobeG5BOQEQ==
+  dependencies:
+    vue-demi latest
+
 unplugin-auto-import@0.18.6:
   version "0.18.6"
   resolved "https://registry.yarnpkg.com/unplugin-auto-import/-/unplugin-auto-import-0.18.6.tgz#6848bef1742bc457f42cf67a13e824f69debc889"
@@ -4812,7 +4814,7 @@ vue-component-type-helpers@^2.0.0:
   resolved "https://registry.yarnpkg.com/vue-component-type-helpers/-/vue-component-type-helpers-2.2.8.tgz#66d25e4405a4bcc06a22aa4c01e35141343da580"
   integrity sha512-4bjIsC284coDO9om4HPA62M7wfsTvcmZyzdfR0aUlFXqq4tXxM1APyXpNVxPC8QazKw9OhmZNHBVDA6ODaZsrA==
 
-vue-demi@*:
+vue-demi@*, vue-demi@latest:
   version "0.14.10"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.10.tgz#afc78de3d6f9e11bf78c55e8510ee12814522f04"
   integrity sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==

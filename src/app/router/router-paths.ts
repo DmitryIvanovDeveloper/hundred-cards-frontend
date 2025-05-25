@@ -8,6 +8,8 @@ export const RouterPaths = {
   list: 'list',
   constructor: 'constructor',
   levels: 'levels',
-  achievements: '/admin/achievements/constructor'
+  game: '/game',
+  achievements: '/admin/achievements/constructor',
+  projectList: '/admin/projects/list'
 };
 

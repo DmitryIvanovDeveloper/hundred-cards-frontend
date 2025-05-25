@@ -39,6 +39,10 @@ export default class QuestionsLocalRepository implements IQuestionsLocalReposito
         this._question.value = question;
     }
 
+    public clearQuestion(): void {
+        this._question.value = undefined;
+    }
+
     public findQuestionById(id: string): Result<Question> {
         const expectedQuestion = this._questions.value?.find(question => question.id === id);
         if (!expectedQuestion) {
@@ -46,5 +50,10 @@ export default class QuestionsLocalRepository implements IQuestionsLocalReposito
         }
 
         return Result.success(expectedQuestion);
+    }
+
+    public clear = (): void => {
+        this._questions.value = [];
+        this.clearQuestion();
     }
 }

@@ -32,8 +32,9 @@ export default class ProjectsController {
         private readonly _eventBus: IEventBus,
     ) {}
 
-    public loading = ref<boolean>(false);
-    public isEdit = ref<boolean>(false);
+    public readonly loading = ref<boolean>(false);
+    public readonly isEdit = ref<boolean>(false);
+    public readonly confirmCancelPopupVisible = ref<boolean>(false);
     public readonly creating = ref<boolean>(false);
 
     public createProject = async (): Promise<Result<void>> => {
@@ -55,8 +56,9 @@ export default class ProjectsController {
 
     public saveProject = async (): Promise<void> => {
         this.loading.value = true;
-        await this._eventBus.publishAsync(new SaveProjectEvent())
+        await this._eventBus.publishAsync(new SaveProjectEvent());
         this.loading.value = false;
+        this.confirmCancelPopupVisible.value = false;
     }
 
     public nextQuestion = (): void => {
@@ -77,6 +79,34 @@ export default class ProjectsController {
         this._repoitory.updateProjects(updatedProject);
     }
 
+    public updatedAddUser = (projectId: string, email: string) => {
+        if (!email) {
+            return;
+        }
+        
+        const projectResult = this._repoitory.findProjectById(projectId);
+        if (!projectResult.hasData()) {
+            return;
+        }
+
+        const project = projectResult.data;
+
+        const updatedProject = project.withUpdatedNewUser(email);
+        this._repoitory.updateProjects(updatedProject);
+    }
+
+    public updatedRemoveUser = (projectId: string, id: string) => {
+        const projectResult = this._repoitory.findProjectById(projectId);
+        if (!projectResult.hasData()) {
+            return;
+        }
+
+        const project = projectResult.data;
+
+        const updatedProject = project.withUpdatedRemovedUser(id);
+        this._repoitory.updateProjects(updatedProject);
+    }
+
     public edit = (edit: boolean): void => {
         this.isEdit.value = edit;
     }
@@ -94,5 +124,9 @@ export default class ProjectsController {
         this._repoitory.updateProjects(updatedProject);
 
         await this._deleteProjectUseCase.execute({ projectId: id} );
+    }
+
+    public changeConfirmCancelPopupVisible = () => {
+        this.confirmCancelPopupVisible.value = !this.confirmCancelPopupVisible.value;
     }
 }

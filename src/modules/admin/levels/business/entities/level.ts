@@ -45,6 +45,10 @@ export default class Level {
         return this.cloneWith({ deleting });
     }
 
+    public withUpdatedEdited(edited: boolean): this {
+        return this.cloneWith({ edited });
+    }
+
     public cloneWith(params: Partial<LevelProps>): this {
         return new Level(
             this.id,

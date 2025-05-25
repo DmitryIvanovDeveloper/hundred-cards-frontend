@@ -2,6 +2,7 @@ import { Ref } from "vue";
 import Achievement from "../entities/achievements";
 
 export default interface IAchievementsLocalRepository {
+  clear(): unknown;
   getAchievements(): Ref<Array<Achievement>> 
   storeAchievements(achievements: Array<Achievement>): void;
   storeAchievements(achievements: Array<Achievement>): void;

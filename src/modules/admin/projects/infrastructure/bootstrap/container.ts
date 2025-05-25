@@ -25,6 +25,7 @@ import ProjectsLoadedEvent from '../../business/events/projects-loaded-event';
 import ProjectsLoadedEventSelectDefaultProjectHandler from '../../business/events/handlers/project-loaded-event-select-default-project.handler';
 import ProjectDeletedEventSelectDefaultProjectHandler from '../../business/events/handlers/project-deleted-event-select-default-project.handler';
 import DeleteProjectLocalUseCase from '../../business/usecases/delete-project-local.usecase';
+import ClearProjectsLocalUseCase from '../../business/usecases/clear-projects-local.usecase';
 
 container
     .bind<ProjectsPresenter>(TYPES.ProjectsPresenter)
@@ -83,6 +84,12 @@ container
 container
     .bind(TYPES.LoadProjectsUseCase)
     .to(LoadProjectsUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind(TYPES.ClearProjectsLocalUseCase)
+    .to(ClearProjectsLocalUseCase)
     .inTransientScope()
 ;
 

@@ -1,7 +1,8 @@
 import Result from "@/infrastructure/helpers/result";
 
-export type DeleteLevelInput = {
-    levelId: string;
+export type CreateLevelInput = {
+    projectId: string;
+    name: string;
 };
 
-export type DeleteLevelOutput = Result<void>
+export type CreateLevelOutput = Result<void>

@@ -3,7 +3,6 @@ import IAchievementsLocalRepository from "../../business/plugins/achievements.lo
 import Achievement from "../../business/entities/achievements";
 
 export default class AchievementsLocalRepository implements IAchievementsLocalRepository {
- 
 	private _achievements = ref<Array<Achievement>>([]);
 	private _achievement = ref<Achievement>();
 
@@ -29,7 +28,6 @@ export default class AchievementsLocalRepository implements IAchievementsLocalRe
 		return this._achievement;
 	}
 	public storeAchievements(achievements: Array<Achievement>): void {
-		(achievements)
 		this._achievements.value = achievements;
 	}
 	
@@ -39,5 +37,10 @@ export default class AchievementsLocalRepository implements IAchievementsLocalRe
 
 	public findAchievementById(id: string): Achievement | undefined {
 		return this._achievements.value.find(achievement => achievement.id === id);
+	}
+
+	public clear(): void {
+		this._achievements.value = [];
+		this._achievement.value = undefined;
 	}
 }

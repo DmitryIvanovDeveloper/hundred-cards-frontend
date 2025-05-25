@@ -31,6 +31,6 @@
     "noImplicitAny": true, // Можно отключить для облегчения настройки
     "strictPropertyInitialization": false // Удобно для работы с DI и декораторами
   },
-  "include": ["src/**/*", "node_modules/vue-material-design-icons/**/*.d.ts"],
+  "include": ["src/**/*", "node_modules/vue-material-design-icons/**/*.d.ts", "public/Build"],
   "exclude": ["node_modules", "**/node_modules/*", "dist"]
 }

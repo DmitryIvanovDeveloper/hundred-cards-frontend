@@ -23,6 +23,7 @@ import DeleteAchievementUseCase from '../../business/usecases/delete-achievement
 import DeleteAchievementLocalUseCase from '../../business/usecases/delete-achievement-local.usecase';
 import AchievemenetDeletedEventSelectDefaultAchievement from '../../business/events/handlers/achievement-deleted-event-select-default-achievement.handler';
 import AchievementDeletedEvent from '../../business/events/achievement-deleted-event';
+import ClearAchievementsLocalUseCase from '../../business/usecases/clear-achievements-local.usecase';
 
 container
 	.bind<IAchievementsHttpRepository>(TYPES.AchievementsHttpRepository)
@@ -52,7 +53,14 @@ container
 	.bind(TYPES.SelectAchievementUseCase)
 	.to(SelectAchievementUseCase)
 	.inTransientScope()
-	;
+;
+
+container
+	.bind(TYPES.DeleteAchievementsLocalUseCase)
+	.to(ClearAchievementsLocalUseCase)
+	.inTransientScope()
+;
+
 
 container
 	.bind(TYPES.CreateAchievementUseCase)
@@ -100,7 +108,7 @@ container
 	.bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)
 	.to(LevelsLoadedEventUpdateAvailableLevelsHandler)
 
-	container
+container
 	.bind<ISyncEventHandler<AchievementDeletedEvent>>(TYPES.AchievementDeletedEventHandler)
 	.to(AchievemenetDeletedEventSelectDefaultAchievement)
 

@@ -23,9 +23,13 @@ import LevelCreatedEventSelectLevelHandler from '../../business/events/handlers/
 import DeleteLevelUseCase from '../../business/usecases/delete-level.usecase';
 import LevelsLoadedEventSelectLevelHandler from '../../business/events/handlers/levels-loaded-event-select-level.handler';
 import LevelsLoadedEvent from '../../business/events/levels-loaded-event';
-import DeleteLevelLocalUseCase from '../../business/usecases/delete-level-local.usecase';
+import DeleteLevelsLocalUseCase from '../../business/usecases/delete-levels-local.usecase';
 import LevelDeletedEventSelectDefaultLevelHandler from '../../business/events/handlers/level-deleted-event-select-default-level.handler';
 import LevelDeletedEvent from '../../business/events/level-deleted-event';
+import ClearLevelsLocalUseCase from '../../business/usecases/clear-levels-local.usecase';
+import ProjectDeletedEvent from '@/modules/admin/projects/business/events/project-deleted-event';
+import ProjectDeletedEventDeleteLevelsLocalHandler from '../../business/events/handlers/project-deleted-event-delete-levels-local.handler';
+import DeleteLevelsLocalByProjectIdUseCase from '../../business/usecases/delete-levels-local-by-project-id.usecase';
 
 container
     .bind<LevelsPresenter>(TYPES.LevelsPresenter)
@@ -76,8 +80,20 @@ container
 ;
 
 container
-    .bind<DeleteLevelLocalUseCase>(TYPES.DeleteLevelLocalUseCase)
-    .to(DeleteLevelLocalUseCase)
+    .bind<DeleteLevelsLocalUseCase>(TYPES.DeleteLevelLocalUseCase)
+    .to(DeleteLevelsLocalUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind(TYPES.DeleteLevelsLocalByProjectIdUseCase)
+    .to(DeleteLevelsLocalByProjectIdUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind(TYPES.ClearLevelsLocalUseCase)
+    .to(ClearLevelsLocalUseCase)
     .inTransientScope()
 ;
 
@@ -96,6 +112,12 @@ container
 container
     .bind<IAsyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandler)
     .to(ProjectSelectedEventLoadLevelsHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<IAsyncEventHandler<ProjectDeletedEvent>>(TYPES.ProjectDeletedEventHandler)
+    .to(ProjectDeletedEventDeleteLevelsLocalHandler)
     .inTransientScope()
 ;
 
@@ -122,8 +144,6 @@ container
     .to(LevelDeletedEventSelectDefaultLevelHandler)
     .inTransientScope()
 ;
-
-
 
 container
     .bind<ISyncEventHandler<LevelsLoadedEvent>>(TYPES.LevelsLoadedEventHandler)

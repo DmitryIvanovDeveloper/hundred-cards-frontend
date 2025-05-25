@@ -39,7 +39,7 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited,
 		</button>
 	
 
-			<div class="flex gap-[10px]">
+			<div class="flex gap-[10px] items-center">
 				<span v-if="edited">⚠️</span>
 
 				<button @click="onEdit" class="cursor-pointer">

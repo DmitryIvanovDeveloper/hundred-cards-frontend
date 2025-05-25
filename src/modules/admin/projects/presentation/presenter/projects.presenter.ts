@@ -13,7 +13,12 @@ export default class ProjectsPresenter {
 
 
     public readonly label = {
-        title: 'Проекты'
+        title: 'Проекты',
+        confirmCancel: {
+            title: 'У вас есть несохраненные изменения. Пожалуйста, сохраните проект, чтобы отправить участникам актуальную версию.',
+            saveContunue: 'Сохранить и продолжить',
+            cancelContunue: 'Продолжить без сохранения',
+        }
     }
     readonly projectViewModel =  computed(() => this.presentProject());
     readonly projectsViewModel = computed(() =>this.presentProjects());
@@ -24,6 +29,7 @@ export default class ProjectsPresenter {
             return null;
         }
 
+        
         return new ProjectViewModel(project);
     }
 

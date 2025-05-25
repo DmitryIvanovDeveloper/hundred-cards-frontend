@@ -11,6 +11,7 @@ const TYPES = {
     LoadPresentProjectsUseCase: Symbol.for('LoadPresentProjectsUseCase'),
     UpdateProjectUseCase: Symbol.for('UpdateProjectUseCase'),
     LoadProjectsUseCase: Symbol.for('LoadProjectsUseCase'),
+    ClearProjectsLocalUseCase: Symbol.for('ClearProjectsLocalUseCase'),
     AdminAuthenticatedEventHandler: Symbol.for('IAsyncEventHandler<AdminAuthenticatedEvent>'),
     SaveProjectEventHandler: Symbol.for('IAsyncEventHandler<SaveProjectEvent>'),
     ProjectDeletedEventHandler: Symbol.for('IAsyncEventHandler<ProjectDeletedEvent>'),

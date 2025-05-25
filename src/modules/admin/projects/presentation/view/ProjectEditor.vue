@@ -4,6 +4,7 @@ import { TYPES } from "../../types";
 import { container } from "@/infrastructure/bootstrap/inversify.config";
 import ProjectsPresenter from "../presenter/projects.presenter";
 import UniversalRoundedButton from "@/ui/Buttons/UniversalRoundedButton.vue";
+import ConfirmPopup from "./components/ConfirmPopup.vue";
 
 const controller = container.get<ProjectsController>(TYPES.ProjectsController);
 const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
@@ -37,8 +38,10 @@ const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
         </div>
         <div class="grid grid-flow-col gap-[15px]">
             <UniversalRoundedButton :label="'Сохранить'" :loading="controller.loading.value" class="!h-[40px] !bg-[#9747FF] !border-none !font-roboto-700 text-[11px]" :handle-press="controller.saveProject"/>
-            <UniversalRoundedButton type="secondary" :label="'Отменить'" class="!h-[40px] !border-[#9747FF] !border-[1px] !bg-transparent !text-[#9747FF] !font-roboto-700 text-[11px]" :handle-press=" () => {}"/>
+            <UniversalRoundedButton type="secondary" :label="'Отменить'" class="!h-[40px] !border-[#9747FF] !border-[1px] !bg-transparent !text-[#9747FF] !font-roboto-700 text-[11px]" :handle-press="controller.changeConfirmCancelPopupVisible"/>
         </div>
+        
+        <ConfirmPopup />
        
       </div>
 

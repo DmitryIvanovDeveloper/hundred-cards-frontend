@@ -6,7 +6,6 @@ import Result from "@/infrastructure/helpers/result";
 import { BaseUseCase } from "@/modules/shared/usecase/bases-usecase";
 import { UpdateProjectInput, UpdateProjectOutput} from "./types/Update-project.type";
 import IProjectsLocalRepository from "../plugins/projects.local.repository.plugin";
-import SelectProjectUseCase from "./select-project.usecase";
 import ProjectsNotUpdatedError from "../errors/project-not-updated.error";
 
 @injectable()
@@ -17,9 +16,6 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
 
         @inject(TYPES.ProjectsLocalRepository)
         private readonly _localRepository: IProjectsLocalRepository,
-
-        @inject(TYPES.SelectProjectUseCase)
-    private readonly _selectProjectUseCase: SelectProjectUseCase,
     ) {
         super()
     }
@@ -30,8 +26,9 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
             return Result.failure(new ProjectsNotUpdatedError());
         }
 
-        const dto = Project.toRequestDto({ name: project.name});
+        const dto = Project.toRequestDto({ name: project.name });
         const result = await this._projectsRepository.updateProject(project.id, dto);
+        
         if (!result.hasData()) {
             return Result.failure(new ProjectsNotUpdatedError());
         }
@@ -39,7 +36,6 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
         const updatedProject = Project.toEntity(result.data);
         this._localRepository.updateProjects(updatedProject);
         
-        this._selectProjectUseCase.execute({ projectId: updatedProject.id });
         return Result.success();
     }
 }

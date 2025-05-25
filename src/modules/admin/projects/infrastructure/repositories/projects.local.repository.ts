@@ -6,7 +6,7 @@ import ProjectNotFoundError from "../../business/errors/project-not-found.error"
 
 export default class ProjectsLocalRepository implements IProjectsLocalRepository  {
 
-    private _project = ref<Project>();
+    private _project = ref<Project | undefined>();
     private _projects = ref<Array<Project>>([]);
 
     public storeProject(project: Project): void {
@@ -46,5 +46,10 @@ export default class ProjectsLocalRepository implements IProjectsLocalRepository
 
     public storeProjects(projects: Array<Project>): void {
         this._projects.value = projects;
+    }
+
+    public clear = (): void => {
+        this._projects.value = [];
+        this._project.value = undefined
     }
 }

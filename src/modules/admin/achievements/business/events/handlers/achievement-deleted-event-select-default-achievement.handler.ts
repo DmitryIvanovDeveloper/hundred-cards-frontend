@@ -21,8 +21,6 @@ export default class AchievemenetDeletedEventSelectDefaultAchievement implements
     }
 
     public handle(event: AchievementDeletedEvent): void {
-
-        console.log("AchievemenetDeletedEventSelectDefaultAchievement")
         const achievements = this._repository.getAchievements().value
         if (!achievements.length) {
             return;

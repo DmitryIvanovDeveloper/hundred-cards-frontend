@@ -37,6 +37,7 @@ import QuestionDeletedEventSelectDefaultQuestionHandler from '../../business/eve
 import QuestionDeletedEvent from '../../business/events/question-deleted-event';
 import QuestionCreatedEventSelectQuestionHandler from '../../business/events/handlers/questions-created-event-select-question.handler';
 import QuestionCreatedEvent from '../../business/events/question-created-event';
+import ClearQuestionsLocalUseCase from '../../business/usecases/clear-questons-local.usecase';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -82,6 +83,12 @@ container
 container
     .bind<NextQuestionUseCase>(TYPES.NextQuestionUseCase)
     .to(NextQuestionUseCase)
+    .inTransientScope()
+;
+
+container
+    .bind(TYPES.ClearQuestionsLocalUseCase)
+    .to(ClearQuestionsLocalUseCase)
     .inTransientScope()
 ;
 

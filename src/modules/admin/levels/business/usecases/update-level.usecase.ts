@@ -8,6 +8,7 @@ import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import { UpdateLevelInput, UpdateLevelOutput } from "./types/update-level.type";
 import LevelNotUpdatedError from "../errors/level-not-updated.error";
+import Level from "../entities/level";
 
 @injectable()
 export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, UpdateLevelOutput> {
@@ -25,18 +26,24 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 	}
 
   public async execute(input: UpdateLevelInput): Promise<UpdateLevelOutput> {
-		const level = this._localRepository.getLevel().value;
-
-		if (!level) {
+		const levels = this._localRepository.getLevels().value;
+		if (!levels.length) {
 			return Result.failure(new LevelNotUpdatedError())
 		}
 
-		const updateRequest = level.toUpdateRequest();
+		const editedLevels = levels.filter(level => level.edited);
 
-		const result = await this._repository.updateLevel(updateRequest, level.id);
-		if (!result.isSuccess) {
-			return Result.failure(new LevelNotUpdatedError(level.id));
-		}
+		await Promise.all(editedLevels.map(async level => {
+			const updateRequest = level.toUpdateRequest();
+			const result = await this._repository.updateLevel(updateRequest, level.id);
+			if (!result.isSuccess) {
+				return;
+			}
+			const updatedLevel = level.withUpdatedEdited(false);
+			this._localRepository.updateLevel(updatedLevel)
+		
+		}))
+
 
 		return Result.success();
   }

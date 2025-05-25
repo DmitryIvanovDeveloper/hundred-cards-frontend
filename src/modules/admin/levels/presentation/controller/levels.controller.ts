@@ -52,14 +52,16 @@ export default class LevelsController  {
         return await this._selectLevelUseCase.execute({ levelId: levelId });
     }
 
-    public updateText(text: string): void {
-        const level = this._repository.getLevel().value;
-        if (!level) {
+    public updateText(id: string ,text: string): void {
+        const result = this._repository.findLevelById(id);
+        if (!result.hasData()) {
             return;
         }
 
+        const level = result.data;
+
         const updatedLevel = level.withUpdatedName(text);
-        this._repository.storeLevel(updatedLevel);
+        this._repository.updateLevel(updatedLevel);
     }
 
     public deleteLevel = async (id: string): Promise<void> => {

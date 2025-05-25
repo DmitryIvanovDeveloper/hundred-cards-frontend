@@ -5,6 +5,7 @@ import { ref, Ref } from "vue";
 import LevelNotFoundError from "../../business/errors/level-not-found.error";
 
 export default class LevelsLocalRepository implements ILevelsLocalRepository  {
+  
     
     private _levels = ref<Array<Level>>([]);
 
@@ -48,4 +49,13 @@ export default class LevelsLocalRepository implements ILevelsLocalRepository  {
 
         return Result.success(expetedLevel);
     }
+
+    public clear(): void {
+       this._levels.value = []
+       this.clearLevel();
+    }
+
+    public clearLevel(): void {
+        this._level.value = undefined;
+     }
 }

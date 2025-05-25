@@ -42,6 +42,7 @@
     "rxjs": "7.8.1",
     "tailwindcss": "^4.0.12",
     "tailwindcss-primeui": "^0.5.1",
+    "unity-webgl": "^4.4.2",
     "url": "0.11.4",
     "uuid": "^11.1.0",
     "vite-plugin-svg-loader": "^1.0.0",

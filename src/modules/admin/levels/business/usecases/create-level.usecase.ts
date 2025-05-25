@@ -11,7 +11,7 @@ import ILevelsHttpRepository from "../plugins/levels.http.repository.plugin";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import SelectLevelUseCase from "./select-level.usecase";
 import LevelCreatedEvent from "../events/level-created-event";
-import { CreateLevelInput, CreateLevelOutput } from "./types/delete-level.type";
+import { CreateLevelInput, CreateLevelOutput } from "./types/create-level.type";
 
 @injectable()
 export default class CreateLevelUseCase extends BaseUseCase<CreateLevelInput, CreateLevelOutput> {

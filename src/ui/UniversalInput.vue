@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import InputText from 'primevue/inputtext';
 import InputMask from 'primevue/inputmask';
 import Password from 'primevue/password';
 import FieldWrapper from './FieldWrapper.vue';
-import { computed } from 'vue';
 
 export interface IUniversalInput {
     error?: string;
@@ -13,8 +13,9 @@ export interface IUniversalInput {
     defaultValue?: string;
     required?: boolean;
     disabled?: boolean;
-    type?: 'number' | 'password' | 'phone' | 'text' | 'email';
+    type?: 'number' | 'password' | 'phone' | 'text' | 'email' | 'url'; // Added 'url' type for the link
     bg?: 'primary' | 'secondary';
+    readonly?: boolean;
     errorlink?: {
         title: string;
         path: string;
@@ -33,7 +34,8 @@ const {
     type = 'text', 
     bg, 
     errorlink,
-    placeholder
+    placeholder,
+    readonly
  } = defineProps<IUniversalInput>();
 
 // Model for v-model binding
@@ -57,11 +59,24 @@ const inputStyle = computed(() => ({
     backgroundColor: 'white'
 }));
 
+// Logic for copying to clipboard
+const copyToClipboard = () => {
+    if (modelValue.value) {
+        navigator.clipboard.writeText(modelValue.value as string)
+            .then(() => {
+                console.log('Link copied to clipboard');
+            })
+            .catch(err => {
+                console.error('Error copying text to clipboard: ', err);
+            });
+    }
+};
 </script>
 
 <template>
     <FieldWrapper :label="label" :isRequired="isRequired" :error="error" :errorlink="errorlink">
         <InputMask
+            :readonly="readonly"
             v-if="type === 'phone'"
             v-model="modelValue"
             mask="+7 (999) 999-99-99"
@@ -70,6 +85,7 @@ const inputStyle = computed(() => ({
             :placeholder="placeholder ?? '+7 (__) ___-__-__'"
         />
         <Password
+            :readonly="readonly"
             toggleMask
             v-if="type === 'password'"
             input-class="w-full !py-[14px] !px-[20px] !placeholder-text_primary h-[52px]"
@@ -82,6 +98,7 @@ const inputStyle = computed(() => ({
             :inputStyle="inputStyle"
         />
         <InputText
+            :readonly="readonly"
             v-if="type === 'text' || type === 'number'"
             :type="type"
             class="!px-[20px] !py-[14px] !placeholder-text_primary"
@@ -91,6 +108,7 @@ const inputStyle = computed(() => ({
             :style="inputStyle"
         />
         <InputText
+            :readonly="readonly"
             v-if="type === 'email'"
             :type="type"
             class="!px-[20px] !py-[14px] !placeholder-text_primary"
@@ -99,9 +117,23 @@ const inputStyle = computed(() => ({
             v-model="modelValue"
             :style="inputStyle"
         />
+
+        <!-- New Input for URL (Link) -->
+        <InputText
+            v-if="type === 'url'"
+            :readonly="readonly"
+            class="!px-[20px] !py-[14px] !placeholder-text_primary"
+            :disabled="disabled"
+            :placeholder="placeholder ?? 'Enter URL'"
+            v-model="modelValue"
+            :style="inputStyle"
+        />
+        <!-- Button to copy the URL -->
+        <button v-if="type === 'url'" @click="copyToClipboard" class="mt-2 p-2 bg-blue-500 text-white rounded">
+            Copy Link
+        </button>
     </FieldWrapper>
 </template>
 
 <style scoped>
-
 </style>

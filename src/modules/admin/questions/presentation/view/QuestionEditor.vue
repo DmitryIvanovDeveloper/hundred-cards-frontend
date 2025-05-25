@@ -8,6 +8,7 @@ import Humburger from "@assets/hamburger.svg";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import ConstructorItemLayout from "@/ui/ConstructorItemLayout.vue";
+import UniversalInput from "@/ui/UniversalInput.vue";
 
 const controller = container.get<QuestionsController>(
 	TYPES.QuestionsController
@@ -62,7 +63,16 @@ const onDrop = (index: number): void => {
 		<ConstructorItemLayout :label="presenter.labels.question">
 			<Textarea @value-change="(value) => controller.updateText(value)"
 				class="w-full p-3 border border-gray-300 rounded min-h-30 bg-[#FFFFFF] !text-[#B7C0CA] !font-rubik-600 !text-[16px]"
-				placeholder="Question text" v-model="presenter.questionViewModel.value.name" />
+				placeholder="Question text" v-model="presenter.questionViewModel.value.name" 
+			/>
+		</ConstructorItemLayout>
+
+		<ConstructorItemLayout :label="presenter.labels.points" >
+			<UniversalInput
+				type="number"
+				:value="presenter.questionViewModel.value.points"
+				:onChange="(value) => controller.updatePoints(Number(value))"
+			/>
 		</ConstructorItemLayout>
 
 		<div>
