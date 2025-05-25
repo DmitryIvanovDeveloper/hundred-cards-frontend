@@ -32,6 +32,9 @@ export default class LoadQuestionsUseCase extends BaseUseCase<LoadQuestionsInput
     }
 
     public execute = async (input: LoadQuestionsInput): Promise<LoadQuestionsOutput> => {
+
+        this._localRepository.clearQuestion();
+
         const loadQuestionRequest = new LoadQuestionsRequest(input);
         const result = await this._httpRepository.loadQuestions(loadQuestionRequest);
 
