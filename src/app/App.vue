@@ -11,7 +11,6 @@ const usecase = container.get<ToastNotificationUseCases>(TYPES.ToastNotification
 const toast = useToast();
 onMounted(() => {
   usecase.setToast(toast);
-
 })
 </script>
 
