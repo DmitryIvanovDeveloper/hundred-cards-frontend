@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
-    base: '/hundred-cards-frontend/',
+    base: '/',
     cacheDir: './node_modules/vite',
     plugins: [
         svgLoader(), 
