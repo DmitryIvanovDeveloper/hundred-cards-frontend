@@ -5,7 +5,7 @@ import {
 } from "../dtos/create-question.dto";
 import { LoadQuestionResponse } from "../dtos/load-question.dto";
 import { UpdateQuestionRequestDTO, UpdateQuestionResponseDTO } from "../dtos/update-question.dto";
-import { Answer } from "./Answer";
+import { Answer } from "./answer";
 
 export interface QuestionProps {
 	id: string;
