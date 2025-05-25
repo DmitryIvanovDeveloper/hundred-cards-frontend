@@ -50,6 +50,7 @@ container
     .whenTargetNamed(NAMES.CookieStorageRespository)
 ;
 
+
 container.bind<IEventBus>(TYPES.EventBus).to(EventBus).inSingletonScope();
 container.bind<Container>(Container).toConstantValue(container);
 

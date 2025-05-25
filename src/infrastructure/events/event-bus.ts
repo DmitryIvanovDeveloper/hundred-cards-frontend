@@ -17,7 +17,7 @@ export class EventBus implements IEventBus {
     {}
 
     publish<TEvent extends IEvent>(event: TEvent): void {
-        const eventType = event.constructor.name;
+        const eventType = (event as any).type ?? event.constructor.name;
         const handlers = this.handlers.get(eventType) || [];
 
         for (const handler of handlers) {
@@ -41,7 +41,7 @@ export class EventBus implements IEventBus {
 
     async publishAsync<TEvent extends IEvent>(event: TEvent): Promise<void> {
 
-        const eventType = event.constructor.name;
+        const eventType = (event as any).type ?? event.constructor.name;
         const handlers = this.handlers.get(eventType) || [];
         const tasks: Promise<void>[] = [];
 

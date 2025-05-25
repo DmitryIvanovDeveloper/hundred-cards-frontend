@@ -59,3 +59,4 @@ container
     .to(TrySignUpUseCase)
     .inTransientScope()
 ;
+

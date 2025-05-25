@@ -18,8 +18,8 @@ export default class Result<T> {
   
     public static failure<U>(errors?: AppError[] | AppError | null, message?: string): Result<U> {
       if (import.meta.env.VITE_APP_ENV === Enviroment.local && errors) {
-        const toast = container.get<ToastNotificationUseCases>(TYPES.ToastNotificationUseCases);
-        toast.error(JSON.stringify(errors));
+        // const toast = container.get<ToastNotificationUseCases>(TYPES.ToastNotificationUseCases);
+        // toast.error(JSON.stringify(errors));
       }
       return new Result<U>(false, undefined, errors, message);
     }

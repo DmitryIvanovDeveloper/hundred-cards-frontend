@@ -16,7 +16,6 @@ import 'element-plus/theme-chalk/dark/css-vars.css';
 
 import '@/modules/shared/authentication/infrastructure/bootstrap/container'
 import '@/modules/admin/projects/infrastructure/bootstrap/container'
-
 import '@/modules/admin/profile/infrastructure/bootstrap/container'
 import '@/modules/admin/levels/infrastructure/bootstrap/container'
 import '@/modules/admin/questions/infrastructure/bootstrap/container'

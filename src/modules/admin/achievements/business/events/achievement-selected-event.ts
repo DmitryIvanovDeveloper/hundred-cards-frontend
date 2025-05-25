@@ -1,7 +1,8 @@
 import { IEvent } from "@/infrastructure/events/event";
 
 export default class AchievementSelectedEvent implements IEvent {
-    achievementId: string;
+    readonly type = 'AchievementSelectedEvent';
+    public readonly achievementId: string;
 
     constructor(achievementId: string) {
         this.achievementId = achievementId;
