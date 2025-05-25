@@ -103,8 +103,12 @@ const signup = async (): Promise<void> => {
         :handle-press="signup"
     />
 
-    <p class="text-center text-sm text-gray-600 text-left">
-      {{presenter.labels.registeredAlready.title}} <a href="/login" class="text-purple-500">{{presenter.labels.registeredAlready.goto}}</a>
+    <p class="text-sm text-gray-600 text-left">
+      {{ presenter.labels.registeredAlready.title }}
+      <router-link to="/login" class="text-purple-500">
+        {{ presenter.labels.registeredAlready.goto }}
+      </router-link>
     </p>
+    
   </div>
 </template>

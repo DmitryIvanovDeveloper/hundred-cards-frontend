@@ -55,9 +55,9 @@ const signIn = async () => {
 
     <p class="text-center text-sm text-gray-600 text-left">
       {{ presenter.labels.notRegistered.title }}
-      <a href="/registration" class="text-purple-500">{{
-        presenter.labels.notRegistered.goto
-      }}</a>
+      <router-link to="/registration" class="text-purple-500">
+        {{ presenter.labels.notRegistered.goto }}
+      </router-link>
     </p>
   </div>
 </template>
