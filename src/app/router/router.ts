@@ -25,7 +25,7 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             component: App,
             meta: { requiresAuth: true },
             beforeEnter: (to, from, next) => {
-
+                console.log(to)
                 const isAuthenticated = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases).isAuthenticated();
 
                 if (to.meta.requiresAuth && !isAuthenticated) {
@@ -103,7 +103,7 @@ const getRoutes = (): Array<RouteRecordRaw> => {
 };
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: getRoutes(),
     scrollBehavior() {
         return { top: 0 };
