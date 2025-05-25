@@ -2,7 +2,7 @@ import { IAsyncEventHandler, ISyncEventHandler } from "@/infrastructure/events/e
 import { TYPES } from "../../../types";
 import { inject } from "inversify";
 import SaveProjectEvent from "@/modules/admin/projects/business/events/save-project-event";
-import PreviousQuestionEvent from "../Previous-question-event";
+import PreviousQuestionEvent from "../previous-question-event";
 import PreviousQuestionUseCase from "../../usecases/previous-question.usecase";
 
 export default class PreviousQuestionEventSetPreviousQuestionHandler implements ISyncEventHandler<PreviousQuestionEvent> {
