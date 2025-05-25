@@ -3,7 +3,7 @@ import { TYPES } from "../../../types";
 import { inject } from "inversify";
 import SaveProjectEvent from "@/modules/admin/projects/business/events/save-project-event";
 import PreviousQuestionEvent from "../Previous-question-event";
-import PreviousQuestionUseCase from "../../usecases/Previous-question.usecase";
+import PreviousQuestionUseCase from "../../usecases/previous-question.usecase";
 
 export default class PreviousQuestionEventSetPreviousQuestionHandler implements ISyncEventHandler<PreviousQuestionEvent> {
     constructor(
