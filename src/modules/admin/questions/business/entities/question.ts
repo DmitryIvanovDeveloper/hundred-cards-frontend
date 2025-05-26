@@ -6,16 +6,19 @@ import {
 import { LoadQuestionResponse } from "../dtos/load-question.dto";
 import { UpdateQuestionRequestDTO, UpdateQuestionResponseDTO } from "../dtos/update-question.dto";
 import { Answer } from "./answer";
+import Result from "@/infrastructure/helpers/result";
 
 export interface QuestionProps {
-	id: string;
-	text: string;
-	points: number;
-	levelId: string;
-	lang: string;
-	answers: Answer[];
-	edited?: boolean;
-	deleting?: boolean;
+	readonly id?: string;
+	readonly text?: string;
+	readonly points?: number;
+	readonly levelId?: string;
+	readonly lang?: string;
+	readonly answers?: ReadonlyArray<Answer>;
+	readonly edited?: boolean;
+	readonly deleting?: boolean;
+	readonly published?: boolean;
+	readonly order?: number;
 }
 
 export default class Question {
@@ -23,30 +26,24 @@ export default class Question {
 	readonly text: string;
 	readonly points: number;
 	readonly levelId: string;
-	readonly answers: Answer[];
+	readonly answers: ReadonlyArray<Answer>;
 	readonly lang: string;
 	readonly edited: boolean;
 	readonly deleting: boolean;
+	readonly published: boolean;
+	readonly order: number;
 
-	constructor(
-		id: string = uuidv4(),
-		text: string,
-		points: number = 5,
-		levelId: string,
-		lang: string,
-		answers: Answer[],
-		edited: boolean = false,
-		deleting: boolean = false,
-
-	) {
-		this.id = id;
-		this.text = text;
-		this.points = points;
-		this.levelId = levelId;
-		this.answers = answers;
-		this.lang = lang;
-		this.edited = edited;
-		this.deleting = deleting;
+	constructor(props: QuestionProps) {
+		this.id = props.id ?? uuidv4();
+		this.text = props.text ?? "";
+		this.points = props.points ?? 0;
+		this.levelId = props.levelId ?? "";
+		this.lang = props.lang ?? "en";
+		this.answers = props.answers?.map((a) => new Answer(a)) ?? [];
+		this.edited = props.edited ?? false;
+		this.deleting = props.deleting ?? false;
+		this.order = props.order ?? 0;
+		this.published = props.published ?? false;
 	}
 
 	public withUpdatedText(text: string): this {
@@ -58,17 +55,37 @@ export default class Question {
 	}
 
 	public withUpdatedAnswerText(answerId: string, newText: string): this {
-		const updatedAnswers = this.answers.map((a) =>
-			a.id === answerId ? a.withUpdatedText(newText) : a
-		);
+        const answer = this.answers.find(a => a.id === answerId);
+        if (!answer) {
+			return this;
+        }
+
+		const upatedAnswer = answer.withUpdatedText(newText);
+		return this.withUpdatedAnswer(upatedAnswer);
+    }
+
+	public withUpdatedCorrectAnswer(answerId: string, correct: boolean): this {
+		const updatedAnswers = this.answers.map((answer) => {
+			if (answer.id === answerId) {
+				return answer.withUpdatedCorrect(correct);        
+			}
+			
+			return answer.withUpdatedCorrect(false);
+		});
+
 		return this.cloneWith({ answers: updatedAnswers, edited: true });
 	}
 
-	public withUpdatedCorrectAnswer(answerId: string, isCorrect: boolean): this {
-		const updatedAnswers = this.answers.map((a) =>
-			a.id === answerId ? a.withUpdatedCorrect(isCorrect) : a.withUpdatedCorrect(false)
-		);
-		return this.cloneWith({ answers: updatedAnswers, edited: true });
+	public withUpdatedAnswerOrderUpResult(id: string): this {
+		return this.withSwappedAnswers(id, -1);
+	}
+
+	public withUpdatedAnswerOrderDownResult(id: string): this {
+		return this.withSwappedAnswers(id, 1);
+	}
+
+	public withUpdatedPublished(published: boolean): this {
+		return this.cloneWith({ published });
 	}
 
 	public withNewAnswer(): this {
@@ -76,16 +93,17 @@ export default class Question {
 			return this;
 		}
 
-		const newAnswer = new Answer({});
+		const correct = this.answers.some((a) => a.correct);
+
+		const order = this._getOrder();
+		const newAnswer = new Answer({ correct: !correct, questionId: this.id, order });
 		return this.cloneWith({ answers: [...this.answers, newAnswer], edited: true });
 	}
 
 	public withRemovedAnswer(answerId: string): this {
-		if (this.answers.length === 2) {
-			return this;
-		}
-
-		const updatedAnswers = this.answers.filter((a) => a.id !== answerId);
+		const updatedAnswers = this.answers.filter(answer => answer.id !== answerId).map((answer, index) =>
+			answer.withUpdatedOrder(index + 1)
+		);
 		return this.cloneWith({ answers: updatedAnswers, edited: true });
 	}
 
@@ -93,32 +111,92 @@ export default class Question {
 		return this.cloneWith({ deleting });
 	}
 
+	public withUpdatedAnswer(answer: Answer): this {
+		const index = this.answers.findIndex((a) => a.id === answer.id);
+		if (index === -1) {
+			return this;
+		}
+		const copy = [...this.answers]
+		copy[index] = answer;
+
+		return this.cloneWith({ answers: copy, edited: true });
+	}
+
+	public withUpdatedAnswersOrder(fromItemId: string, toItemId: string): this {
+		const fromResult = this.findIndexOrFail(fromItemId);
+		if (!fromResult.hasData()) return this;
+
+		const toResult = this.findIndexOrFail(toItemId);
+		if (!toResult.hasData()) return this;
+
+
+
+		const fromItem = this.answers[fromResult.data];
+		const toItem = this.answers[toResult.data];
+
+		const newItems = [...this.answers];
+		newItems[fromResult.data] = fromItem.withUpdatedOrder(toItem.order);
+		newItems[toResult.data] = toItem.withUpdatedOrder(fromItem.order);
+
+		return this.cloneWith({ answers: newItems });
+	}
+
+	public withUpdatedOrder(order: number): this {
+		return this.cloneWith({ order });
+	}
+
+	public findIndexOrFail(id: string): Result<number> {
+		const index = this.answers.findIndex(answer => answer.id === id);
+		return index === -1 ? Result.failure() : Result.success(index);
+	}
+
 	public cloneWith(props: Partial<QuestionProps>): this {
-		return new Question(
-			this.id,
-			props.text ?? this.text,
-			props.points ?? this.points,
-			props.levelId ?? this.levelId,
-			props.lang ?? this.lang,
-			props.answers ?? this.answers,
-			props.edited ?? this.edited,
-			props.deleting ?? this.deleting
-		) as this;
+		return new Question({
+			id: this.id,
+			text: props.text ?? this.text,
+			points: props.points ?? this.points,
+			levelId: this.levelId,
+			lang: this.lang,
+			answers: props.answers ?? this.answers,
+			edited: props.edited ?? this.edited,
+			deleting: props.deleting ?? this.deleting,
+			order: props.order ?? this.order,
+			published: props.published ?? this.published,
+		}) as this;
 	}
 
-	static create(levelId: string, text?: string): Question {
-		const id = uuidv4();
-		return new Question(uuidv4(), "New Question", 0, levelId, "RU", [Answer.create(id, 'Ответ 1', true), Answer.create(id, 'Ответ 2', false)]);
+	public static create(props: QuestionProps): Question {
+		return new Question({
+			id: props.id ?? uuidv4(),
+			text: props.text ?? "Новый вопрос",
+			points: props.points ?? 0,
+			levelId: props.levelId ?? "",
+			lang: props.lang ?? "RU",
+			answers: props.answers?.map((a) => new Answer(a)) ?? [],
+			edited: false,
+			deleting: false,
+			order: props.order ?? 0,
+			published: props.published ?? false,
+		});
 	}
 
-	static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse | UpdateQuestionResponseDTO): Question {
+	public static toEntity(dto: LoadQuestionResponse | CreateQuestionResponse | UpdateQuestionResponseDTO): Question {
 		const answers = dto.answers.map(
-			(a) => new Answer({id: a.id, text: a.text, isCorrect: a.isCorrect, lang:a.lang, questionId: a.questionId})
+			(a) => new Answer({id: a.id, text: a.text, correct: a.correct, lang:a.lang, questionId: a.questionId})
 		);
-		return new Question(dto.id, dto.text, dto.points, dto.levelId, dto.lang, answers);
+		return new Question({
+			id: dto.id,
+			text: dto.text,
+			points: dto.points,
+			levelId: dto.levelId,
+			lang: dto.lang,
+			answers: answers,
+			edited: false,
+			deleting: false,
+		});
 	}
 
-	toCreateRequest(): CreateQuestionRequest {
+	public toCreateRequest(): CreateQuestionRequest {
 		return {
 			id: this.id,
 			text: this.text,
@@ -129,7 +207,7 @@ export default class Question {
 		};
 	}
 
-	toUpdateRequest(): UpdateQuestionRequestDTO {
+	public toUpdateRequest(): UpdateQuestionRequestDTO {
 		return {
 			id: this.id,
 			text: this.text,
@@ -139,4 +217,27 @@ export default class Question {
 			answers: this.answers.map((a) => ({ ...a })),
 		};
 	}
+
+	public withSwappedAnswers(id: string, offset: number): this {
+		const index = this.answers.findIndex(item => item.id === id);
+		if (index === -1 || !this.answers[index + offset]) {
+			return this;
+		}
+
+		const current = this.answers[index];
+		const neighbor = this.answers[index + offset];
+
+		const updatedAnswers = [...this.answers];
+		updatedAnswers[index] = neighbor.withUpdatedOrder(current.order);
+		updatedAnswers[index + offset] = current.withUpdatedOrder(neighbor.order);
+
+		return this.cloneWith({answers: updatedAnswers });
+	}
+
+	public _getOrder(): number {
+		return this.answers.length > 0
+			? Math.max(...this.answers.map(answer => answer.order)) + 1
+			: 1;
+	}
+
 }

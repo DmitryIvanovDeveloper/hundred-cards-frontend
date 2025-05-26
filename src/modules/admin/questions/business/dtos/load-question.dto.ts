@@ -37,14 +37,14 @@ export class LoadQuestionResponse {
 export class LoadAnswerResponse {
    id: string;
    text: string;
-   isCorrect: boolean;
+   correct: boolean;
    lang: string;
    questionId: string;
 
-   constructor(id: string, text: string, isCorrect: boolean, lang: string, question_id: string) {
+   constructor(id: string, text: string, correct: boolean, lang: string, question_id: string) {
       this.id = id;
       this.text = text;
-      this.isCorrect = isCorrect;
+      this.correct = correct;
       this.lang = lang;
       this.questionId = question_id;
    }

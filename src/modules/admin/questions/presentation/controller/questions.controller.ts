@@ -12,6 +12,7 @@ import NextQuestionUseCase from "../../business/usecases/next-question.usecase";
 import PreviousQuestionUseCase from "../../business/usecases/previous-question.usecase";
 import { ref } from "vue";
 import DeleteQuestionUseCase from "../../business/usecases/delete-queston.usecase";
+import ReorderQuestionsUseCase from "../../business/usecases/reorder-questions-order.usecase";
 
 export default class QuestionsController {
     constructor(
@@ -34,7 +35,11 @@ export default class QuestionsController {
         private readonly _nextQuestionUseCase: NextQuestionUseCase,
 
         @inject(TYPES.PreviousQuestionUseCase)
-        private readonly _previousQuestionUseCase: PreviousQuestionUseCase
+        private readonly _previousQuestionUseCase: PreviousQuestionUseCase,
+
+        @inject(TYPES.ReorderQuestionsUseCase)
+        private readonly _reorderQuestionsUseCase: ReorderQuestionsUseCase,
+        
     ) {}
 
     public readonly creating = ref<boolean>(false);
@@ -65,7 +70,6 @@ export default class QuestionsController {
 
         const question = result.data;
         const updatedQuestion = question.withUpdatedDeleting(true);
-        console.log(updatedQuestion )
         this._repository.updateQuestions(updatedQuestion);
 
         await this._deleteQuestionUseCase.execute({ questionId: id });
@@ -95,17 +99,40 @@ export default class QuestionsController {
         this._repository.updateQuestions(updatedQuestion);
     }
 
-    public updateAnswerSelection(answerId: string, isCorrect: boolean): void {
+    public updateAnswerCorrect(answerId: string, correct: boolean): void {
         const question = this._repository.getQuestion().value;
         if (!question) return;
 
         const updatedQuestion = question.withUpdatedCorrectAnswer(
             answerId,
-            isCorrect
+            correct
         );
 
         this._repository.updateQuestions(updatedQuestion);
     }
+
+    public updatePublished(questionId: string, published: boolean): void {
+        const questions = this._repository.getQuestions().value;
+        if (!questions.length) return;
+
+        const question = questions.find(q => q.id === questionId);
+        if (!question) return;
+
+        const updatedQuestion = question.withUpdatedPublished(published);
+        this._repository.updateQuestions(updatedQuestion);
+    }
+
+    public changeAnswerOrders = (fromAnswerId: string, toAnswerId: string) => {
+        const question = this._repository.getQuestion().value;
+        if (!question) return;
+
+        const updtedQuestion = question.withUpdatedAnswersOrder(toAnswerId, fromAnswerId);
+        this._repository.updateQuestions(updtedQuestion);
+    };
+
+    public changeOrders = (fromId: string, toId: string): void => {
+       this._reorderQuestionsUseCase.execute(fromId, toId);
+    };
 
     public addNewAnswer() {
         const question = this._repository.getQuestion().value;

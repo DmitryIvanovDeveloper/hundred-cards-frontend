@@ -18,42 +18,39 @@ export interface IProjectItemListProps {
   onEdit: (id: string) => void;
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
+  onChecked: (id: string, checked: boolean) => void;
+  onChangeOrder?: (fromId: string, toId: string) => void;
   selectedId: string;
   creating: boolean
   droppable?: boolean;
   checkable?: boolean;
 }
 
-const { title, items, onCreate, onEdit, onSelect, onDelete, selectedId, droppable, creating } =
+const { title, items, onCreate, onEdit, onSelect, onDelete, onChangeOrder, selectedId, droppable, creating } =
   defineProps<IProjectItemListProps>();
 
-const draggedItem = ref<number | null>(null);
-const draggedOverIndex = ref<number>(-1);
+const draggedItemId = ref<string | null>(null);
+const dragOverItemId = ref<string | null>(null);
 
-const onDragStart = (index: number): void => {
-  draggedItem.value = index;
-  draggedOverIndex.value = -1;
-};
+function onDragStart(itemId: string) {
+    draggedItemId.value = itemId;
+}
 
-const onDragOver = (e: DragEvent, index: number): void => {
-  e.preventDefault();
-  draggedOverIndex.value = index;
-};
+function onDragOver(e: DragEvent, targetItemId: string) {
+    e.preventDefault();
+    if (targetItemId !== draggedItemId.value) {
+        dragOverItemId.value = targetItemId;
+    }
+}
 
-const onDrop = (index: number): void => {
-  if (draggedItem.value === null || draggedOverIndex.value === null) return;
+function onDrop(targetItemId: string) {
+    if (draggedItemId.value && targetItemId && draggedItemId.value !== targetItemId && !!onChangeOrder) {
+      onChangeOrder(draggedItemId.value, targetItemId);
+    }
 
-  const draggedItemData = items[draggedItem.value];
-  const updatedItems = [...items];
-
-  updatedItems.splice(draggedItem.value, 1);
-  updatedItems.splice(index, 0, draggedItemData);
-
-  items.splice(0, items.length, ...updatedItems);
-
-  draggedItem.value = null;
-  draggedOverIndex.value = -1;
-};
+    draggedItemId.value = null;
+    dragOverItemId.value = null;
+}
 </script>
 
 <template>
@@ -62,12 +59,12 @@ const onDrop = (index: number): void => {
       <div
         v-for="(item, index) in items"
         :key="item.id"
-        draggable="true"
-        @dragstart="onDragStart(index)"
-        @dragover="(e) => onDragOver(e, index)"
-        @drop="onDrop(index)"
+        :draggable="true"
+        @dragstart="() => onDragStart(item.id)"
+        @dragover="(e) => onDragOver(e, item.id)"
+        @drop="() => onDrop(item.id)"
         :class="[
-            draggedOverIndex === index ? 'bg-purple-50' : '',
+          dragOverItemId === item.id ? 'bg-purple-50' : '',
         ]"
       >
         <ProjectSidebarElementLayout
@@ -75,6 +72,7 @@ const onDrop = (index: number): void => {
             :onSelect="() => onSelect(item.id)"
             :onEdit="() => onEdit(item.id)"
             :onDelete="() => onDelete(item.id)"
+            :onChecked="(value: boolean) => onChecked(item.id, value)"
             :deleting="item.deleting"
             :droppable="droppable"
             :selected="item.id === selectedId"

@@ -26,7 +26,7 @@ export class PostAnswerRequest {
   constructor(createAnswerRequest: CreateAnswerRequest) {
     this.lang_iso = createAnswerRequest.lang;
     this.text = createAnswerRequest.text;
-    this.is_correct = createAnswerRequest.isCorrect;
+    this.is_correct = createAnswerRequest.correct;
   }
 }
 

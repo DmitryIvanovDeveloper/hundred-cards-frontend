@@ -25,44 +25,35 @@ const selectQuestion = (id: string): void => {
 	controller.selectQuestion(id);
 };
 
-const draggedItem = ref<number | null>(null);
-const draggedOverIndex = ref<number>(-1);
+const draggedItemId = ref<string | null>(null);
+const dragOverItemId = ref<string | null>(null);
 
-const onDragStart = (index: number): void => {
-	draggedItem.value = index;
-	draggedOverIndex.value = -1;
-};
+function onDragStart(itemId: string) {
+    draggedItemId.value = itemId;
+}
 
-const onDragOver = (e: DragEvent, index: number): void => {
-	e.preventDefault();
-	draggedOverIndex.value = index;
-};
+function onDragOver(e: DragEvent, targetItemId: string) {
+    e.preventDefault();
+    if (targetItemId !== draggedItemId.value) {
+        dragOverItemId.value = targetItemId;
+    }
+}
 
-const onDrop = (index: number): void => {
-	if (draggedItem.value === null || draggedOverIndex.value === null) return;
+function onDrop(targetItemId: string) {
+    if (draggedItemId.value && targetItemId && draggedItemId.value !== targetItemId) {
+        controller.changeAnswerOrders(draggedItemId.value, targetItemId);
+    }
 
-	const draggedItemData = presenter.questionsViewModel.value[draggedItem.value];
-	const updatedItems = [...presenter.questionsViewModel.value];
-
-	updatedItems.splice(draggedItem.value, 1);
-	updatedItems.splice(index, 0, draggedItemData);
-
-	presenter.questionsViewModel.value.splice(
-		0,
-		presenter.questionsViewModel.value.length,
-		...updatedItems
-	);
-
-	draggedItem.value = null;
-	draggedOverIndex.value = -1;
-};
+    draggedItemId.value = null;
+    dragOverItemId.value = null;
+}
 </script>
 
 <template>
 	<div v-if="presenter.questionViewModel.value" class="flex flex-col gap-[50px]">
 		<ConstructorItemLayout :label="presenter.labels.question">
 			<Textarea @value-change="(value) => controller.updateText(value)"
-				class="w-full p-3 border border-gray-300 rounded min-h-30 bg-[#FFFFFF] !text-[#B7C0CA] !font-rubik-600 !text-[16px]"
+				class="w-full p-3 border border-gray-300 rounded min-h-30 bg-[#FFFFFF] !font-rubik-600 !text-[16px]"
 				placeholder="Question text" v-model="presenter.questionViewModel.value.name" 
 			/>
 		</ConstructorItemLayout>
@@ -77,22 +68,31 @@ const onDrop = (index: number): void => {
 
 		<div>
 			<ConstructorItemLayout :label="presenter.labels.answers">
-				<div v-for="(answer, index) in presenter.questionViewModel.value.answers" :key="answer.id"
-					draggable="true" @dragstart="onDragStart(index)" @dragover="(e) => onDragOver(e, index)"
-					@drop="onDrop(index)" :class="[
-						'flex items-center justify-between text-sm text-gray-600  rounded-lg transition-all duration-200 hover:bg-purple-100',
-						draggedOverIndex === index ? 'bg-purple-50' : '',
-					]" class="flex items-center gap-[8px]">
+				<div
+					v-for="(answer, index) in presenter.questionViewModel.value.answers" 
+					:key="answer.id"
+					:draggable="true"
+					@dragstart="() => onDragStart(answer.id)"
+					@dragover="(e) => onDragOver(e, answer.id)"
+					@drop="() => onDrop(answer.id)"
+					:class="[
+						'flex items-center justify-between text-sm text-gray-600  rounded-lg transition-all duration-200 hover:bg-purple-100',{
+					}]" 
+					class="flex items-center gap-[8px]"
+				>
+					
 					<Humburger />
 
-					<el-checkbox v-model="answer.isCorrect" @change="
-						(value) =>
-							controller.updateAnswerSelection(answer.id, value as boolean)
-					" />
+					<el-checkbox 
+						v-model="answer.correct"
+						@change="(value) => controller.updateAnswerCorrect(answer.id, value as boolean)" 
+					/>
 
-					<InputText @update:model-value="
-						(value) => controller.updateAnswerText(answer.id, value as string)
-					" v-model="answer.name" class="flex-1 p-2 border border-gray-300 rounded bg-[#FFFFFF]" />
+					<InputText 
+						@update:model-value="(value) => controller.updateAnswerText(answer.id, value as string)"
+						v-model="answer.name" 
+						class="flex-1 p-2 border border-gray-300 rounded bg-[#FFFFFF]" 
+					/>
 
 					<button class="ml-2 p-1 text-gray-400 cursor-pointer"
 						@click="() => controller.removeAnswer(answer.id)">

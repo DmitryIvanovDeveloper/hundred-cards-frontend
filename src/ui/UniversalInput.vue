@@ -38,28 +38,24 @@ const {
     readonly
  } = defineProps<IUniversalInput>();
 
-// Model for v-model binding
 const modelValue = computed({
     get: () => {
         const val = value ?? defaultValue ?? null;
-        return val === null ? '' : String(val); // Convert null to an empty string and ensure the value is a string
+        return val === null ? '' : String(val);
     },
     set: (newValue: string | number | null) => {
         if (type === 'number' && typeof newValue === 'string') {
-            // Ensure that when the type is 'number', the value is correctly converted to number
-            onChange(Number(newValue));  // Convert to number if it's a string
+            onChange(Number(newValue));
         } else {
             onChange(newValue);  // Pass string or null as is
         }
     },
 });
 
-// 👉 Computed input style
 const inputStyle = computed(() => ({
     backgroundColor: 'white'
 }));
 
-// Logic for copying to clipboard
 const copyToClipboard = () => {
     if (modelValue.value) {
         navigator.clipboard.writeText(modelValue.value as string)
@@ -118,7 +114,6 @@ const copyToClipboard = () => {
             :style="inputStyle"
         />
 
-        <!-- New Input for URL (Link) -->
         <InputText
             v-if="type === 'url'"
             :readonly="readonly"
@@ -128,7 +123,6 @@ const copyToClipboard = () => {
             v-model="modelValue"
             :style="inputStyle"
         />
-        <!-- Button to copy the URL -->
         <button v-if="type === 'url'" @click="copyToClipboard" class="mt-2 p-2 bg-blue-500 text-white rounded">
             Copy Link
         </button>

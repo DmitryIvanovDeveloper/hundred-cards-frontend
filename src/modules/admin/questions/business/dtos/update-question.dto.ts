@@ -12,7 +12,7 @@ export class UpdateQuestionRequestDTO {
 export class UpdateAnswerRequestDTO {
    readonly lang:string;
    readonly text: string;
-   readonly isCorrect: boolean
+   readonly correct: boolean
    readonly questionId: string
    readonly id: string
 }
@@ -38,14 +38,14 @@ export class UpdateQuestionResponseDTO {
 export class UpdateAnswerResponseDTO {
    readonly lang:string;
    readonly text: string;
-   readonly isCorrect: boolean
+   readonly correct: boolean
    readonly questionId: string
    readonly id: string
 
    constructor(response: PutAnswerResponse) {
       this.lang = response.lang_iso;
       this.text = response.text;
-      this.isCorrect = response.is_correct;
+      this.correct = response.is_correct;
       this.questionId = response.question_id;
       this.id = response.id;
    }

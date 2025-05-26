@@ -6,10 +6,10 @@ import { Ref, ref } from "vue";
 
 export default class QuestionsLocalRepository implements IQuestionsLocalRepository  {
    
-    private _questions = ref<Array<Question>>([]);
+    private _questions = ref<ReadonlyArray<Question>>([]);
     private _question = ref<Question>()
 
-    public storeQuestions(questions: Array<Question>): void {
+    public storeQuestions(questions: ReadonlyArray<Question>): void {
         this._questions.value = questions;
     }
 
@@ -19,15 +19,17 @@ export default class QuestionsLocalRepository implements IQuestionsLocalReposito
             return;
         }
 
-        this._questions.value[index] = updatedQuestion;
+        const copy = [...this._questions.value];
+        copy[index] = updatedQuestion;
+        this._questions.value = copy;
         this._question.value = updatedQuestion;
     }
 
     public addQuestion(question: Question) {
-        this._questions.value.push(question);
+        this._questions.value = [...this._questions.value, question];
     }
 
-    public getQuestions(): Ref<Array<Question>> {
+    public getQuestions(): Ref<ReadonlyArray<Question>> {
         return this._questions
     }
      

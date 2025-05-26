@@ -28,7 +28,6 @@ const createQuestion = async (): Promise<void> => {
     await controller.createQuestion();
 };
 
-
 const goToConstructor = (): void => {
   router.push(`${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.constructor}`);
 }
@@ -36,14 +35,16 @@ const goToConstructor = (): void => {
 </script>
 
 <template>
-    <ProjectItemList 
+    <ProjectItemList
         :title="presenter.labels.title"
         :items="presenter.questionsViewModel.value"
         :onCreate="createQuestion"
         :creating="controller.creating.value"
         :onEdit="() => {}"
+        :onChecked="(id, checked) => controller.updatePublished(id, checked)"
         :onDelete="controller.deleteQuestion"
         :onSelect="selectQuestion"
+        :onChangeOrder="controller.changeOrders"
         :selected-id="presenter.questionViewModel.value?.id ?? ''"
         droppable
         checkable

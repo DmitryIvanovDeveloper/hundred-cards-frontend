@@ -12,7 +12,7 @@ export default class PreviousQuestionEventSetPreviousQuestionHandler implements 
     ) {}
    
 
-    public canHandle(event: SaveProjectEvent): boolean {
+    public canHandle(event: PreviousQuestionEvent): boolean {
         return event instanceof PreviousQuestionEvent;
     }
 

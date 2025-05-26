@@ -28,9 +28,13 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
 
     public execute = async (input: CreateQuestionInput): Promise<CreateQuestionsOutput> => {
 
-        const levelId = input.levelId
+        const questions = this._localRepository.getQuestions().value;
+        const order = questions.length > 0
+        ? Math.max(...questions.map(question => question.order)) + 1
+        : 1;
+        const levelId = input.levelId;
 
-        const request = Question.create(levelId).toCreateRequest();
+        const request = Question.create({levelId, order}).toCreateRequest();
 
         const result = await this._repository.save(request);
         if (!result.hasData()) {

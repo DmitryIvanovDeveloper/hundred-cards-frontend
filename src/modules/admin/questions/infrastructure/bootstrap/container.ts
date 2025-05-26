@@ -38,6 +38,7 @@ import QuestionDeletedEvent from '../../business/events/question-deleted-event';
 import QuestionCreatedEventSelectQuestionHandler from '../../business/events/handlers/questions-created-event-select-question.handler';
 import QuestionCreatedEvent from '../../business/events/question-created-event';
 import ClearQuestionsLocalUseCase from '../../business/usecases/clear-questons-local.usecase';
+import ReorderQuestionsUseCase from '../../business/usecases/reorder-questions-order.usecase';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -61,6 +62,13 @@ container
     .to(SelectQuestionUseCase)
     .inTransientScope()
 ;
+
+container
+    .bind(TYPES.ReorderQuestionsUseCase)
+    .to(ReorderQuestionsUseCase)
+    .inTransientScope()
+;
+
 
 container
     .bind<CreateQuestionUseCase>(TYPES.CreateQuestionUseCase)

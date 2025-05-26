@@ -7,6 +7,7 @@ export interface IProjectSidbarElementLayout {
 	onEdit: () => void;
 	onDelete: () => void;
 	onSelect: () => void;
+	onChecked: (value: boolean) => void;
 	droppable: boolean;
 	selected: boolean;
 	checkable: boolean;
@@ -23,7 +24,11 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited,
 		class="flex items-center text-sm text-gray-600 shadow-none transition-all !duration-200 underline-offset-4 gap-[10px]"
 	>
 		<Humburger v-if="droppable" />
-		<el-checkbox v-if="checkable" :checked="checked"/>
+		<el-checkbox 
+			v-if="checkable" 
+			:checked="checked" 
+			@change="(value) => onChecked(value as boolean)" 
+		/>
 		<div 
 			class="flex justify-between w-full p-1 cursor-pointer hover:bg-gray-200"
 			:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"

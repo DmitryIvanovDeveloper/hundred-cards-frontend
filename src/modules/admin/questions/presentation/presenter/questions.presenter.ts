@@ -24,7 +24,7 @@ export default class QuestionsPresenter {
     
     private presentQuestions(): Array<QuestionViewModel> {
         const questions = this._repository.getQuestions().value;
-        return questions.map(question => new QuestionViewModel(question));
+        return questions.map(question => new QuestionViewModel(question)).sort((a, b) => a.order - b.order);
     }
 
     private presentQuestion(): QuestionViewModel | null{

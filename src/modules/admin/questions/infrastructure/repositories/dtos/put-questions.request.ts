@@ -29,7 +29,7 @@ export class PutAnswerRequest {
   constructor(createAnswerRequest: UpdateAnswerRequestDTO) {
     this.lang_iso = createAnswerRequest.lang;
     this.text = createAnswerRequest.text;
-    this.is_correct = createAnswerRequest.isCorrect;
+    this.is_correct = createAnswerRequest.correct;
     this.question_id = createAnswerRequest.questionId;
     this.id = createAnswerRequest.id;
   }

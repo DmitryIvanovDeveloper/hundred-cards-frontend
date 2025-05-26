@@ -12,6 +12,7 @@ const TYPES = {
     DeleteQuestionUseCase: Symbol.for('DeleteQuestionUseCase'),
     DeleteQuestionLocalUseCase: Symbol.for('DeleteQuestionLocalUseCase'),
     DeleteQuestionsLocalUseCase: Symbol.for('DeleteQuestionsLocalUseCase'),
+    ReorderQuestionsUseCase: Symbol.for('ReorderQuestionsUseCase'),
     ClearQuestionsLocalUseCase: Symbol.for('ClearQuestionsLocalUseCase'),
     LevelSelectedEventHandler: Symbol.for('IAsyncEventHandler<LevelSelectedEvent>'),
     SaveProjectEventHandler: Symbol.for('IAsyncEventHandler<SaveProjectEvent>'),

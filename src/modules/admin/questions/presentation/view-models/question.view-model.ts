@@ -8,34 +8,37 @@ export default class QuestionViewModel {
 	readonly edited: boolean;
 	readonly deleting: boolean;
 	readonly answers: Array<AnswerViewModel>;
-
 	readonly name: string;
 	readonly points: number
+	readonly order: number
 
 	constructor(question: Question) {
 		this.id = question.id;
 		this.name = question.text;
 		this.points = question.points;
 		this.levelId = question.levelId;
-		this.answers = question.answers.map(answer => new AnswerViewModel(answer));
+		this.answers = question.answers.map(answer => new AnswerViewModel(answer)).sort((a, b) => a.order - b.order);
 		this.edited = question.edited ?? false;
 		this.deleting = question.deleting ?? false;
+		this.order = question.order ?? 0;
 	}
 }
 
 export class AnswerViewModel {
 	readonly id: string;
 	readonly name: string;
-	readonly isCorrect: boolean;
+	readonly correct: boolean;
 	readonly questionId: string;
 	readonly lang: string;
+	readonly order: number;
 
 	constructor(answer: Answer) {
 		this.id = answer.id;
 		this.name = answer.text;
 		this.questionId = answer.questionId;
-		this.isCorrect = answer.isCorrect;
+		this.correct = answer.correct;
 		this.lang = answer.lang;
+		this.order = answer.order ?? 0;
 	}
 }
 

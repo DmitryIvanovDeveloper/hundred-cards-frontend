@@ -8,7 +8,7 @@ export class QuestionMapper {
       id: a.id,
       questionId: viewModel.id,
       text: a.name,
-      isCorrect: a.isCorrect,
+      correct: a.correct,
       lang: "RU",
     }));
 
