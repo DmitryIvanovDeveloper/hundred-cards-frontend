@@ -35,7 +35,7 @@ export class EventBus implements IEventBus {
                 return;
             }
             handler.handle(event);
-            this._toastNotificationUseCases.success(`${eventType}`);
+            // this._toastNotificationUseCases.success(`${eventType}`);
         }
     }
 
@@ -59,7 +59,7 @@ export class EventBus implements IEventBus {
         for (const handler of asyncHandlers) {
             if (handler.canHandle(event)) {
                 tasks.push(handler.handleAsync(event));
-                this._toastNotificationUseCases.success(`${eventType}`);
+                // this._toastNotificationUseCases.success(`${eventType}`);
             }
         }
 
