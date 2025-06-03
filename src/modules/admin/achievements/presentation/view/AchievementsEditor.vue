@@ -66,7 +66,6 @@ const router = useRouter();
 	</ConstructorItemLayout>
 
 	<ConstructorItemLayout label="Выберите вопросы для достижений">
-		{{ presenter.achievementViewModel.value?.availableQuestions }}
 		<UniversalSelect
 			label:=""
 			:type="'multiple'"

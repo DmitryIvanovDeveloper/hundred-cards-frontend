@@ -21,7 +21,7 @@ export default class AuthenticationHttpRepository implements IAuthenticationHttp
     ){} 
 
     public signUp = async (signupDto: RegistrationRequestDTO): Promise<Result<string>> => {
-        const endpoint = 'sign_up/';
+        const endpoint = 'admin/sign_up/';
 
         const request = new SignUpRequest(signupDto);
 

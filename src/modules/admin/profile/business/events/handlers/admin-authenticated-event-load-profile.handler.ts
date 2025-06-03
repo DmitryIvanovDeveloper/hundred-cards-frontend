@@ -1,6 +1,5 @@
 import { IAsyncEventHandler } from "@/infrastructure/events/events-handler.plugin";
 import AdminAuthenticatedEvent from "@/modules/shared/authentication/business/events/admin-authenticated.event";
-import { L } from "vitest/dist/chunks/reporters.d.CfRkRKN2";
 
 export default class AdminAuthenticatedEventCreateProfileHandler
   implements IAsyncEventHandler<AdminAuthenticatedEvent>
