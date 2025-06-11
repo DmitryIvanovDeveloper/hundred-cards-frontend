@@ -4,6 +4,7 @@ export class UpdateQuestionRequestDTO {
    readonly id: string;
    readonly text: string;
    readonly points: number;
+   readonly order: number;
    readonly levelId: string;
    readonly lang: string;
    readonly answers: Array<UpdateAnswerRequestDTO>;
@@ -21,6 +22,7 @@ export class UpdateQuestionResponseDTO {
    readonly id: string;
    readonly text: string;
    readonly points: number;
+   readonly order: number;
    readonly levelId: string;
    readonly lang: string;
    readonly answers: Array<UpdateAnswerResponseDTO>;
@@ -30,6 +32,7 @@ export class UpdateQuestionResponseDTO {
       this.text = response.text;
       this.points = response.points;
       this.levelId = response.level_id;
+      this.order = response.order;
       this.lang = response.lang_iso;
       this.answers = response.answers.map(answer => new UpdateAnswerResponseDTO(answer));
    }

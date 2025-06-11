@@ -26,6 +26,10 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
             return Result.failure(new ProjectsNotUpdatedError());
         }
 
+        if (!project.edited) {
+            return Result.success();
+        }
+        
         const dto = Project.toRequestDto({ name: project.name });
         const result = await this._projectsRepository.updateProject(project.id, dto);
         

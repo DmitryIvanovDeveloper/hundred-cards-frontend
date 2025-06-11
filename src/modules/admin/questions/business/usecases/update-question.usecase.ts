@@ -30,6 +30,7 @@ export default class UpdateQuestionUseCase extends BaseUseCase<UpdateQuestionInp
 
         await Promise.all(editedQuestions.map(async question => {
             const updateRequest = question.toUpdateRequest();
+
             const result = await this._repository.update(question.id, updateRequest);
 
             if (!result.hasData()) {

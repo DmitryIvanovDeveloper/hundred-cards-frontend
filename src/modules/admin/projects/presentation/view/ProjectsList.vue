@@ -31,6 +31,16 @@ const createProject = async (): Promise<void> => {
     goToConstructor();
 }
 
+const loadProject = async (): Promise<void> => {
+    const result = await controller.createProject();
+    if (!result.isSuccess) {
+        return;
+    }
+
+    goToConstructor();
+}
+
+
 const shareProject = ref<ProjectViewModel | undefined>()
 
 const selectProject = async (projectId: string): Promise<void> => {

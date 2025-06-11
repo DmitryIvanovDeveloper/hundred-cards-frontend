@@ -79,6 +79,8 @@ export default class QuestionsHttpRepository
         const request = new PutQuestionRequest(updateQuestionRequest);
 
         const response = await this._httpClient.put<PutQuestionResponse, PutQuestionRequest>(endpoint, request);
+        console.log(response)
+
         if (!response.hasData()) {
             return this.handleNetworkError(response.errors as NetworkError);
         }

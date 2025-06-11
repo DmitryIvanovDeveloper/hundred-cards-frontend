@@ -24,8 +24,6 @@ export default class AchievementViewModel {
         this.earnedMoney = entity.earnedMoney;
         this.description = entity.description;
         this.lang = entity.lang;
-        this.availableLevels = entity.availableLevels.map((level) => ({id: level.id, value: level.name}));
-        this.availableQuestions = entity.availableQuestions.map((level) => ({id: level.id, value: level.name}));
         this.edited = entity.edited ?? false;
         this.deleting = entity.deleting ?? false;
 

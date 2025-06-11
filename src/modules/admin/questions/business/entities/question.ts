@@ -212,6 +212,7 @@ export default class Question {
 			id: this.id,
 			text: this.text,
 			points: this.points,
+			order: this.order,
 			levelId: this.levelId,
 			lang: this.lang,
 			answers: this.answers.map((a) => ({ ...a })),

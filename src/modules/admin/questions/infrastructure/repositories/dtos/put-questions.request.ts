@@ -5,6 +5,7 @@ export class PutQuestionRequest {
   readonly lang_iso: string;
   readonly text: string;
   readonly points: number;
+  readonly order: number;
   readonly level_id: string;
   readonly answers: Array<PostAnswerRequest>;
 
@@ -13,6 +14,7 @@ export class PutQuestionRequest {
     this.text = createQuestionRequest.text;
     this.points = createQuestionRequest.points;
     this.level_id = createQuestionRequest.levelId;
+    this.order = createQuestionRequest.order;
     this.answers = createQuestionRequest.answers.map(
       (answer) => new PutAnswerRequest(answer)
     );
@@ -40,6 +42,7 @@ export interface PutQuestionResponse {
     readonly lang_iso:  string;
     readonly text: string;
     readonly points: number;
+    readonly order: number;
     readonly level_id:  string;
     readonly answers: Array<PutAnswerResponse>
 }
