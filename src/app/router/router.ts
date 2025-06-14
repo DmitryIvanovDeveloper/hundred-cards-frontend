@@ -53,6 +53,7 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             component: Admin,
             meta: { requiresAuth: true },
             beforeEnter: async (to, from, next) => {
+                console.log(to)
                 const authToken = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases);
 
                 if (to.meta.requiresAuth && !authToken.isAuthenticated()) {

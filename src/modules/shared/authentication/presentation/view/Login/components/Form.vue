@@ -20,8 +20,7 @@ const signIn = async () => {
     if (!result.isSuccess) {
         return;
     }
-
-    router.push(RouterPaths.admin);
+    router.push(`${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.list}`);
 }
 </script>
 
