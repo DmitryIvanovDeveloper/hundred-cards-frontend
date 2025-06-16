@@ -55,18 +55,18 @@ function onDrop(targetItemId: string) {
 
 <template>
   <ProjectSidebarItemLayout :title="title" :onAdd="onCreate" :creating="creating">
-    <div class="flex flex-col gap-[10px] w-full pl-6">
+    <div class="flex flex-col gap-[10px] w-full pl-6 overflow-auto max-h-[400px]">
       <div
         v-for="(item, index) in items"
-        :key="item.id"
-        :draggable="true"
-        @dragstart="() => onDragStart(item.id)"
-        @dragover="(e) => onDragOver(e, item.id)"
-        @drop="() => onDrop(item.id)"
-        :class="[
-          dragOverItemId === item.id ? 'bg-purple-50' : '',
-        ]"
-      >
+            :key="item.id"
+            :draggable="true"
+            @dragstart="() => onDragStart(item.id)"
+            @dragover="(e) => onDragOver(e, item.id)"
+            @drop="() => onDrop(item.id)"
+            :class="[
+              dragOverItemId === item.id ? 'bg-purple-50' : '',
+            ]"
+        >
         <ProjectSidebarElementLayout
             :title="item.name"
             :onSelect="() => onSelect(item.id)"

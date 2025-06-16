@@ -25,7 +25,7 @@ export default class AuthenticationHttpRepository implements IAuthenticationHttp
         const request = new SignUpRequest(signupDto);
 
         const response = await this._httpClient.post<IRegistrationResponse, SignUpRequest>(endpoint, request);
-
+        console.log(request);
         if (!response.isSuccess || !response.data) {
             return this.handleNetworkError(response.errors as AuthenticationError);
         }

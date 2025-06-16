@@ -8,6 +8,7 @@ export default class SignUpRequest {
         readonly password: string;
 
     }
+    public readonly userName: string;
     public readonly avatar: null;
 
 

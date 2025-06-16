@@ -33,20 +33,20 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited,
 			class="flex justify-between w-full p-1 cursor-pointer hover:bg-gray-200"
 			:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"
 		>
-		<button
-			@click="onSelect"
-			class="flex items-center gap-[10px] w-full p-1 cursor-pointer hover:bg-gray-200"
-			:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"
-		>
-		<span class="font-roboto-400 text-[13px] text-[#424242] text-left block truncate">
-			{{ title }}
-		  </span>	
+			<button
+				@click="onSelect"
+				class="flex items-center gap-[10px] w-full p-1 cursor-pointer hover:bg-gray-200"
+				:class="[selected ? 'bg-[#F7F7F7] text-blue-600' : '']"
+			>
+				<span class="font-roboto-400 text-[13px] text-[#424242] text-left block">
+					{{ title }}
+				</span>	
 		</button>
 	
 
 			<div class="flex gap-[10px] items-center">
 				<span v-if="edited">⚠️</span>
-
+<!-- 
 				<button @click="onEdit" class="cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
 						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -56,9 +56,9 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited,
 							d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
 						</path>
 					</svg>
-				</button>
+				</button> -->
 				
-				<button :onclick="onDelete"  class="flex items-center cursor-pointer">
+				<button :onclick="onDelete" class="flex items-center cursor-pointer">
 					<svg v-if="!deleting" xmlns="http://www.w3.org/2000/svg" width="24" height="1\24" viewBox="0 0 24 24" fill="none"
 						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
 						class="lucide lucide-square-xmark text-gray-400" aria-hidden="true">

@@ -11,8 +11,6 @@ const router = useRouter();
 // Store the selected route or section
 const selected = ref<'projects' | 'account' | 'analitics' | 'settings' | 'help'>('projects');
 
-
-
 const buttons: { title: string; icon: any; type: 'projects' | 'account' | 'analitics' | 'settings' | 'help' }[] = [
   { title: 'Мой аккаунт', icon: UserIcon, type: 'account' },
   { title: 'Проекты', icon: FolderIcon, type: 'projects' },

@@ -54,5 +54,6 @@ const goToConstructor = (): void => {
 		:onSelect="selectLevel"
 		:selected-id="presenter.levelViewModel.value?.id ?? ''"
 		droppable
+		:onChecked="() => {}"
 	/>
 </template>

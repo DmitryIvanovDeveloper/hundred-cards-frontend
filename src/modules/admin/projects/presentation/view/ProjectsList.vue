@@ -67,27 +67,30 @@ const email = ref<string>('');
         <button :onclick="createProject" class="flex flex-col">
             <Add />
             <span>{{ "Создать Новый проект" }}</span>
-
         </button>
 
       
-        <div v-for="(project, index) in presenter.projectsViewModel.value" :key="index">
-            <div>
-                <button :onclick="() => selectProject(project.id)">
+        <div
+            class="flex flex-col w-[166px]"
+            v-for="(project, index) in presenter.projectsViewModel.value"
+            :key="index"
+        >
+                <button 
+                    class="w-[166px]"
+                    :onclick="() => selectProject(project.id)"
+                >
                     <Folder />
-                    <span>{{ project.name }}</span>
                 </button>
 
                 <button 
-                    class="relative right-[35px] bottom-[155px]"
+                    class="absolute top-17 pl-[130px]"
                     :onclick="() => {
                     shareProject = project
                     visible = true
                 }">
                     <Share />
                 </button>
-            </div>
-            
+                <span :class="{'break-all': project.name.length > 21}">{{ project.name }}</span>
         </div>
 
 
