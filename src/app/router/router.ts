@@ -17,6 +17,7 @@ import ProjectsList from '@/modules/admin/projects/presentation/view/ProjectsLis
 import Levels from '@/modules/admin/levels/presentation/view/Levels.vue';
 import LevelList from '@/modules/admin/levels/presentation/view/LevelList.vue';
 import AchievementsConstructor from '@/modules/admin/achievements/presentation/view/AchievementsConstructor.vue';
+import Profile from '@/modules/admin/profile/presentation/view/Profile.vue';
 
 const getRoutes = (): Array<RouteRecordRaw> => {
     return [{
@@ -25,7 +26,6 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             component: App,
             meta: { requiresAuth: true },
             beforeEnter: (to, from, next) => {
-                console.log(to)
                 const isAuthenticated = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases).isAuthenticated();
 
                 if (to.meta.requiresAuth && !isAuthenticated) {
@@ -53,7 +53,6 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             component: Admin,
             meta: { requiresAuth: true },
             beforeEnter: async (to, from, next) => {
-                console.log(to)
                 const authToken = container.get<AuthTokenUseCases>(TYPES.AuthTokenUseCases);
 
                 if (to.meta.requiresAuth && !authToken.isAuthenticated()) {
@@ -97,6 +96,10 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             {
                 path: RouterPaths.achievements,
                 component: AchievementsConstructor,
+            },
+            {
+                path: RouterPaths.account,
+                component: Profile,
             },
         ],
         },

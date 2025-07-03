@@ -27,11 +27,16 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 
   public async execute(input: UpdateLevelInput): Promise<UpdateLevelOutput> {
 		const levels = this._localRepository.getLevels().value;
-		if (!levels.length) {
+		if (!levels) {
 			return Result.failure(new LevelNotUpdatedError())
 		}
 
 		const editedLevels = levels.filter(level => level.edited);
+
+		levels.forEach(level => {
+			const updatedLevel = level.withUpdatedShowErrors();
+			this._localRepository.updateLevel(updatedLevel);
+		});
 
 		await Promise.all(editedLevels.map(async level => {
 			const updateRequest = level.toUpdateRequest();
@@ -41,7 +46,6 @@ export default class UpdateLevelUseCase extends BaseUseCase<UpdateLevelInput, Up
 			}
 			const updatedLevel = level.withUpdatedEdited(false);
 			this._localRepository.updateLevel(updatedLevel)
-		
 		}))
 
 

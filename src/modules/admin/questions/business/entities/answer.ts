@@ -1,5 +1,6 @@
 
 import { v4 as uuidv4 } from "uuid";
+import AnswersEmptyError from "../errors/answer-empty";
 
 export interface AnswerProps {
 	readonly id?: string;
@@ -53,5 +54,13 @@ export class Answer {
 
 	static create(props: AnswerProps): Answer {
 		return new Answer(props);
+	}
+
+	public validate(): AnswersEmptyError | undefined {
+		if (this.text) {
+			return;
+		}
+
+		return new AnswersEmptyError(this.id);
 	}
 }

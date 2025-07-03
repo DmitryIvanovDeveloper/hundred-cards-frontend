@@ -25,7 +25,7 @@ const confirmSave = async () => {
 </script>
 
 <template>
-    <Dialog 
+    <Dialog
         :visible="controller.confirmCancelPopupVisible.value" 
         class="!flex" 
         pt:root:class="!flex !border-0 !bg-[#EFF6F8] w-[600px] h-[300px] p-[70px] justify-center items-center" 
@@ -40,7 +40,7 @@ const confirmSave = async () => {
     
                 <div class="flex justufy-between items-center gap-4">
                     <UniversalRoundedButton 
-                        :label="presenter.label.confirmCancel.saveContunue" 
+                        :label="presenter.label.confirmCancel.saveContinue" 
                         :loading="controller.loading.value" 
                         class="!h-[40px] !bg-[#9747FF] !border-none !font-roboto-700 !text-[14px]" 
                         :handle-press="confirmSave
@@ -48,7 +48,7 @@ const confirmSave = async () => {
 
                     <UniversalRoundedButton 
                         type="secondary" 
-                        :label="presenter.label.confirmCancel.cancelContunue" 
+                        :label="presenter.label.confirmCancel.cancelContinue" 
                         class="!h-[40px] !border-[#9747FF] !border-[1px] !bg-transparent !text-[#9747FF] !font-roboto-700 !text-[14px]"
                         :handle-press="confirmCancel" />
                 </div>

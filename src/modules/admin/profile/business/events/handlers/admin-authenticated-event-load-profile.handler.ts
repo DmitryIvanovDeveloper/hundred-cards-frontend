@@ -4,11 +4,11 @@ import AdminAuthenticatedEvent from "@/modules/shared/authentication/business/ev
 export default class AdminAuthenticatedEventCreateProfileHandler
   implements IAsyncEventHandler<AdminAuthenticatedEvent>
 {
-  canHandle(event: AdminAuthenticatedEvent): boolean {
-    return event instanceof AdminAuthenticatedEvent;
-  }
+	public canHandle(event: AdminAuthenticatedEvent): boolean {
+		return event instanceof AdminAuthenticatedEvent;
+	}
 
-  async handleAsync(event: AdminAuthenticatedEvent): Promise<void> {
-    await Promise.resolve();
-  }
+	public async handleAsync(event: AdminAuthenticatedEvent): Promise<void> {
+		await Promise.resolve();
+	}
 }

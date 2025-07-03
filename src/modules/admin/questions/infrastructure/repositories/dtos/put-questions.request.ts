@@ -7,6 +7,7 @@ export class PutQuestionRequest {
   readonly points: number;
   readonly order: number;
   readonly level_id: string;
+  readonly is_published: boolean;
   readonly answers: Array<PostAnswerRequest>;
 
   constructor(createQuestionRequest: UpdateQuestionRequestDTO) {
@@ -15,6 +16,8 @@ export class PutQuestionRequest {
     this.points = createQuestionRequest.points;
     this.level_id = createQuestionRequest.levelId;
     this.order = createQuestionRequest.order;
+    this.is_published = createQuestionRequest.published;
+
     this.answers = createQuestionRequest.answers.map(
       (answer) => new PutAnswerRequest(answer)
     );

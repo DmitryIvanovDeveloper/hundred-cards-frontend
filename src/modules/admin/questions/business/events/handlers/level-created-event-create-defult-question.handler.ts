@@ -17,6 +17,6 @@ export default class LevelCreatedEventCreateDefaultQuestionHandler
   }
 
   async handleAsync(event: LevelCreatedEvent): Promise<void> {
-      // await this._createQuestionUseCase.execute({ levelId: event.levelId });
+      await this._createQuestionUseCase.execute({ levelId: event.levelId });
   }
 }

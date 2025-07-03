@@ -1,7 +1,7 @@
 import { IEvent } from "@/infrastructure/events/event";
 
 export default class ProjectCreatedEvent implements IEvent {
-    readonly type = 'LevelsLoadedEvent';
+    readonly type = 'ProjectCreatedEvent';
 
     readonly projectId: string;
     

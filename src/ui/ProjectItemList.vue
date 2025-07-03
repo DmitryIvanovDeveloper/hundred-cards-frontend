@@ -6,9 +6,11 @@ import { onMounted, ref } from "vue";
 export interface ProjectItem {
   id: string;
   name: string;
-  checked?: boolean
-  edited?: boolean
-  deleting: boolean
+  checked?: boolean;
+  edited?: boolean;
+  deleting: boolean;
+  hasError?: boolean
+  published?: boolean
 }
 
 export interface IProjectItemListProps {
@@ -54,6 +56,7 @@ function onDrop(targetItemId: string) {
 </script>
 
 <template>
+	
   <ProjectSidebarItemLayout :title="title" :onAdd="onCreate" :creating="creating">
     <div class="flex flex-col gap-[10px] w-full pl-6 overflow-auto max-h-[400px]">
       <div
@@ -67,8 +70,9 @@ function onDrop(targetItemId: string) {
               dragOverItemId === item.id ? 'bg-purple-50' : '',
             ]"
         >
+
         <ProjectSidebarElementLayout
-            :title="item.name"
+            :title="(item.name)"
             :onSelect="() => onSelect(item.id)"
             :onEdit="() => onEdit(item.id)"
             :onDelete="() => onDelete(item.id)"
@@ -78,6 +82,8 @@ function onDrop(targetItemId: string) {
             :selected="item.id === selectedId"
             :checkable="checkable ?? false"
             :edited="item.edited"
+            :error="item.hasError"
+            :published="item.published"
         />
       </div>
     </div>

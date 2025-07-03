@@ -1,32 +1,36 @@
 <script setup lang="ts">
-import Humburger from "@assets/hamburger.svg";
+import Hamburger from "@assets/hamburger.svg";
 import Delete from 'vue-material-design-icons/DeleteOutline.vue';
 
 export interface IProjectSidbarElementLayout {
-	title?: string;
+	readonly title?: string;
 	onEdit: () => void;
 	onDelete: () => void;
 	onSelect: () => void;
 	onChecked: (value: boolean) => void;
-	droppable: boolean;
-	selected: boolean;
-	checkable: boolean;
-	checked?: boolean;
-	edited?: boolean;
-	deleting?: boolean;
+	readonly droppable: boolean;
+	readonly selected: boolean;
+	readonly checkable: boolean;
+	readonly checked?: boolean;
+	readonly edited?: boolean;
+	readonly deleting?: boolean;
+	readonly error?: boolean;
+	readonly published?: boolean;
 }
 
-const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited, deleting } = defineProps<IProjectSidbarElementLayout>();
+const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited, deleting, published } = defineProps<IProjectSidbarElementLayout>();
 
 </script>
 <template>
 	<div
+		:class="[{'border-[#FFFFF]': error }]"
 		class="flex items-center text-sm text-gray-600 shadow-none transition-all !duration-200 underline-offset-4 gap-[10px]"
 	>
-		<Humburger v-if="droppable" />
+		<Hamburger v-if="droppable" />
+
 		<el-checkbox 
 			v-if="checkable" 
-			:checked="checked" 
+			:checked="published" 
 			@change="(value) => onChecked(value as boolean)" 
 		/>
 		<div 
@@ -46,6 +50,7 @@ const { title, onEdit,onDelete, onSelect, droppable, checkable, checked, edited,
 
 			<div class="flex gap-[10px] items-center">
 				<span v-if="edited">⚠️</span>
+				<span v-if="error">❗</span>
 <!-- 
 				<button @click="onEdit" class="cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"

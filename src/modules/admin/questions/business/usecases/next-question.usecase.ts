@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../types";
 import Result from "@/infrastructure/helpers/result";
-import { UpateQuestionOutput, UpdateQuestionInput } from "./types/update-question.type";
+import { UpdateQuestionOutput, UpdateQuestionInput } from "./types/update-question.type";
 import IQuestionsLocalRepository from '../plugins/questions.local.repository.plugin';
 import SelectQuestionUseCase from "./select-question.usecase";
 
@@ -17,7 +17,6 @@ export default class NextQuestionUseCase {
     }
 
     public execute = (): Result<void> => {
-        
         const questions = this._repository.getQuestions().value;
         const question = this._repository.getQuestion().value;
 

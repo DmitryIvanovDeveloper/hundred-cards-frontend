@@ -27,9 +27,17 @@ export default class DeleteQuestionLocalUseCase extends BaseUseCase<DeleteQuesti
 
     public execute = async (input: DeleteQuestionInput): Promise<DeleteQuestionOutput> => {
         const questions = this._localRepository.getQuestions().value;
+        if (!questions) {
+            return Result.failure();
+        }
         const filteredQuestions = questions.filter(question => question.id !== input.questionId);
         this._localRepository.storeQuestions(filteredQuestions);
 
+        const question = this._localRepository.getQuestion().value
+        if (question?.id === input.questionId) {
+            this._localRepository.clearQuestion()
+        }
+        
         this._eventBus.publishAsync(new QuestionDeletedEvent(input.questionId));
         this._toastNotificationUseCases.success('Question deleted successful');
         return Result.success();

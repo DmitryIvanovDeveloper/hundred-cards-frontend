@@ -18,7 +18,7 @@ const { onChange } = defineProps<ILevelsSelectionProps>();
     <UniversalSelect
         label:=""
         :type="'multiple'"
-        :options="presenter.levelsViewModel.value.map(level => ({ label: level.id, value: level.name }))"
+        :options="presenter.levelsViewModel.value?.map(level => ({ label: level.id, value: level.name }))"
         :onChange="onChange"
     />
 </template>s

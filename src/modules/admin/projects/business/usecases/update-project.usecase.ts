@@ -29,6 +29,14 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
         if (!project.edited) {
             return Result.success();
         }
+
+        const errors = project.validate();
+        const updatedProject = project.withUpdatedShowError();
+        this._localRepository.storeProject(updatedProject);
+
+        if (errors.length) {
+            return Result.failure(new ProjectsNotUpdatedError());
+        }
         
         const dto = Project.toRequestDto({ name: project.name });
         const result = await this._projectsRepository.updateProject(project.id, dto);
@@ -37,8 +45,8 @@ export default class UpdateProjectUseCase extends BaseUseCase<UpdateProjectInput
             return Result.failure(new ProjectsNotUpdatedError());
         }
 
-        const updatedProject = Project.toEntity(result.data);
-        this._localRepository.updateProjects(updatedProject);
+        const entity = Project.toEntity(result.data);
+        this._localRepository.updateProjects(entity);
         
         return Result.success();
     }

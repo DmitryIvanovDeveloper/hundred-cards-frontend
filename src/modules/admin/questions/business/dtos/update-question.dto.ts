@@ -4,6 +4,7 @@ export class UpdateQuestionRequestDTO {
    readonly id: string;
    readonly text: string;
    readonly points: number;
+   readonly published: boolean;
    readonly order: number;
    readonly levelId: string;
    readonly lang: string;

@@ -6,6 +6,7 @@ import { RouterPaths } from "@/app/router/router-paths";
 import { useRouter } from "vue-router";
 import ProjectsPresenter from "../presenter/projects.presenter";
 import ProjectItemList from "@/ui/ProjectItemList.vue";
+import ProjectItemListSkeleton from "@/ui/ProjectItemListSkeleton.vue";
 
 const controller = container.get<ProjectsController>(TYPES.ProjectsController);
 const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
@@ -41,14 +42,24 @@ const deleteProject = async (id: string): Promise<void> => {
 </script>
 
 <template>
-    <ProjectItemList 
+    <ProjectItemListSkeleton v-if="presenter.projectsViewModel.value === undefined"/>
+    <ProjectItemList
+        v-else
         :title="presenter.label.title"
-        :items="presenter.projectsViewModel.value"
+        :items="presenter.projectsViewModel.value.map(i => ({
+            id: i.id,
+            name: i.name.value as string,
+            checked: false,
+            edited: i.edited,
+            deleting: i.deleting,
+            hasError: i.hasError
+        })) ?? []" 
         :onCreate="createProject"
         :onDelete="deleteProject"
         :creating="controller.creating.value"
         :onEdit="() => {}"
         :onSelect="selectProject"
         :selected-id="presenter.projectViewModel.value?.id ?? ''"
+        :on-checked="() => {}"
     />
 </template>

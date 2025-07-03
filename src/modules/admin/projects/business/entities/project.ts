@@ -1,29 +1,32 @@
 import CreateProjectResponseDTO from "../dtos/create-project.dto";
 import { CreateProjectRequestDTO } from "../dtos/create-project.dto";
 import UpdateProjectResponseDTO from "../dtos/update-project.dto";
+import ProjectsNameEmptyError from "../errors/projects-name-empty.error";
+import ProjectsError from "../errors/projects.error";
 import { CreateProjectInput } from "../usecases/types/create-project.type";
 import { User } from "./user";
 import { v4 as uuid } from 'uuid';
 
 export interface IProjectProps {
-    id?: string;
-    name?: string;
-    created?: Date | undefined;
-    userId?: number;
-    edited?: boolean;
-    deleting?: boolean;
-    users?: ReadonlyArray<User>;
+    readonly id?: string;
+    readonly name?: string;
+    readonly created?: Date | undefined;
+    readonly userId?: number;
+    readonly edited?: boolean;
+    readonly deleting?: boolean;
+    readonly users?: ReadonlyArray<User>;
+    readonly showError?: boolean;
 }
 
-
 export default class Project {
-    readonly id: string;
-    readonly name: string;
-    readonly created: Date | undefined;
-    readonly userId: number;
-    readonly edited: boolean;
-    readonly deleting: boolean;
-    readonly users: ReadonlyArray<User>
+    public readonly id: string;
+    public readonly name: string;
+    public readonly created: Date | undefined;
+    public readonly userId: number;
+    public readonly edited: boolean;
+    public readonly deleting: boolean;
+    public readonly users: ReadonlyArray<User>
+    public readonly showError: boolean;
 
     constructor(props: Partial<IProjectProps>) {
         this.id = props.id ?? uuid();
@@ -32,7 +35,9 @@ export default class Project {
         this.userId = props.userId ?? -1;
         this.edited = props.edited ?? false;
         this.deleting = props.deleting ?? false;
-        this.users = props.users ?? []
+        this.users = props.users ?? [];
+        this.showError = props.showError ?? false;
+
     }
 
     public withUpdatedName(name: string): this {
@@ -58,6 +63,21 @@ export default class Project {
         return this.cloneWith({ users: updatedUsers });
     }
 
+    public withUpdatedShowError(): this {
+        return this.cloneWith({ showError: true });
+    }
+
+    public validate(): ReadonlyArray<ProjectsError> {
+        const errors = new Array<ProjectsError>();
+
+        if (!this.name) {
+            const error = new ProjectsNameEmptyError();
+            errors.push(error);
+        }
+
+        return errors;
+    }
+
     public cloneWith(params: Partial<IProjectProps>): this {
         return new Project({
             id: this.id,
@@ -67,6 +87,7 @@ export default class Project {
             edited: params.edited ?? this.edited,
             deleting: params.deleting ?? this.deleting,
             users: params.users ?? this.users,
+            showError: params.showError ?? this.showError,
         }) as this;
     }
 
@@ -84,4 +105,5 @@ export default class Project {
             name: input.name
         };
     }
+    
 }

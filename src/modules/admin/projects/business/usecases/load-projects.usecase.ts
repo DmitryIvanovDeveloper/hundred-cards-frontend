@@ -27,7 +27,7 @@ export default class LoadProjectsUseCase extends BaseUseCase<LoadProjectsInput, 
 	}
 
 	public async execute(): Promise<LoadProjectsOutput> {
-
+		this._localRepository.clear();
 		const result = await this._projectsRepository.loadProjects();
 		if (!result.hasData()) {
 			return Result.failure<void>(new ProjectsNotLoadedError());

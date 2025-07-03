@@ -17,15 +17,16 @@ export default class LevelsPresenter  {
     }
 
     public levelViewModel =  computed(() => this.presentLevel());
-    public levelsViewModel = computed(() => this.presentLevels());
-    
-    private presentLevels(): Array<LevelViewModel> {
-        return this._repository
-            .getLevels().value
-            .map(level => new LevelViewModel(level))
-        ;
-    }
+    public levelsViewModel = computed(() => {
 
+        const levels =  this._repository.getLevels().value;
+        if (levels === undefined) {
+            return;
+        }
+
+        return levels.map(level => new LevelViewModel(level));
+    });
+    
     private presentLevel(): LevelViewModel | null {
         const level = this._repository.getLevel().value;
         if (!level) {

@@ -113,7 +113,7 @@ export default class QuestionsController {
 
     public updatePublished(questionId: string, published: boolean): void {
         const questions = this._repository.getQuestions().value;
-        if (!questions.length) return;
+        if (!questions) return;
 
         const question = questions.find(q => q.id === questionId);
         if (!question) return;
@@ -126,8 +126,8 @@ export default class QuestionsController {
         const question = this._repository.getQuestion().value;
         if (!question) return;
 
-        const updtedQuestion = question.withUpdatedAnswersOrder(toAnswerId, fromAnswerId);
-        this._repository.updateQuestions(updtedQuestion);
+        const updatedQuestion = question.withUpdatedAnswersOrder(toAnswerId, fromAnswerId);
+        this._repository.updateQuestions(updatedQuestion);
     };
 
     public changeOrders = (fromId: string, toId: string): void => {

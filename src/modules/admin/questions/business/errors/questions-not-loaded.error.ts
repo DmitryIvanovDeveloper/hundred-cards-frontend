@@ -1,6 +1,6 @@
-import QuestionsError from './questions.error';
+import QuestionError from './questions.error';
 
-export default class QuestionsNotLoadedError extends QuestionsError {
+export default class QuestionsNotLoadedError extends QuestionError {
     constructor(){
         super(``);
     }

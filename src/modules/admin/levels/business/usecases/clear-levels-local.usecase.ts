@@ -6,16 +6,15 @@ import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import { DeleteLevelsInput, DeleteLevelsOutput } from "./types/delete-levels.type";
 
 @injectable()
-export default class ClearLevelsLocalUseCase extends BaseUseCase<DeleteLevelsInput, DeleteLevelsOutput> {
+export default class ClearLevelsLocalUseCase {
     
     constructor(
         @inject(TYPES.LevelsLocalRepository)
         private readonly _localRepository: ILevelsLocalRepository,
     ) {
-        super();
     }
 
-    public async execute(input: DeleteLevelsInput): Promise<DeleteLevelsOutput> {
+    public async execute(): Promise<DeleteLevelsOutput> {
         this._localRepository.clear();
         return Result.success();
     }

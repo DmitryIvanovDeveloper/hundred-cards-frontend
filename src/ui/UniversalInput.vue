@@ -1,72 +1,53 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import InputText from 'primevue/inputtext';
 import InputMask from 'primevue/inputmask';
 import Password from 'primevue/password';
+import { computed } from 'vue';
 import FieldWrapper from './FieldWrapper.vue';
+import { InputNumber } from 'primevue';
 
 export interface IUniversalInput {
     error?: string;
     label?: string;
     placeholder?: string;
-    value?: string | number | null;  // Updated to handle both string and number
+    value?: string | number;
     defaultValue?: string;
-    required?: boolean;
+    isRequired?: boolean;
     disabled?: boolean;
-    type?: 'number' | 'password' | 'phone' | 'text' | 'email' | 'url'; // Added 'url' type for the link
+    type?: 'number' | 'password' | 'phone' | 'text' | 'email' | 'float';
     bg?: 'primary' | 'secondary';
-    readonly?: boolean;
     errorlink?: {
         title: string;
         path: string;
     };
-    onChange: (value: string | number | null) => void;  // Updated to handle both string and number
+    readonly?: boolean;
+    onChange: (value: string | number) => void;
 }
 
-const { 
-    value, 
-    defaultValue, 
-    error, 
-    label, 
-    onChange, 
-    required: isRequired, 
-    disabled, 
-    type = 'text', 
-    bg, 
+const {
+    value,
+    defaultValue,
+    error,
+    label,
+    onChange,
+    isRequired,
+    disabled,
+    type = 'text',
+    bg,
     errorlink,
     placeholder,
-    readonly
- } = defineProps<IUniversalInput>();
+    readonly,
+} = defineProps<IUniversalInput>();
 
 const modelValue = computed({
-    get: () => {
-        const val = value ?? defaultValue ?? null;
-        return val === null ? '' : String(val);
-    },
-    set: (newValue: string | number | null) => {
-        if (type === 'number' && typeof newValue === 'string') {
-            onChange(Number(newValue));
-        } else {
-            onChange(newValue);  // Pass string or null as is
-        }
-    },
+    get: () => value ?? defaultValue ?? null,
+    set: (newValue: string) => onChange(newValue),
 });
 
 const inputStyle = computed(() => ({
-    backgroundColor: 'white'
+    backgroundColor: 'white',
 }));
 
-const copyToClipboard = () => {
-    if (modelValue.value) {
-        navigator.clipboard.writeText(modelValue.value as string)
-            .then(() => {
-                console.log('Link copied to clipboard');
-            })
-            .catch(err => {
-                console.error('Error copying text to clipboard: ', err);
-            });
-    }
-};
 </script>
 
 <template>
@@ -74,60 +55,78 @@ const copyToClipboard = () => {
         <InputMask
             :readonly="readonly"
             v-if="type === 'phone'"
-            v-model="modelValue"
+            v-model="modelValue as string"
             mask="+7 (999) 999-99-99"
-            class="!px-[20px] !py-[14px] !placeholder-text_primary"
+            class="!px-[20px] !py-[14px] !placeholder-text_primary !h-[40px]"
             :style="inputStyle"
             :placeholder="placeholder ?? '+7 (__) ___-__-__'"
+            :class="[{'!border-text_danger': error}, {'!border-border_color': !error }]"
         />
+
         <Password
             :readonly="readonly"
             toggleMask
             v-if="type === 'password'"
-            input-class="w-full !py-[14px] !px-[20px] !placeholder-text_primary h-[52px]"
+            :input-class="['w-full !py-[14px] !px-[20px] !placeholder-text_primary h-[40px]', {'!border-text_danger': error}, {'!border-border_color': !error }]"
             :type="type"
             :disabled="disabled"
             :feedback="false"
             :placeholder="placeholder"
-            :modelValue="modelValue"
-            @update:modelValue="(value) => onChange(value)"
+            :modelValue="(modelValue as string)"
+            @update:modelValue="(value) => onChange(value as string)"
             :inputStyle="inputStyle"
         />
+
         <InputText
+            v-if="type === 'text'"
             :readonly="readonly"
-            v-if="type === 'text' || type === 'number'"
             :type="type"
-            class="!px-[20px] !py-[14px] !placeholder-text_primary"
+            class="!text-label !py-[14px] !px-[20px] h-[40px] !border-border_color !justify-center !items-center !text-left"
             :disabled="disabled"
             :placeholder="placeholder"
-            v-model="modelValue"
+            v-model="(modelValue as string)"
             :style="inputStyle"
+            :class="[{'!border-text_danger': error}, {'!border-border_color': !error }]"
         />
+        <InputNumber
+            v-if="type === 'float'"
+            :type="type"
+            class="w-full"
+            input-class="!px-[20px] h-[40px]"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            v-model="(modelValue as number)"
+            :style="inputStyle"
+            :minFractionDigits="2"
+            :maxFractionDigits="2"
+            @input="(event) => onChange(event.value as number)"
+            mode="decimal"
+            :class="[{'!border-text_danger': error}, {'!border-border_color': !error }]"
+        />
+
+        <InputNumber
+            v-if="type === 'number'"
+            :type="type"
+            class="w-full"
+            input-class="!px-[20px]h-[40px]"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            v-model="(modelValue as number)"
+            :style="inputStyle"
+            :useGrouping="false"
+            @input="(event) => onChange(event.value as number)"
+        />
+
         <InputText
-            :readonly="readonly"
             v-if="type === 'email'"
             :type="type"
             class="!px-[20px] !py-[14px] !placeholder-text_primary"
             :disabled="disabled"
-            :placeholder="placeholder ?? 'email@example.com'"
-            v-model="modelValue"
+            :placeholder="placeholder ?? 'Введите почту...'"
+            v-model="(modelValue as string)"
             :style="inputStyle"
         />
-
-        <InputText
-            v-if="type === 'url'"
-            :readonly="readonly"
-            class="!px-[20px] !py-[14px] !placeholder-text_primary"
-            :disabled="disabled"
-            :placeholder="placeholder ?? 'Enter URL'"
-            v-model="modelValue"
-            :style="inputStyle"
-        />
-        <button v-if="type === 'url'" @click="copyToClipboard" class="mt-2 p-2 bg-blue-500 text-white rounded">
-            Copy Link
-        </button>
     </FieldWrapper>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -10,6 +10,7 @@ import Level from "../entities/level";
 import ILevelsLocalRepository from "../plugins/levels.local.repository.plugin";
 import { IEventBus } from "@/infrastructure/events/event-bus.plugin";
 import LevelsLoadedEvent from "../events/levels-loaded-event";
+import { g } from "vitest/dist/chunks/suite.d.FvehnV49";
 
 @injectable()
 export default class LoadLevelsUseCase extends BaseUseCase<LoadLevelInput, LoadLevelOutput>{
@@ -33,6 +34,7 @@ export default class LoadLevelsUseCase extends BaseUseCase<LoadLevelInput, LoadL
         }
 
         const levels = result.data.map(dto => Level.toEntity(dto));
+        console.log(result)
         this._localRepository.storeLevels(levels);
         
         this._eventBus.publish(new LevelsLoadedEvent(levels.map(level => ({ id: level.id, name: level.name }))));

@@ -7,7 +7,7 @@ const TYPES = {
     DeleteProjectLocalUseCase: Symbol.for('DeleteProjectLocalUseCase'),
     ProjectsService: Symbol.for('ProjectsService'),
     SelectProjectUseCase: Symbol.for('SelectProjectUseCase'),
-    CreateProjectPresentConstructorUseCase: Symbol.for('CreateProjectPresentConstructorUseCase'),
+    CreateProjectUseCase: Symbol.for('CreateProjectUseCase'),
     LoadPresentProjectsUseCase: Symbol.for('LoadPresentProjectsUseCase'),
     UpdateProjectUseCase: Symbol.for('UpdateProjectUseCase'),
     LoadProjectsUseCase: Symbol.for('LoadProjectsUseCase'),

@@ -51,6 +51,7 @@ watch(
             :maxlength="props.limit"
             autoResize
             rows="3"
+            :class="[{'!border-[#FF6666]': error}, {'!border-border_color': !error }]"
         />
         <span
             v-if="props.limit"

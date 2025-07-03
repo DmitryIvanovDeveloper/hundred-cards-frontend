@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Chip } from 'primevue';
-import { UserViewModel } from './view-models/project.view-model';
+import { UserViewModel } from '../presenter/view-models/project.view-model';
 import UniversalInput from '@/ui/UniversalInput.vue';
 
 export interface IEmailListProps {

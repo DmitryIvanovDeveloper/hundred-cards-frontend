@@ -25,8 +25,7 @@ export default class AuthenticationHttpRepository implements IAuthenticationHttp
         const request = new SignUpRequest(signupDto);
 
         const response = await this._httpClient.post<IRegistrationResponse, SignUpRequest>(endpoint, request);
-        console.log(request);
-        if (!response.isSuccess || !response.data) {
+        if (!response.hasData()) {
             return this.handleNetworkError(response.errors as AuthenticationError);
         }
 
@@ -45,7 +44,7 @@ export default class AuthenticationHttpRepository implements IAuthenticationHttp
 
         const response = await this._httpClient.post<ILoginResponse, ILoginRequest>(endpoint, request);
 
-        if (!response.isSuccess || !response.data) {
+        if (!response.hasData()) {
             return this.handleNetworkError(response.errors as AuthenticationError);
         }
 
@@ -54,7 +53,6 @@ export default class AuthenticationHttpRepository implements IAuthenticationHttp
 
 
     private handleNetworkError<T>(networkError: NetworkError): Result<T> {
-      
         return Result.failure();
     }
 }

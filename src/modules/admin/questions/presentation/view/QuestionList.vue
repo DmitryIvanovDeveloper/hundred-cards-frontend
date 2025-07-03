@@ -29,7 +29,7 @@ const createQueation = async (): Promise<void> => {
         </button>
         <button v-for="(item, index) in presenter.questionsViewModel.value" :key="index">
             <Folder />
-            <span>{{item.name}}</span>
+            <span>{{item.name.value}}</span>
         </button>
     </div>
 </template>

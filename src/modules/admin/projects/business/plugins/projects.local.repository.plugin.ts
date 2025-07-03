@@ -6,7 +6,7 @@ export default interface IProjectsLocalRepository {
     clear(): unknown;
     updateProjects(updatedProject: Project): unknown;
     getProject(): Ref<Project | undefined>;
-    getProjects(): Ref<Array<Project>>;
+    getProjects(): Ref<Array<Project> | undefined>;
     storeProjects(projects: Project[]): void;
     storeProject(project: Project): void;
     addProject(project: Project): void;

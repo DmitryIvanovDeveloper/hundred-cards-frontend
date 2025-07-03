@@ -29,6 +29,10 @@ export default class CreateQuestionUseCase extends BaseUseCase<CreateQuestionInp
     public execute = async (input: CreateQuestionInput): Promise<CreateQuestionsOutput> => {
 
         const questions = this._localRepository.getQuestions().value;
+        if (!questions) {
+            return Result.failure();
+        }
+        
         const order = questions.length > 0
         ? Math.max(...questions.map(question => question.order)) + 1
         : 1;

@@ -8,7 +8,7 @@ import ProjectHeader from "@/modules/admin/projects/presentation/view/ProjectHea
   <ProjectSidebar />
 
   <div
-    class="flex flex-col !justify-between w-full items-center justify-center min-h-screen  bg-[#E1EBEF]"
+    class="flex flex-col !justify-start w-full items-center  min-h-screen  bg-[#E1EBEF]"
     style="background-image: url(&quot;path-to-wavy-background.png&quot;)"
   >
     <ProjectHeader />

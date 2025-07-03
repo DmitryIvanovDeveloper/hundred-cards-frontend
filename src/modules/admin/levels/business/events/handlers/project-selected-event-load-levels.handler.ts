@@ -13,7 +13,7 @@ export default class ProjectSelectedEventLoadLevelsHandler implements IAsyncEven
   ){
 
   }
-  public canHandle(event: AdminAuthenticatedEvent): boolean {
+  public canHandle(event: ProjectSelectedEvent): boolean {
     return event instanceof ProjectSelectedEvent;
   }
 

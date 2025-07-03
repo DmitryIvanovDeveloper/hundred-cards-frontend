@@ -39,6 +39,8 @@ import QuestionCreatedEventSelectQuestionHandler from '../../business/events/han
 import QuestionCreatedEvent from '../../business/events/question-created-event';
 import ClearQuestionsLocalUseCase from '../../business/usecases/clear-questons-local.usecase';
 import ReorderQuestionsUseCase from '../../business/usecases/reorder-questions-order.usecase';
+import ProjectSelectedEvent from '@/modules/admin/projects/business/events/project-selected-event';
+import ProjectSelectedEventClearLocalRepositoryHandler from '../../business/events/handlers/project-selected-event-clear-local-repostory.handler';
 
 container
     .bind<QuestionsPresenter>(TYPES.QuestionsPresenter)
@@ -187,5 +189,11 @@ container
 container
     .bind<ISyncEventHandler<QuestionCreatedEvent>>(TYPES.QuestionCreatedEventHandler)
     .to(QuestionCreatedEventSelectQuestionHandler)
+    .inTransientScope()
+;
+
+container
+    .bind<ISyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandler)
+    .to(ProjectSelectedEventClearLocalRepositoryHandler)
     .inTransientScope()
 ;

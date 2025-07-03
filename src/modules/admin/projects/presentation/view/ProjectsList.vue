@@ -13,9 +13,9 @@ import { ref } from 'vue';
 import { Dialog } from 'primevue';
 import UniversalLinkInput from '@/ui/UniversalLinkInput.vue';
 import UniversalRoundedButton from '@/ui/Buttons/UniversalRoundedButton.vue';
-import EmaiList from './EmaiList.vue';
+import ProjectUsers from './ProjectUsers.vue';
 import Project from '../../business/entities/project';
-import ProjectViewModel from './view-models/project.view-model';
+import ProjectViewModel from '../presenter/view-models/project.view-model';
 
 const controller = container.get<ProjectsController>(TYPES.ProjectsController);
 const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
@@ -90,7 +90,7 @@ const email = ref<string>('');
                 }">
                     <Share />
                 </button>
-                <span :class="{'break-all': project.name.length > 21}">{{ project.name }}</span>
+                <span :class="{'break-all': (project.name.value as string).length > 21}">{{ project.name.value }}</span>
         </div>
 
 
@@ -114,14 +114,14 @@ const email = ref<string>('');
                     </button>
                 </div>
 
-                <EmaiList 
-                    :users="presenter.projectsViewModel.value.find(d => d.id === shareProject?.id)?.users ?? []"
+                <ProjectUsers 
+                    :users="presenter.projectsViewModel.value?.find(d => d.id === shareProject?.id)?.users ?? []"
                     :remove="(value) => controller.updatedRemoveUser(shareProject?.id ?? '', value)"
                 />
     
                 <UniversalLinkInput
                     :type="'url'"
-                    :value="`https://hundredcards.onrender.com/?project_id=${shareProject?.id}`"
+                    :value="`https://dmitryivanovdeveloper.github.io/hundred-cards-web/?project_id=${shareProject?.id}`"
                     readonly
                     :onChange="() => {}"
                 />

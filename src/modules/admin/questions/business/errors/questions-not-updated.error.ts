@@ -1,7 +1,7 @@
 import { id } from 'inversify';
-import QuestionsError from './questions.error';
+import QuestionError from './questions.error';
 
-export default class QuestionNotUpdatedError extends QuestionsError {
+export default class QuestionNotUpdatedError extends QuestionError {
     constructor(id?: string) {
         super(`Question with id '${id}' not updated `);
     }

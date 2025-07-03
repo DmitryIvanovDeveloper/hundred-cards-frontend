@@ -7,6 +7,10 @@ import { LoadQuestionResponse } from "../dtos/load-question.dto";
 import { UpdateQuestionRequestDTO, UpdateQuestionResponseDTO } from "../dtos/update-question.dto";
 import { Answer } from "./answer";
 import Result from "@/infrastructure/helpers/result";
+import QuestionError from "../errors/questions.error";
+import QuestionAnswersEmptyError from "../errors/question-answers-empty";
+import QuestionEmptyError from "../errors/question-empty-empty.error";
+import AnswersEmptyError from "../errors/answer-empty";
 
 export interface QuestionProps {
 	readonly id?: string;
@@ -19,19 +23,21 @@ export interface QuestionProps {
 	readonly deleting?: boolean;
 	readonly published?: boolean;
 	readonly order?: number;
+	readonly showErrors?: boolean;
 }
 
 export default class Question {
-	readonly id: string;
-	readonly text: string;
-	readonly points: number;
-	readonly levelId: string;
-	readonly answers: ReadonlyArray<Answer>;
-	readonly lang: string;
-	readonly edited: boolean;
-	readonly deleting: boolean;
-	readonly published: boolean;
-	readonly order: number;
+	public readonly id: string;
+	public readonly text: string;
+	public readonly points: number;
+	public readonly levelId: string;
+	public readonly answers: ReadonlyArray<Answer>;
+	public readonly lang: string;
+	public readonly edited: boolean;
+	public readonly deleting: boolean;
+	public readonly published: boolean;
+	public readonly order: number;
+	public readonly showErrors: boolean;
 
 	constructor(props: QuestionProps) {
 		this.id = props.id ?? uuidv4();
@@ -44,6 +50,7 @@ export default class Question {
 		this.deleting = props.deleting ?? false;
 		this.order = props.order ?? 0;
 		this.published = props.published ?? false;
+		this.showErrors = props.showErrors ?? false
 	}
 
 	public withUpdatedText(text: string): this {
@@ -51,6 +58,11 @@ export default class Question {
 	}
 
 	public withUpdatedPoints(points: number): this {
+		if (points < 0) {
+			return this;
+		}
+
+		console.log(points)
 		return this.cloneWith({ points, edited: true });
 	}
 
@@ -60,8 +72,8 @@ export default class Question {
 			return this;
         }
 
-		const upatedAnswer = answer.withUpdatedText(newText);
-		return this.withUpdatedAnswer(upatedAnswer);
+		const updatedAnswer = answer.withUpdatedText(newText);
+		return this.withUpdatedAnswer(updatedAnswer);
     }
 
 	public withUpdatedCorrectAnswer(answerId: string, correct: boolean): this {
@@ -85,7 +97,11 @@ export default class Question {
 	}
 
 	public withUpdatedPublished(published: boolean): this {
-		return this.cloneWith({ published });
+		return this.cloneWith({ published, edited: true });
+	}
+
+	public withUpdatedShowErrors(): this {
+		return this.cloneWith({ showErrors: true });
 	}
 
 	public withNewAnswer(): this {
@@ -162,6 +178,7 @@ export default class Question {
 			deleting: props.deleting ?? this.deleting,
 			order: props.order ?? this.order,
 			published: props.published ?? this.published,
+			showErrors: props.showErrors ?? this.showErrors,
 		}) as this;
 	}
 
@@ -177,6 +194,7 @@ export default class Question {
 			deleting: false,
 			order: props.order ?? 0,
 			published: props.published ?? false,
+			showErrors: props.showErrors ?? false,
 		});
 	}
 
@@ -215,6 +233,7 @@ export default class Question {
 			order: this.order,
 			levelId: this.levelId,
 			lang: this.lang,
+			published: this.published,
 			answers: this.answers.map((a) => ({ ...a })),
 		};
 	}
@@ -240,5 +259,33 @@ export default class Question {
 			? Math.max(...this.answers.map(answer => answer.order)) + 1
 			: 1;
 	}
+
+	public validate(): ReadonlyArray<QuestionError> {
+
+		const errors = new Array<QuestionError>
+
+		const answersErrors = new Array<AnswersEmptyError>();
+
+        this.answers.forEach(answer => {
+			const answerError = answer.validate();
+			if (!answerError) {
+				return;
+			}
+
+			answersErrors.push(answerError);
+		});
+
+		if (answersErrors.length) {
+			const error = new QuestionAnswersEmptyError(this.id, answersErrors);
+			errors.push(error);
+		}
+
+		if (!this.text) {
+			const error = new QuestionEmptyError(this.id);
+			errors.push(error);
+		}
+
+		return errors;
+    }
 
 }

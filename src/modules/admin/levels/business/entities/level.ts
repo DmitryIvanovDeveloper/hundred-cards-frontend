@@ -3,38 +3,40 @@ import {
     ILevelCreateResponseDTO,
 } from "../dtos/level.create.dto";
 import { ILevelUpdateRequestDTO } from "../dtos/level.update.dto";
+import LevelNameEmptyError from "../errors/level-name-empty.error";
+import LevelsError from "../errors/levels.error";
 
 export interface LevelProps {
-    id: string;
-    name: string;
-    lang: string;
-    projectId: string;
-    edited: boolean;
-    deleting: boolean;
-}
-
-export default class Level {
     readonly id: string;
     readonly name: string;
     readonly lang: string;
     readonly projectId: string;
     readonly edited: boolean;
     readonly deleting: boolean;
+    readonly showError: boolean;
 
-    constructor(
-        id: string,
-        name: string,
-        lang: string,
-        projectId: string,
-        edited: boolean = false,
-        deleting: boolean = false
-    ) {
-        this.id = id;
-        this.name = name;
-        this.lang = lang;
-        this.projectId = projectId;
-        this.edited = edited;
-        this.deleting = deleting;
+}
+
+export default class Level {
+    public readonly id: string;
+    public readonly name: string;
+    public readonly lang: string;
+    public readonly projectId: string;
+    public readonly edited: boolean;
+    public readonly deleting: boolean;
+    public readonly showError: boolean;
+
+    constructor(props: Partial<LevelProps>){
+        this.id = props.id ?? '';
+        this.name = props.name ?? '';
+        this.lang = props.lang ?? '';
+        this.projectId = props.projectId ?? '';
+        this.edited = props.edited ?? false;
+        this.deleting = props.deleting ?? false;
+        this.showError = props.showError ?? false;
+
+        console.log(this.name)
+
     }
 
     public withUpdatedName(name: string): this {
@@ -49,15 +51,31 @@ export default class Level {
         return this.cloneWith({ edited });
     }
 
+    public withUpdatedShowErrors(): this {
+        return this.cloneWith({ showError: true });
+    }
+
     public cloneWith(params: Partial<LevelProps>): this {
-        return new Level(
-            this.id,
-            params.name ?? this.name,
-            params.lang ?? this.lang,
-            params.projectId ?? this.projectId,
-            params.edited ?? this.edited,
-            params.deleting ?? this.deleting
-        ) as this;
+        return new Level({
+            id: this.id,
+            name: params.name ?? this.name,
+            lang: params.lang ?? this.lang,
+            projectId: params.projectId ?? this.projectId,
+            edited: params.edited ?? this.edited,
+            deleting: params.deleting ?? this.deleting,
+            showError: params.showError ?? this.showError,
+        }) as this;
+    }
+
+    public validate(): ReadonlyArray<LevelsError> {
+        const errors = new Array<LevelsError>();
+
+        if (!this.name) {
+            const error = new LevelNameEmptyError();
+            errors.push(error);
+        }
+
+        return errors;
     }
 
     public toCreateRequest(): ILevelCreateRequestDTO {
@@ -86,10 +104,19 @@ export default class Level {
     }
 
     static toEntity(dto: ILevelCreateResponseDTO): Level {
-        return new Level(dto.id, dto.level, dto.lang, dto.projectId);
+        return new Level({
+            id: dto.id,
+            name: dto.level,
+            lang: dto.lang,
+            projectId: dto.projectId,
+        });
     }
 
     static create(name: string, lang: string, projectId: string): Level {
-        return new Level("", name, lang, projectId);
+        return new Level({
+            name, 
+            lang, 
+            projectId
+        });
     }
 }

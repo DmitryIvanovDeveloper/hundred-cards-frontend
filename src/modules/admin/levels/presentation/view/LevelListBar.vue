@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import LevelsController from "../controller/levels.controller";
 import LevelsPresenter from "../presenter/levels.presenter";
 import ProjectItemList from "@/ui/ProjectItemList.vue";
+import ProjectItemListSkeleton from "@/ui/ProjectItemListSkeleton.vue";
 
 const controller = container.get<LevelsController>(TYPES.LevelsController);
 const presenter = container.get<LevelsPresenter>(TYPES.LevelsPresenter);
@@ -44,9 +45,19 @@ const goToConstructor = (): void => {
 </script>
 
 <template>
-	<ProjectItemList 
+    <ProjectItemListSkeleton v-if="presenter.levelsViewModel.value === undefined"/>
+
+	<ProjectItemList
+		v-else
 		:title="presenter.labels.title"
-		:items="presenter.levelsViewModel.value"
+		:items="presenter.levelsViewModel.value.map(i => ({
+            id: i.id,
+            name: i.name.value as string,
+            checked: false,
+            edited: i.edited,
+            deleting: i.deleting,
+            hasError: i.hasError
+        })) ?? []"
 		:onCreate="createLevel"
 		:creating="controller.creating.value"
 		:onEdit="() => {}"

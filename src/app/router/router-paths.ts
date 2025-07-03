@@ -10,6 +10,7 @@ export const RouterPaths = {
   levels: 'levels',
   game: '/game',
   achievements: '/admin/achievements/constructor',
-  projectList: '/admin/projects/list'
+  projectList: '/admin/projects/list',
+  account: '/admin/account'
 };
 

@@ -13,12 +13,12 @@ const controller = container.get<ProjectsController>(TYPES.ProjectsController)
 
 <template>
   <ConstructorLayout>
-    <div class="flex flex-col w-full">
+    <div class="grid w-full">
       <LevelEditor />
       <QuestionEditor />
     </div>
     <template #buttons>
-      <div class="flex gap-[10px]">
+      <!-- <div class="flex gap-[10px]">
         <Button
             @click="controller.nextQuestion"
             class="text-[#FFFFFF] px-4 py-2 rounded w-[48px] h-[38px] !border-none !bg-[#FF811B]"
@@ -31,7 +31,7 @@ const controller = container.get<ProjectsController>(TYPES.ProjectsController)
         >
             <ArrowRightIcon class="w-[15px] h-[15px]" />
         </Button>
-      </div>
+      </div> -->
     </template>
   </ConstructorLayout>
 </template>

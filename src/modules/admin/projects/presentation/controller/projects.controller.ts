@@ -16,7 +16,7 @@ import DeleteProjectUseCase from "../../business/usecases/delete-project.usecase
 export default class ProjectsController {
     
     constructor(
-        @inject(TYPES.CreateProjectPresentConstructorUseCase)
+        @inject(TYPES.CreateProjectUseCase)
         private readonly _createNewProjectUseCase: CreateProjectUseCase,
 
         @inject(TYPES.SelectProjectUseCase)

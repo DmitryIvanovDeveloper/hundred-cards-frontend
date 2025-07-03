@@ -21,6 +21,7 @@ export default {
       colors: {
         'white': '#FFFFF',
         'background': 'rgba(239,246,248, 1)',
+        'text_danger': "#FF6666"
       },
     },
   },

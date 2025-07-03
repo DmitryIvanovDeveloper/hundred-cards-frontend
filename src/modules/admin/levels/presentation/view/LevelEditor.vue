@@ -6,6 +6,7 @@ import LevelsController from "../controller/levels.controller";
 import LevelsPresenter from "../presenter/levels.presenter";
 import UniversalInput from "@/ui/UniversalInput.vue";
 import ConstructorItemLayout from "@/ui/ConstructorItemLayout.vue";
+import { error } from "console";
 
 const controller = container.get<LevelsController>(TYPES.LevelsController);
 const presenter = container.get<LevelsPresenter>(TYPES.LevelsPresenter);
@@ -21,8 +22,9 @@ const router = useRouter();
 	>
 		<UniversalInput
 			:label="''"
-			:value="presenter.levelViewModel.value?.name"
+			:value="presenter.levelViewModel.value?.name.value"
 			:onChange="(value) => controller.updateText(presenter.levelViewModel.value?.id ?? '', value as string)"
+			:error="presenter.levelViewModel.value?.name.error"
 		/>
 	</ConstructorItemLayout>
 

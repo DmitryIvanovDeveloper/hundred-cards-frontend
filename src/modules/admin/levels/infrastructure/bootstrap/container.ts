@@ -6,7 +6,6 @@ import LevelsController from '../../presentation/controller/levels.controller';
 import LoadLevelsUseCase from '../../business/usecases/load-levels.usecase';
 import LevelsHttpRepository from '../repositories/levels.http.repository';
 import ProjectSelectedEvent from '@/modules/admin/projects/business/events/project-selected-event';
-import ProjectSelectedEventLoadLevelsHandler from '../../business/events/handlers/project-selected-event-load-levels.handler';
 import SelectLevelUseCase from '../../business/usecases/select-level.usecase';
 import CreateLevelUseCase from '../../business/usecases/create-level.usecase';
 import LevelService from '../../business/services/level.service';
@@ -30,6 +29,8 @@ import ClearLevelsLocalUseCase from '../../business/usecases/clear-levels-local.
 import ProjectDeletedEvent from '@/modules/admin/projects/business/events/project-deleted-event';
 import ProjectDeletedEventDeleteLevelsLocalHandler from '../../business/events/handlers/project-deleted-event-delete-levels-local.handler';
 import DeleteLevelsLocalByProjectIdUseCase from '../../business/usecases/delete-levels-local-by-project-id.usecase';
+import ProjectSelectedEventClearLocalRepositoryHandler from '../../business/events/handlers/project-selected-event-clear-local-repostory.handler';
+import ProjectSelectedEventLoadLevelsHandler from '../../business/events/handlers/project-selected-event-load-levels.handler';
 
 container
     .bind<LevelsPresenter>(TYPES.LevelsPresenter)
@@ -150,3 +151,10 @@ container
     .to(LevelsLoadedEventSelectLevelHandler)
     .inTransientScope()
 ;
+
+container
+    .bind<ISyncEventHandler<ProjectSelectedEvent>>(TYPES.ProjectSelectedEventHandlerSync)
+    .to(ProjectSelectedEventClearLocalRepositoryHandler)
+    .inTransientScope()
+;
+

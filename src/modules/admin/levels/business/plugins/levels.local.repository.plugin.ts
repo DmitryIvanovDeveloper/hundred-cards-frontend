@@ -11,5 +11,5 @@ export default interface ILevelsLocalRepository {
     storeLevels(levels: Array<Level>): void;
     findLevelById(id: string): Result<Level>;
     getLevel(): Ref<Level | undefined> 
-    getLevels(): Ref<Array<Level>>;
+    getLevels(): Ref<Array<Level> | undefined>;
 }

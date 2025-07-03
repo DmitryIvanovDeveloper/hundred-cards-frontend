@@ -24,7 +24,7 @@ const { error, label, errorlink, isRequired } = defineProps<IFieldWrapperInputPr
         <slot />
 
         <div>
-            <Message v-if="error" size="small" severity="secondary" variant="simple" class="block text-left text-[14px] font-roboto-400 !text-text_danger">
+            <Message v-if="error" size="small" severity="secondary" variant="simple" class="block text-left text-[14px] font-roboto-400 !text-[#FF6666]">
                 {{ error }}
                 <router-link v-if="errorlink" :to="errorlink?.path" class="text-[#01AEEA] text-[14px] hover:text-[#01AEEA] text-left">{{
                     errorlink.title

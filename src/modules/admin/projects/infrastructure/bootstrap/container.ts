@@ -12,7 +12,7 @@ import SelectProjectUseCase from '../../business/usecases/select-project.usecase
 import { container } from '@/infrastructure/bootstrap/inversify.config';
 import IProjectsLocalRepository from '../../business/plugins/projects.local.repository.plugin';
 import ProjectsHttpRepository from '../repositories/projects.http.repository';
-import ProjectsService from '../../services/project.service';
+import ProjectsService from '../../business/services/project.service';
 import { TYPES } from '../../types';
 import SaveProjectEvent from '../../business/events/save-project-event';
 import SaveProjectEventUpdateProjectHandler from '../../business/events/handlers/save-project-event-update-project.handler';
@@ -28,13 +28,13 @@ import DeleteProjectLocalUseCase from '../../business/usecases/delete-project-lo
 import ClearProjectsLocalUseCase from '../../business/usecases/clear-projects-local.usecase';
 
 container
-    .bind<ProjectsPresenter>(TYPES.ProjectsPresenter)
+    .bind(TYPES.ProjectsPresenter)
     .to(ProjectsPresenter)
     .inSingletonScope()
 ;
 
 container
-    .bind<ProjectsController>(TYPES.ProjectsController)
+    .bind(TYPES.ProjectsController)
     .to(ProjectsController)
     .inSingletonScope()
 ;
@@ -46,37 +46,37 @@ container
 ;
 
 container
-    .bind<CreateProjectUseCase>(TYPES.CreateProjectPresentConstructorUseCase)
+    .bind(TYPES.CreateProjectUseCase)
     .to(CreateProjectUseCase)
     .inTransientScope()
 ;
 
 container
-    .bind<LoadProjectsUseCase>(TYPES.LoadPresentProjectsUseCase)
+    .bind(TYPES.LoadPresentProjectsUseCase)
     .to(LoadProjectsUseCase)
     .inTransientScope()
 ;
 
 container
-    .bind<SelectProjectUseCase>(TYPES.SelectProjectUseCase)
+    .bind(TYPES.SelectProjectUseCase)
     .to(SelectProjectUseCase)
     .inTransientScope()
 ;
 
 container
-    .bind<UpdateProjectUseCase>(TYPES.UpdateProjectUseCase)
+    .bind(TYPES.UpdateProjectUseCase)
     .to(UpdateProjectUseCase)
     .inTransientScope()
 ;
 
 container
-    .bind<DeleteProjectUseCase>(TYPES.DeleteProjectUseCase)
+    .bind(TYPES.DeleteProjectUseCase)
     .to(DeleteProjectUseCase)
     .inTransientScope()
 ;
 
 container
-    .bind<DeleteProjectLocalUseCase>(TYPES.DeleteProjectLocalUseCase)
+    .bind(TYPES.DeleteProjectLocalUseCase)
     .to(DeleteProjectLocalUseCase)
     .inTransientScope()
 ;

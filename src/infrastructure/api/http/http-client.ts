@@ -5,6 +5,8 @@ import IErrorResponse from '../../dtos/errorResponse';
 import IHttpClient from './http.interface';
 import { TYPES } from '../../bootstrap/types';
 import AuthTokenUseCases from '@/modules/shared/authStorage/business/usecases/auth-token.usecases';
+import router from '@/app/router/router';
+import { RouterPaths } from '@/app/router/router-paths';
 
 export default class HttpClient implements IHttpClient {
     private _baseUrl: string;
@@ -53,6 +55,11 @@ export default class HttpClient implements IHttpClient {
                     : undefined,
             });
 
+
+            if (response.status === 401) {
+               router.push(RouterPaths.login);
+               this._authTokenUseCases.clear();
+            }
 
             if (response.ok) {
                 const json = (await response.json()) as TResponse;

@@ -27,16 +27,17 @@ export default class DeleteLevelLocalUseCase extends BaseUseCase<DeleteLevelInpu
     public async execute(input: DeleteLevelInput): Promise<DeleteLevelOutput> {
         const levelId = input.levelId;
         const levels = this._localRepository.getLevels().value;
-        const filtredLevels = levels.filter(level => level.id !== levelId);
-        this._localRepository.storeLevels(filtredLevels);
+        if (!levels) {
+            return Result.failure();
+        }
+        const filteredLevels = levels.filter(level => level.id !== levelId);
+        this._localRepository.storeLevels(filteredLevels);
         
         this._toastNotificationUseCases.success('Level successfully deleted');
 
         this._eventBus.publishAsync(new LevelDeletedEvent(levelId))
 
         const level = this._localRepository.getLevel().value;
-        console.log(level)
-        console.log(levelId)
         if (!level || level.id !== levelId) {
             return Result.success();
         }

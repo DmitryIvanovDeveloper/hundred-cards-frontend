@@ -1,4 +1,4 @@
-import ProjectViewModel from "../view/view-models/project.view-model";
+import ProjectViewModel from "./view-models/project.view-model";
 import { inject } from "inversify";
 import { TYPES } from "../../types";
 import IProjectsLocalRepository from "../../business/plugins/projects.local.repository.plugin";
@@ -16,12 +16,19 @@ export default class ProjectsPresenter {
         title: 'Проекты',
         confirmCancel: {
             title: 'У вас есть несохраненные изменения. Пожалуйста, сохраните проект, чтобы отправить участникам актуальную версию.',
-            saveContunue: 'Сохранить и продолжить',
-            cancelContunue: 'Продолжить без сохранения',
+            saveContinue: 'Сохранить и продолжить',
+            cancelContinue: 'Продолжить без сохранения',
         }
     }
     readonly projectViewModel =  computed(() => this.presentProject());
-    readonly projectsViewModel = computed(() =>this.presentProjects());
+    readonly projectsViewModel = computed(() => {
+        const projects =  this._repository.getProjects().value;
+        if (!projects) {
+            return undefined;
+        }
+
+        return projects.map(project => new ProjectViewModel(project))
+    });
 
     private presentProject(): ProjectViewModel | null {
         const project = this._repository.getProject().value;
@@ -31,12 +38,5 @@ export default class ProjectsPresenter {
 
         
         return new ProjectViewModel(project);
-    }
-
-    private presentProjects(): Array<ProjectViewModel> {
-        return this._repository
-            .getProjects().value
-            .map(project => new ProjectViewModel(project))
-        ;
     }
 }

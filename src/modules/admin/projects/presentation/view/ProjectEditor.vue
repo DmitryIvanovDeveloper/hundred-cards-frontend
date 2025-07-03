@@ -5,17 +5,24 @@ import { container } from "@/infrastructure/bootstrap/inversify.config";
 import ProjectsPresenter from "../presenter/projects.presenter";
 import UniversalRoundedButton from "@/ui/Buttons/UniversalRoundedButton.vue";
 import ConfirmPopup from "./components/ConfirmPopup.vue";
+import Header from "@/ui/Header.vue";
+import UniversalInput from "@/ui/UniversalInput.vue";
+import { error } from "console";
+import { onMounted } from "vue";
 
 const controller = container.get<ProjectsController>(TYPES.ProjectsController);
 const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
 
+onMounted(() => {
+    controller.edit(false)
+});
 </script>
 
 <template>
-    <div class="flex items-center w-full p-[15px] w-70 bg-blue-50 flex justify-between border-r border-gray-200">
-        <div>
+    <Header>
+        <template #title>
             <div v-if="!controller.isEdit.value" class="flex items-center gap-[10px]">
-                <span  class="font-roboto-700 text-[20px] text-[#92A0A6]">{{ presenter.projectViewModel.value?.name }}</span>
+                <span  class="font-roboto-700 text-[20px] text-[#92A0A6]">{{ presenter.projectViewModel.value?.name.value }}</span>
                 <button @click="() => controller.edit(true)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -27,22 +34,33 @@ const presenter = container.get<ProjectsPresenter>(TYPES.ProjectsPresenter);
                     </svg>
                 </button>
             </div>
-            <input 
-                @input="(event) => controller.updateName((event.target as HTMLInputElement).value)"
-                :value="presenter.projectViewModel.value?.name " 
-                v-if="controller.isEdit.value" 
-                class="p-[6px] bg-[#FFFFFF] font-roboto-700 text-[20px] text-[#92A0A6]"
-                @blur="() => controller.edit(false)"
-            />
-            
-        </div>
-        <div class="grid grid-flow-col gap-[15px]">
-            <UniversalRoundedButton :label="'Сохранить'" :loading="controller.loading.value" class="!h-[40px] !bg-[#9747FF] !border-none !font-roboto-700 text-[11px]" :handle-press="controller.saveProject"/>
-            <UniversalRoundedButton type="secondary" :label="'Отменить'" class="!h-[40px] !border-[#9747FF] !border-[1px] !bg-transparent !text-[#9747FF] !font-roboto-700 text-[11px]" :handle-press="controller.changeConfirmCancelPopupVisible"/>
-        </div>
-        
-        <ConfirmPopup />
-       
-      </div>
+            <div>
+                <UniversalInput 
+                    v-if="controller.isEdit.value" 
+                    :onChange="value => controller.updateName(value as string)"
+                    @blur="() => controller.edit(false)"
+                    :value="presenter.projectViewModel.value?.name.value"
+                    :error="presenter.projectViewModel.value?.name.error"
+                />
+                <!-- <input 
+                    @input="(event) => controller.updateName((event.target as HTMLInputElement).value)"
+                    :value="presenter.projectViewModel.value?.name.value" 
+                    v-if="controller.isEdit.value" 
+                    class="p-[6px] bg-[#FFFFFF] font-roboto-700 text-[20px] text-[#92A0A6]"
+                    :class="[{'!text-[#FF6666]': !!presenter.projectViewModel.value?.name.error}]"
+                    @blur="() => controller.edit(false)"
+                /> -->
 
+            </div>
+        </template>
+        <template #buttons>
+            <div class="grid grid-flow-col gap-[15px]">
+                <UniversalRoundedButton :label="'Сохранить'" :loading="controller.loading.value" class="!h-[40px] !bg-[#9747FF] !border-none !font-roboto-700 text-[11px]" :handle-press="controller.saveProject"/>
+                <UniversalRoundedButton type="secondary" :label="'Отменить'" class="!h-[40px] !border-[#9747FF] !border-[1px] !bg-transparent !text-[#9747FF] !font-roboto-700 text-[11px]" :handle-press="controller.changeConfirmCancelPopupVisible"/>
+            </div>
+            
+        </template>
+    </Header>
+
+    <ConfirmPopup />
 </template>

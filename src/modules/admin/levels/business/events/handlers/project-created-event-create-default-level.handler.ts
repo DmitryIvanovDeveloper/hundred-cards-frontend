@@ -16,6 +16,6 @@ export default class ProjectCreatedEventCreateDefaultLevelHandler implements IAs
 	}
 
 	async handleAsync(event: ProjectCreatedEvent): Promise<void> {
-		// await this._createLevelUseCase.execute({ projectId: event.projectId, name: 'Новый уровень' });
+		await this._createLevelUseCase.execute({ projectId: event.projectId, name: 'Новый уровень' });
 	}
 }

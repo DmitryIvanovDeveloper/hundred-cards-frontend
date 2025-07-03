@@ -33,7 +33,8 @@ export default class SelectProjectUseCase extends BaseUseCase<SelectProjectInput
         const project = result.data;
         this._localRepository.storeProject(project);
 
-        this._eventBus.publishAsync(new ProjectSelectedEvent(input.projectId))
+        this._eventBus.publish(new ProjectSelectedEvent(input.projectId))
+        await this._eventBus.publishAsync(new ProjectSelectedEvent(input.projectId))
 
         return Result.success<void>();
     }

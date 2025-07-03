@@ -73,6 +73,17 @@ export default class ProjectsHttpRepository implements IProjectsHttpRepository  
         return Result.success();
     }
 
+    public loadProjectUsers = async (projectId: string): Promise<Result<void>> => {
+        const endpoint = `cards/admin/projects/${projectId}/`;
+
+        const response = await this._httpClient.delete<DeleteProjectResponse>(endpoint);
+        if (!response.hasData()) {
+            return this.handleNetworkError(response.errors as NetworkError)
+        }
+        
+        return Result.success();
+    }
+
 
     private handleNetworkError<T>(networkError: NetworkError): Result<T> {
         return Result.failure();
