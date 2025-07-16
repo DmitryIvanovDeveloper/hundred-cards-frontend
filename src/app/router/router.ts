@@ -18,6 +18,8 @@ import Levels from '@/modules/admin/levels/presentation/view/Levels.vue';
 import LevelList from '@/modules/admin/levels/presentation/view/LevelList.vue';
 import AchievementsConstructor from '@/modules/admin/achievements/presentation/view/AchievementsConstructor.vue';
 import Profile from '@/modules/admin/profile/presentation/view/Profile.vue';
+import Members  from '@/modules/admin/members/presentation/view/Members.vue';
+import Member from '@/modules/admin/members/presentation/view/Member.vue';
 
 const getRoutes = (): Array<RouteRecordRaw> => {
     return [{
@@ -100,6 +102,14 @@ const getRoutes = (): Array<RouteRecordRaw> => {
             {
                 path: RouterPaths.account,
                 component: Profile,
+            },
+            {
+                path: RouterPaths.members,
+                component: Members,
+            },
+            {
+                path: RouterPaths.member,
+                component: Member,
             },
         ],
         },

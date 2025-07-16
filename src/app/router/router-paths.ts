@@ -11,6 +11,8 @@ export const RouterPaths = {
   game: '/game',
   achievements: '/admin/achievements/constructor',
   projectList: '/admin/projects/list',
-  account: '/admin/account'
+  account: '/admin/account',
+  members: '/admin/members',
+  member: '/admin/member'
 };
 
