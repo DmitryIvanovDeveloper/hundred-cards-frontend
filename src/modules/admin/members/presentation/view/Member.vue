@@ -13,20 +13,22 @@ import MembersPresenter from '../presenter/members.presenter';
 import { TYPES } from '../../types';
 import { useRouter } from 'vue-router';
 import AvatarIco from '@/assets/avatar.svg'
+import { computed } from 'vue';
 
 const controller = container.get<MembersController>(TYPES.MembersController);
 const presenter = container.get<MembersPresenter>(TYPES.MembersPresenter);
 
 const router = useRouter();
 
+const loading = computed(() => {
+    return presenter.memberProjects.value === undefined;
+}) 
 </script>
 
 <template>
     <div class="flex flex-col w-full gap-[20px]">
         <Card title="Name" class="!h-[121px]">
             <div class="flex items-center gap-[20px]">
-                
-                
                 <AvatarIco v-if="!presenter.member.value?.avatar"/>
                 <Avatar
                     v-else
@@ -44,7 +46,9 @@ const router = useRouter();
             <div class="flex flex-col gap-[5px]">
                 <!-- <span class="block text-left text-[#7D8B91] ">Поиск теста</span> -->
                 <MemberTableHeader title="Все тесты"/>
+                <Skeleton v-if="loading"  class="!h-[25px]" v-for="() in ['', '', '']"/>
                 <div
+                    v-else
                     v-for="(project, index) in presenter.memberProjects.value" :key="index"
                     class="flex gap-[5px]">
                     <MemberTableItem class="!h-[30px]" :title="project.projectName" />

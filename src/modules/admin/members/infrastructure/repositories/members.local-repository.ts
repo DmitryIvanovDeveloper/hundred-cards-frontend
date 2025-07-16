@@ -5,15 +5,15 @@ import { MemberProject } from "../../business/entities/member-project";
 
 export default class MembersLocalRepository implements IMembersLocalRepository {
 	
-	private _members = ref<ReadonlyArray<Member>>([]);
+	private _members = ref<ReadonlyArray<Member> | undefined>(undefined);
 	private _member = ref<Member | undefined>();
-	private _memberProjects = ref<ReadonlyArray<MemberProject>>([]);
+	private _memberProjects = ref<ReadonlyArray<MemberProject> | undefined>(undefined);
 
 	public storeMembers(entities: ReadonlyArray<Member>): void {
 		this._members.value = entities;
 	}
 
-	public getMembers(): Ref<ReadonlyArray<Member>> {
+	public getMembers(): Ref<ReadonlyArray<Member> | undefined> {
 		return this._members;
 	}
 
@@ -26,10 +26,10 @@ export default class MembersLocalRepository implements IMembersLocalRepository {
 	}
 
 	public findMember(id: number): Member | undefined {
-		return this._members.value.find(member => member.id === id)
+		return this._members.value?.find(member => member.id === id)
 	}
 
-	public getMemberProjects(): Ref<ReadonlyArray<MemberProject>> {
+	public getMemberProjects(): Ref<ReadonlyArray<MemberProject> | undefined> {
 		return this._memberProjects;
 	}
 
@@ -38,6 +38,9 @@ export default class MembersLocalRepository implements IMembersLocalRepository {
 	}
 
 	public updateMemberProjects(entity: MemberProject): void {
+		if (!this._memberProjects.value) {
+			return;
+		}
 		const expectedIndex = this._memberProjects.value.findIndex(memberProject => memberProject.projectId === entity.projectId);
 		if (expectedIndex === -1) {
 			return;
@@ -50,10 +53,14 @@ export default class MembersLocalRepository implements IMembersLocalRepository {
 	}
 
 	public findMemberProject(id: string): MemberProject | undefined {
-		return this._memberProjects.value.find(mp => mp.projectId === id);
+		return this._memberProjects.value?.find(mp => mp.projectId === id);
 	}
 
 	public clear(): void {
 		this._member.value = undefined;
+	}
+
+	public clearMembers(): void {
+		this._members.value = undefined;
 	}
 }

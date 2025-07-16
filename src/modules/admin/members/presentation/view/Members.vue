@@ -9,6 +9,8 @@ import MembersPresenter from '../presenter/members.presenter';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { RouterPaths } from '@/app/router/router-paths';
+import { Skeleton } from 'primevue';
+import { computed } from '@vue/reactivity';
 
 const controller = container.get<MembersController>(TYPES.MembersController);
 const presenter = container.get<MembersPresenter>(TYPES.MembersPresenter);
@@ -24,10 +26,14 @@ const onClick = (id: number): void => {
     router.push(RouterPaths.member)
 }
 
+const loading = computed(() => {
+    return presenter.membersViewModel.value === undefined;
+}) 
+
 </script>
 
 <template>
-    <div class="flex flex-col w-full gap-[20px]">
+    <div class="flex flex-col w-full gap-[20px] p-[20px]">
         <Card class="!w-full !h-[77px]">
             <div class="flex">
                 <span>{{presenter.label.title}}</span>
@@ -39,20 +45,22 @@ const onClick = (id: number): void => {
                 <div class="flex w-full justify-between gap-[5px]">
                     <MemberTableHeader title="Участники"/>
                     <MemberTableHeader title="Email"/>
-                    <MemberTableHeader title="Тестов"/>
+                    <MemberTableHeader title="Проектов"/>
                     <MemberTableHeader 
                         :title="''" 
                         class="!w-[80px] "
                     />
                 </div>
+                <Skeleton v-if="loading"  class="!h-[25px]" v-for="() in ['', '', '']"/>
                 <div 
+                    v-else
                     class="flex w-full justify-between gap-[5px]"
                     v-for="(member) in presenter.membersViewModel.value"
                 >
                     <MemberTableRow
                         :name="member.name"
                         :email="member.email"
-                        :tests="100"
+                        :tests="member.tests"
                         :onclick="() => onClick(member.id)"
                     />
                 </div>

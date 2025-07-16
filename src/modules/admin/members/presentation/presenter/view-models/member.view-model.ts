@@ -6,6 +6,7 @@ export default class MemberViewModel {
 	public readonly name: string;
     public readonly avatar: string | null;
     public readonly userName: string;
+    public readonly tests: number;
 
     constructor(entity: Member) {
         this.id = entity.id;
@@ -13,5 +14,6 @@ export default class MemberViewModel {
         this.name = `${entity.firstName} ${entity.lastName}`;
         this.avatar = entity.avatar;
         this.userName = entity.userName;
+        this.tests = entity.tests;
     }
 }

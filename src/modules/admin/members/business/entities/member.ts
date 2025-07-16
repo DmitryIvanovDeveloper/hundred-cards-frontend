@@ -8,7 +8,7 @@ interface IProps {
 	readonly lastName: string;
     readonly avatar: string | null;
     readonly userName: string;
-	readonly projects: ReadonlyArray<MemberProject>
+    readonly tests: number;
 
 }
 export class Member {
@@ -18,6 +18,7 @@ export class Member {
 	public readonly lastName: string;
     public readonly avatar: string | null;
     public readonly userName: string;
+    public readonly tests: number;
 	
 	constructor(props: Partial<IProps>) {
 		this.id = props.id ?? -1;
@@ -26,6 +27,7 @@ export class Member {
 		this.lastName = props.lastName ?? '';
 		this.avatar = props.avatar ?? null;
 		this.userName = props.userName ?? '';
+		this.tests = props.tests ?? 0
 	}
 
 	
@@ -40,7 +42,7 @@ export class Member {
 		}) as this;
 	}
 
-	public static toEntity(dto: MemberDTO): Member {
+	public static toEntity(dto: MemberDTO, tests?: number): Member {
 		return new Member({
 			id: dto.id,
 			email: dto.email,
@@ -48,6 +50,7 @@ export class Member {
 			lastName: dto.lastName,
 			avatar: dto.avatar,
 			userName: dto.userName,
+			tests
 		})
 	}
 }

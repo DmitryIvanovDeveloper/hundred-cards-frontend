@@ -19,13 +19,19 @@ export default class MembersPresenter {
 
 	public readonly membersViewModel = computed(() => {
 		const members = this._localRepository.getMembers().value;
+		console.log(members)
+
+		if (!members) {
+			return;
+		}
+
 		return members.map(member => new MemberViewModel(member));
 	});
 
 	public readonly member = computed(() => {
 		const member = this._localRepository.getMember().value;
 		if (!member) {
-			return;
+			return undefined;
 		}
 
 		return new MemberViewModel(member);
