@@ -9,18 +9,19 @@ const router = useRouter();
 
 
 // Store the selected route or section
-const selected = ref<'projects' | 'account' | 'analitics' | 'settings' | 'help'>('projects');
+const selected = ref<'projects' | 'account' | 'analytics' | 'settings' | 'help' | 'members'>('projects');
 
-const buttons: { title: string; icon: any; type: 'projects' | 'account' | 'analitics' | 'settings' | 'help' }[] = [
+const buttons: { title: string; icon: any; type: 'projects' | 'account' | 'analytics' | 'settings' | 'help' | 'members'}[] = [
 	{ title: 'Мой аккаунт', icon: UserIcon, type: 'account' },
 	{ title: 'Проекты', icon: FolderIcon, type: 'projects' },
-	{ title: 'Аналитика', icon: ChartBarIcon, type: 'analitics' },
+	{ title: 'Участники', icon: FolderIcon, type: 'members' },
+	{ title: 'Аналитика', icon: ChartBarIcon, type: 'analytics' },
 	{ title: 'Настройки', icon: CogIcon, type: 'settings' },
 	{ title: 'Помощь', icon: QuestionMarkCircleIcon, type: 'help' },
 ];
 
 
-const handlePress = (type: 'projects' | 'account' | 'analitics' | 'settings' | 'help') => {
+const handlePress = (type: 'projects' | 'account' | 'analytics' | 'settings' | 'help' | 'members') => {
 	selected.value = type; // Update selected route
 	if (type === 'projects') {
 		const newPath = `${RouterPaths.admin}/${RouterPaths.projects}/${RouterPaths.list}`;
@@ -29,6 +30,10 @@ const handlePress = (type: 'projects' | 'account' | 'analitics' | 'settings' | '
 
 	if (type === 'account') {
 		router.push(RouterPaths.account);
+	}
+	console.log(type === 'members')
+	if (type === 'members') {
+		router.push(RouterPaths.members);
 	}
 }
 </script>

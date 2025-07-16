@@ -31,7 +31,7 @@ const { rounded, label, disabled, type = 'primary', style, loading, handlePress 
                 'font-roboto-500 text-[16px]': rounded && type !== 'link',
                 'font-roboto-700 text-[18px]': !rounded && type !== 'link',
                 '!bg-[#9747FF] !border-none !border-primary !text-white': type === 'primary',
-                '!bg-secondary !text-primary border border-[#9747FF]': type === 'secondary',
+                '!bg-[#FFFFFF] !text-[#424242] border !border-[#9747FF]': type === 'secondary',
                 '!bg-text_danger !border-none !text-white': type === 'danger',
                 '!bg-disabled !border-none !text-white': disabled,
                 '!bg-additional !text-primary': type === 'additional',

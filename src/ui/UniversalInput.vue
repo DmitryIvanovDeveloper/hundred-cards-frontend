@@ -67,11 +67,12 @@ const inputStyle = computed(() => ({
             :readonly="readonly"
             toggleMask
             v-if="type === 'password'"
+
             :input-class="['w-full !py-[14px] !px-[20px] !placeholder-text_primary h-[40px]', {'!border-text_danger': error}, {'!border-border_color': !error }]"
             :type="type"
             :disabled="disabled"
             :feedback="false"
-            :placeholder="placeholder"
+            :placeholder="placeholder  ?? 'Введите пароль...'"
             :modelValue="(modelValue as string)"
             @update:modelValue="(value) => onChange(value as string)"
             :inputStyle="inputStyle"
@@ -108,7 +109,7 @@ const inputStyle = computed(() => ({
             v-if="type === 'number'"
             :type="type"
             class="w-full"
-            input-class="!px-[20px]h-[40px]"
+            input-class="!px-[20px] h-[40px]"
             :disabled="disabled"
             :placeholder="placeholder"
             v-model="(modelValue as number)"
@@ -120,7 +121,7 @@ const inputStyle = computed(() => ({
         <InputText
             v-if="type === 'email'"
             :type="type"
-            class="!px-[20px] !py-[14px] !placeholder-text_primary"
+            class="!px-[20px] !py-[14px]  h-[40px] !placeholder-text_primary"
             :disabled="disabled"
             :placeholder="placeholder ?? 'Введите почту...'"
             v-model="(modelValue as string)"
